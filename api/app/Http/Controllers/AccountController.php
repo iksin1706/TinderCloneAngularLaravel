@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Photo;
 
 
 class AccountController extends Controller
@@ -24,15 +25,17 @@ class AccountController extends Controller
     public function register(RegisterRequest $request)
     {
 
-        $request = $request->validated();
+        $request->validated();
 
         $user = User::create([
-            'username' => $request->name,
+            'username' => $request->username,
             'email' => $request->email,
-            'knownAs' => $request->knowAs,
+            'known_as' => $request->knownAs,
             'gender' => $request->gender,
-            'date_of_birth' => $request->knowAs,
-            'password' => Hash::make($request->password),
+            'date_of_birth' => $request->dateOfBirth,
+            'city' => $request->city,
+            'country' => $request->country,
+            'password' => Hash::make($request->password)
         ]);
 
         $token = Auth::login($user);
@@ -40,9 +43,9 @@ class AccountController extends Controller
         return response()->json([
             'username' => $user->username,
             'token' => $token,
-            'knownAs' => $user->knowAs,
+            'knownAs' => $user->know_as,
             'gender' => $user->gender,
-        ]);
+        ],201);
     }
 
     public function login(LoginRequest $request)
@@ -58,20 +61,24 @@ class AccountController extends Controller
             ], 401);
         }
 
-        $user = Auth::user();
-
-        $user = User::find($user->user_id);
-
-        $mainPhoto = $user->photos()->where('isMain', true)->first();
+        $user=User::find(Auth::user()->id);
+        
+        $mainPhoto = $user->photos()->where('is_main', true)->first();
+        
+        if ($mainPhoto) {
+            $photoUrl = $mainPhoto->url;
+        } else {
+            $photoUrl = null;
+        }
 
         return response()->json([
             'username' => $user->username,
             'token' => $token,
             'type' => 'bearer',
-            'knownAs' => $user->knowAs,
+            'knownAs' => $user->known_as,
             'gender' => $user->gender,
-            'photoUrl' => $mainPhoto
-        ]);
+            'photoUrl' => $photoUrl
+        ],201);
     }
     public function logout()
     {
@@ -90,7 +97,7 @@ class AccountController extends Controller
             'username' => $user->username,
             'token' => Auth::refresh(),
             'type' => 'bearer',
-            'knownAs' => $user->knowAs,
+            'knownAs' => $user->know_as,
             'gender' => $user->gender,
             'photoUrl' => $mainPhoto,
         ]);
