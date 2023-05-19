@@ -74,7 +74,15 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Photo::class);
     }
+    public function likedByUsers()
+    {
+        return $this->hasMany(Like::class, 'source_user_id');
+    }
 
+    public function likedUsers()
+    {
+        return $this->hasMany(Like::class, 'target_user_id');
+    }
     // /**
     //  * Get the liked by users for the user.
     //  */

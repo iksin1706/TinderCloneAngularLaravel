@@ -1,27 +1,25 @@
 <?php
 
-namespace Database\Seeders;
-
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
-class DatabaseSeeder extends Seeder
+class UsersTableSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
+     *
+     * @return void
      */
     public function run()
     {
-        $jsonFile = storage_path('seeds\data.json'); // Replace with the path to your JSON file
+        $jsonFile = storage_path('data.json'); // Replace with the path to your JSON file
 
         $data = json_decode(file_get_contents($jsonFile), true);
 
         foreach ($data as $item) {
             // Insert user data
             $userId = DB::table('users')->insertGetId([
-                'username' => $item['username'],
+                'user_name' => $item['user_name'],
                 'gender' => $item['gender'],
                 'date_of_birth' => $item['date_of_birth'],
                 'known_as' => $item['known_as'],
@@ -34,16 +32,14 @@ class DatabaseSeeder extends Seeder
                 'country' => $item['country'],
                 'created_at' => now(),
                 'updated_at' => now(),
-                'password' => Hash::make("Passw0rd")
             ]);
 
             // Insert photos
-            $photos = json_decode(json_encode($item['photos']), true);
+            $photos = json_decode($item['photos'], true);
 
             foreach ($photos as $photo) {
                 DB::table('photos')->insert([
                     'user_id' => $userId,
-                    'public_id' => "temp",
                     'url' => $photo['url'],
                     'is_main' => $photo['is_main'],
                     // 'created_at' => now(),
