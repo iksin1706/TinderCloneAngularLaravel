@@ -29,16 +29,19 @@ class AccountController extends Controller
 
         $user = User::create([
             'username' => $request->username,
-            'email' => $request->email,
+            'email' => "test@test.pl",
             'known_as' => $request->knownAs,
             'gender' => $request->gender,
             'date_of_birth' => $request->dateOfBirth,
             'city' => $request->city,
             'country' => $request->country,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'role_id' => 1
         ]);
 
         $token = Auth::login($user);
+
+        
 
         return response()->json([
             'username' => $user->username,

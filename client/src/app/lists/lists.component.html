@@ -1,0 +1,27 @@
+<div class="text-cente mt-3">
+    <h2>{{predicate === 'liked' ? 'Members I like' : 'Members who like me'}}</h2>
+</div>
+
+<div class="container mt-3">
+    <div class="d-flex">
+        <form #form="ngForm" class="d-flex mb-3" (ngSubmit)="loadLikes()" autocomplete="off">
+        <div class="btn-group">
+            <button name="predicate" (click)="loadLikes()" class="btn btn-primary" btnRadio="liked" [(ngModel)]="predicate">Members I like</button>
+            <button name="predicate" (click)="loadLikes()" class="btn btn-primary " btnRadio="likedBy" [(ngModel)]="predicate">Members that likes me</button>                    
+        </div>
+    </form>
+    </div>
+    <div class="row mt-3">
+        <div class="col-2" *ngFor="let member of members">
+            <app-member-card [member]="member"></app-member-card>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center" *ngIf="pagination">
+    <pagination [(ngModel)]="pagination.currentPage" [boundaryLinks]="true" [maxSize]="10"
+        [totalItems]="pagination.totalItems" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
+        lastText="&raquo;" (pageChanged)="pageChanged($event)" [itemsPerPage]="pagination.itemsPerPage">
+
+    </pagination>
+</div>

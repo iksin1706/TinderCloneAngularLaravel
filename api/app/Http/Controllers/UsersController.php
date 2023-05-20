@@ -27,21 +27,23 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $pageNumber = $request->input('pageNumber', 1);
-        $pageSize = $request->input('pageSize', 10);
-        $minAge = $request->input('minAge');
-        $maxAge = $request->input('maxAge');
-        $gender = $request->input('gender');
-        $orderBy = $request->input('orderBy', 'created_at');
+        $pageNumber = $request->query('pageNumber', 1);
+        $pageSize = $request->query('pageSize', 10);
+        $minAge = $request->query('minAge');
+        $maxAge = $request->query('maxAge');
+        $gender = $request->query('gender');
+        $orderBy = $request->query('orderBy', 'created_at');
 
         $query = User::with('photos');
 
         if ($minAge) {
-            $query->where('age', '>=', $minAge);
+            $minBirthDate = date('Y-m-d', strtotime("-$minAge years"));
+            $query->where('date_of_birth', '<=', $minBirthDate);
         }
-
+        
         if ($maxAge) {
-            $query->where('age', '<=', $maxAge);
+            $maxBirthDate = date('Y-m-d', strtotime("-$maxAge years"));
+            $query->where('date_of_birth', '>=', $maxBirthDate);
         }
 
         if ($gender) {
@@ -50,7 +52,8 @@ class UsersController extends Controller
 
         $query->orderBy($orderBy);
 
-        $totalUsers = $query->count();
+        $totalItems = $query->count();
+        $totalPages = ceil($totalItems/$pageSize);
 
         $users = $query->skip(($pageNumber - 1) * $pageSize)
             ->take($pageSize)
@@ -58,21 +61,28 @@ class UsersController extends Controller
 
         $users = collect($users)->map(function ($user) {
             return [
-                'username' => $user->username,
+                'userName' => $user->username,
                 'knownAs' => $user->known_as,
-                'age' => now()->diffInYears($user->date_of_birth),
+                'age' => $user->age(),
                 'photoUrl' => $user->Photos->first(function ($photo) {
                     return $photo->is_main;
-                })->url,
+                })?->url,
                 'city' => $user->city,
-                'id' => $user->id
+                'country' => $user->country,
+                'id' => $user->id,
+                'created' => $user->created_at
             ];
         });
 
-        return response()->json(
+        $response = response()->json(
             $users,
             200
         );
+
+        $response->header('Content-Type','application/json');
+        $response->header('Access-Control-Expose-Headers','Pagination');
+        $response->header('Pagination', '{"currentPage":"'.$pageNumber.'","itemsPerPage":"'.$pageSize.'","totalItems":"'.$totalItems.'","totalPages":"'.$totalPages.'"}');
+        return $response;
     }
 
     /**

@@ -1,0 +1,8 @@
+<h4>Internal server error</h4>
+<ng-container *ngIf="error">
+    <h5>{{error.messege}}</h5>
+    <p>Look in F12 network request</p>
+    <code>
+        {{error.details}}
+    </code>
+</ng-container>

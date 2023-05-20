@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\MessageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,11 +27,16 @@ Route::controller(AccountController::class)->group(function () {
     Route::post('account/register', 'register');
 });
 Route::controller(UsersController::class)->group(function () {
-    Route::get('members', 'index');
-    Route::get('member/{username}', 'show');
-    Route::put('members', 'update');
+    Route::get('users', 'index');
+    Route::get('users/{username}', 'show');
+    Route::put('users', 'update');
 });
 Route::controller(LikeController::class)->group(function () {
     Route::get('likes', 'index');
     Route::post('likes/{username}', 'store');
-});  
+});
+
+Route::controller(MessageController::class)->group(function () {
+    Route::get('messages', 'index');
+    Route::post('messages/{username}', 'show');
+});

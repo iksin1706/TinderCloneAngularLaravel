@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -17,6 +18,20 @@ class DatabaseSeeder extends Seeder
         $jsonFile = storage_path('seeds\data.json'); // Replace with the path to your JSON file
 
         $data = json_decode(file_get_contents($jsonFile), true);
+
+        Role::insert(
+            [
+                [
+                    'name' => 'user',
+                ],
+                [
+                    'name' => 'moderator'
+                ],
+                [
+                    'name' => 'admin'
+                ]
+            ]
+        );
 
         foreach ($data as $item) {
             // Insert user data
@@ -34,7 +49,8 @@ class DatabaseSeeder extends Seeder
                 'country' => $item['country'],
                 'created_at' => now(),
                 'updated_at' => now(),
-                'password' => Hash::make("Passw0rd")
+                'password' => Hash::make("Passw0rd"),
+                'role_id' => 1
             ]);
 
             // Insert photos

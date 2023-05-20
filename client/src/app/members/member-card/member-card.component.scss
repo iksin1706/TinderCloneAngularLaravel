@@ -1,0 +1,58 @@
+$transition-time: 350ms;
+
+.card{
+    transition: $transition-time ease-out;
+    box-shadow: 0px 5px 20px #f2f2f200;
+    & img{
+        transform: scale(1);
+        transition: $transition-time ease-out;
+        opacity: 0.7;
+    }
+    &:hover{
+        transition: $transition-time ease-out;
+        transform: translateY(-1rem);
+        box-shadow: 0px 5px 20px #f2f2f2;
+        cursor: pointer;
+        & img{
+        transform: scale(1.2);
+        transition: $transition-time ease-out;
+        opacity: 0.7;
+        }
+    }
+    &-img-wrapper{
+        overflow: hidden;
+        position: relative;  
+        &:hover .member-icons{
+            bottom: 0;
+            opacity: 1;
+            transition: $transition-time;
+        }
+    
+    }
+}
+.btn{
+    border-radius: 50%;
+}
+
+
+
+.member-icons{
+    position: absolute;
+    bottom: -30%;
+    left: 0;
+    right: 0;
+    margin-left:auto;
+    margin-right: auto;
+    opacity: 0;
+    transition: $transition-time;
+}
+
+@keyframes fa-blink {
+    0% {opacity: 1;}
+    100% {opacity: 0.4;}
+}
+
+.is-online {
+    animation: fa-blink 1.5s linear infinite;
+    color: rgb(1,189,43);
+}

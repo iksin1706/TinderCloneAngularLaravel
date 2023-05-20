@@ -1,0 +1,13 @@
+<form class="form-group" [formGroup]="loginForm" (ngSubmit)="login()" autocomplete="off">
+    <h2 class="text-center text-primary">Log in</h2>
+    <hr>
+
+    <input name="username" [(ngModel)]="model.username" class="form-control m-2" type="text"
+    placeholder="Username" aria-label="Search">
+    <input name="password" [(ngModel)]="model.password" class="form-control m-2" type="password"
+    placeholder="Password" aria-label="Search">
+
+    <div class="text-center">
+        <button class="btn btn-success me-2" type="submit">Login</button>
+    </div>
+</form>

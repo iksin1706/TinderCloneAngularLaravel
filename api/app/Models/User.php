@@ -45,7 +45,8 @@ class User extends Authenticatable implements JWTSubject
         'interests',
         'city',
         'country',
-        'password'
+        'password',
+        'role_id'
     ];
 
     /**
@@ -83,45 +84,14 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Like::class, 'target_user_id');
     }
-    // /**
-    //  * Get the liked by users for the user.
-    //  */
-    // public function likedByUsers()
-    // {
-    //     return $this->hasMany(UserLike::class, 'liked_user_id');
-    // }
 
-    // /**
-    //  * Get the liked users for the user.
-    //  */
-    // public function likedUsers()
-    // {
-    //     return $this->hasMany(UserLike::class, 'liker_user_id');
-    // }
-
-    // /**
-    //  * Get the sent messages for the user.
-    //  */
-    // public function messagesSent()
-    // {
-    //     return $this->hasMany(Message::class, 'sender_id');
-    // }
-
-    // /**
-    //  * Get the received messages for the user.
-    //  */
-    // public function messagesReceived()
-    // {
-    //     return $this->hasMany(Message::class, 'recipient_id');
-    // }
-
-    // /**
-    //  * Get the roles for the user.
-    //  */
-    // public function roles()
-    // {
-    //     return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
-    // }
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+    public function age(){
+        return now()->diffInYears($this->date_of_birth);
+    }
 
     public function getJWTIdentifier()
     {
