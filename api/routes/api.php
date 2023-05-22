@@ -29,7 +29,10 @@ Route::controller(AccountController::class)->group(function () {
 Route::controller(UsersController::class)->group(function () {
     Route::get('users', 'index');
     Route::get('users/{username}', 'show');
+    Route::post('users/add-photo', 'addPhoto');
     Route::put('users', 'update');
+    Route::delete('users/delete-photo/{id}', 'deletePhoto');
+    Route::put('users/set-main-photo/{id}', 'setMainPhoto');
 });
 Route::controller(LikeController::class)->group(function () {
     Route::get('likes', 'index');
@@ -38,5 +41,6 @@ Route::controller(LikeController::class)->group(function () {
 
 Route::controller(MessageController::class)->group(function () {
     Route::get('messages', 'index');
-    Route::post('messages/{username}', 'show');
+    Route::get('messages/{username}', 'thread');
+    Route::post('messages', 'store');
 });

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Message;
 
 class MessageController extends Controller
 {
@@ -18,28 +18,33 @@ class MessageController extends Controller
     {
         $user = Auth::user();
 
-        $messages = Message::with('users')
-        ->select()
-        ->where('recipient_username', $user->username)
-        ->orWhere('sender_username', $user->username)
+        $messages = Message::where('recipient_id', $user->id)
+        ->orWhere('sender_id', $user->id)
         ->groupBy('recipient_id')
         ->groupBy('sender_id')
-        ->orderBy('message-sent', 'desc');
+        ->orderBy('message_sent', 'desc')
+        ->get();
+
+        
+
+
+        $messages = collect($messages)->map(function ($message) {
+            $photoUrl = User::where('id',$message->recipient_id)->first()->Photos->first(function ($photo) {
+                return $photo->is_main;
+            })?->url;
+            return [
+                'content' => $message->content,
+                'photoUrl' => $photoUrl,
+                'username' => $message->recipient_username,
+                'dateRead' => $message->date_read
+            ];
+        });
 
         return response()->json($messages);
     }
 
-    public function store(Request $request, $username)
+    public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'recipient_username' => 'required',
-            'content' => 'required',
-        ]);
-    
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-    
         $username = Auth::user()->username;
     
         if (strtolower($username) === strtolower($request->recipient_username)) {
@@ -48,20 +53,19 @@ class MessageController extends Controller
     
         $sender = User::where('username', $username)->first();
         $recipient = User::where('username', $request->recipient_username)->first();
+        // if (!$recipient) {
+        //     return response()->json("Recipient not found", 404);
+        // }
     
-        if (!$recipient) {
-            return response()->json("Recipient not found", 404);
-        }
+        $responseMessage = new Message();
+        $responseMessage->sender_id = $sender->id;
+        $responseMessage->recipient_id = $recipient->id;
+        $responseMessage->sender_username = $sender->username;
+        $responseMessage->recipient_username = $recipient->username;
+        $responseMessage->content = $request->content;
+        $responseMessage->save();
     
-        $message = new Message();
-        $message->sender_id = $sender->id;
-        $message->recipient_id = $recipient->id;
-        $message->sender_username = $sender->username;
-        $message->recipient_username = $recipient->username;
-        $message->content = $request->content;
-        $message->save();
-    
-        return response()->json($message, 200);
+        return response()->json($responseMessage, 200);
     }
 
 
@@ -69,8 +73,7 @@ class MessageController extends Controller
 
         $user = Auth::user();
 
-        $messages = Message::with('users')
-        ->where(function ($query) use ($user,$username) {
+        $messages = Message::where(function ($query) use ($user,$username) {
             $query->where('recipient_username', $user->username)
                 ->where('sender_username', $username);
         })
@@ -78,7 +81,7 @@ class MessageController extends Controller
             $query->where('recipient_username', $username)
                 ->where('sender_username', $user->username);
         })
-        ->orderBy('message_sent', 'desc');
+        ->orderBy('message_sent', 'desc')->get();
 
         return response()->json($messages);
     }

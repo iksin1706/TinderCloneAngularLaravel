@@ -11,9 +11,10 @@ import { AccountService } from '../_services/account.service';
 })
 export class LoginComponent {
   constructor(private accountService: AccountService, private toastr: ToastrService, private fb: FormBuilder, private router: Router) { }
-  loginForm: FormGroup = new FormGroup({});
   model: any = {};
   login() {
+    console.log(this.model);
+    
     this.accountService.login(this.model).subscribe({
       next: () => this.router.navigateByUrl('/members')
     }

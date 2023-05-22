@@ -6,8 +6,9 @@
     <div class="d-flex">
         <form #form="ngForm" class="d-flex mb-3" (ngSubmit)="loadLikes()" autocomplete="off">
         <div class="btn-group">
-            <button name="predicate" (click)="loadLikes()" class="btn btn-primary" btnRadio="liked" [(ngModel)]="predicate">Members I like</button>
-            <button name="predicate" (click)="loadLikes()" class="btn btn-primary " btnRadio="likedBy" [(ngModel)]="predicate">Members that likes me</button>                    
+            <button name="predicate" (click)="loadLikes()" class="btn btn-primary" [class.unactive]="predicate!=='matches'"   btnRadio="matches" [(ngModel)]="predicate">Matches</button>
+            <button name="predicate" (click)="loadLikes()" class="btn btn-primary" [class.unactive]="predicate!=='liked'"   btnRadio="liked" [(ngModel)]="predicate">Members I like</button>
+            <button name="predicate" (click)="loadLikes()" class="btn btn-primary " [class.unactive]="predicate!=='likedBy'"   btnRadio="likedBy" [(ngModel)]="predicate">Members that likes me</button>                    
         </div>
     </form>
     </div>

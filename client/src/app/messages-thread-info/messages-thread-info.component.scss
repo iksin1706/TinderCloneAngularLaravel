@@ -1,0 +1,38 @@
+.thread{
+    width: 25rem;
+    padding: .5rem;
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    background-color: #151515;
+    align-items: center;
+    transition: 100ms;
+    box-sizing: border-box;
+    &-photo{
+        width: 3rem;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        border: 2px solid purple;
+    }
+    &-details{
+        margin-left: 1rem;
+    }
+    &-username{
+        font-size: 1.2rem;
+        margin-bottom: 5px;
+        
+    }
+    &-last-message{
+        color: white;
+        font-size: .8rem;
+        font-weight: lighter;
+        margin-bottom: 0;
+    }
+
+    &:hover{
+        border-bottom: 3px solid purple;
+        transform: translateY(-3px);
+        background-color: #252525;
+        cursor: pointer;
+    }
+}

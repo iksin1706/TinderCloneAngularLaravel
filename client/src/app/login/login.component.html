@@ -1,4 +1,4 @@
-<form class="form-group" [formGroup]="loginForm" (ngSubmit)="login()" autocomplete="off">
+<form class="form-group" #loginForm="ngForm" (ngSubmit)="login()" autocomplete="off">
     <h2 class="text-center text-primary">Log in</h2>
     <hr>
 

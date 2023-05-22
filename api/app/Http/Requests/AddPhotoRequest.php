@@ -22,7 +22,7 @@ class AddPhotoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image' => 'required|image:jpeg,png,jpg,gif,svg|max:2048'
+            'file' => 'required|image:jpeg,png,jpg,gif,svg|max:2048'
         ];
     }
 }

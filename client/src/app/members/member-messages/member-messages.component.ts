@@ -24,9 +24,16 @@ export class MemberMessagesComponent {
   }
 
   sendMessage(){
+    console.log('test');
     if(!this.username) return;
-    this.messageService.sendMessage(this.username, this.messageContent).then(() => {
-      this.messageContent='';
+    console.log('test2');
+    this.messageService.sendMessage({
+      "recipient_username":this.username,
+      "content":this.messageContent
+  }).subscribe({
+      next: (response) => {
+        this.messages.push(response as Message);
+      }
     })
   }
 

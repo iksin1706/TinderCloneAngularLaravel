@@ -1,23 +1,30 @@
-<nav class="nav">
-    <div class="nav-profile">
+<nav class="navigation">
+    <div class="navigation-row navigation-profile">
         <div class="dropdown me-3" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
             <img src="{{user.photoUrl || './assets/user.png'}}" alt="">
             <a class="dropdown-toggle text-light text-decoration-none ms-2" dropdownToggle>{{user.knownAs}} </a>
             <div class="dropdown-menu mt-2" *dropdownMenu>
-                <a href="" class="dropdown-item" routerLink="/member/edit">Edit Profile</a>
-                <a href="" class="dropdown-item" (click)="logout()">Logout</a>
+                <a href="" class="dropdown-item " routerLink="/member/edit">Edit Profile</a>
+                <a href="" class="dropdown-item " (click)="logout()">Logout</a>
             </div>
-
-
         </div>
-        <div class="nav-likes" *ngIf="(accountService.currentUser$ | async) as user">
+        <div class="navigation-likes" *ngIf="(accountService.currentUser$ | async) as user">
             <a routerLink="/lists" routerLinkActive="active"><i class="nav-likes fa fa-heart"></i></a>
         </div>
         <div *ngIf="!(accountService.currentUser$ | async) as user">
             <a routerLink="/login" routerLinkActive="active">Log in</a>
-        </div>       
-    </div>
+        </div>
 
+    </div>
+    <div class="navigation-row navigation-members">
+            <a *ngIf="router.isActive('/cards',true)" routerLink="/members" class="navigation-link text-gradient">Can't find love in cards? Click here and look at all of our members</a>
+            <a *ngIf="!router.isActive('/cards',true)" routerLink="/members" class="navigation-link text-gradient">Click here to find love in cards</a>
+    </div>
+    <h2 class="navigation-header text-gradient ">
+        Messages
+
+    </h2>
+    <app-messages-thread-info></app-messages-thread-info>
 
     <!-- <div class="container-fluid">
         <a class="navbar-brand" routerLink="/" routerLinkActive="active">{{title}}</a>

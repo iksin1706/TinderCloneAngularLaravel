@@ -1,1 +1,33 @@
-/* You can add global styles to this file, and also import other style files */
+@import "./vars.scss";
+
+.text-gradient{
+    background: radial-gradient(circle at 0 0, $color-primary 0%, $color-secondary 100%);;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body{
+    // background: -webkit-radial-gradient(58% 130%,$color-secondary 0%, $color-primary 100%) no-repeat center bottom fixed;
+    background-position: bottom;
+    background: #303030
+}
+
+*{
+    padding: 0;
+    margin: 0;
+}
+
+.btn-primary{
+    background-image: linear-gradient( $color-secondary 0%, $color-primary 100%);;;
+    border: none;
+    border-radius: 0;
+    transition: .1s;
+    &:hover{
+        transform: scale(1.05);
+        z-index: 100;
+    }
+}
+
+.unactive{
+    background: gray !important;
+}

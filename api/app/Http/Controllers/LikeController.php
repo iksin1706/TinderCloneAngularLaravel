@@ -41,6 +41,16 @@ class LikeController extends Controller
                     ->where('target_user_id', $userId);
             });
         }
+
+        if($predicate == 'matches'){
+            $users->whereIn('id', function ($query) use ($userId) {
+                $query->select('source_user_id')
+                ->from('likes')
+                ->where('target_user_id', $userId)
+                ->where('is_mutual',true);
+            });
+            
+        }
         
         $likedUsers = $users->get()->map(function ($user) {
             return [
@@ -49,7 +59,7 @@ class LikeController extends Controller
                 'age' => now()->diffInYears($user->date_of_birth),
                 'photoUrl' => $user->Photos->first(function ($photo) {
                     return $photo->is_main;
-                })->url,
+                })?->url,
                 'city' => $user->city,
                 'id' => $user->id
             ];
@@ -84,6 +94,14 @@ class LikeController extends Controller
         $userLike = new Like();
         $userLike->source_user_id = $sourceUser->id;
         $userLike->target_user_id = $likedUser->id;
+        
+        $mutualLike = Like::where('target_user_id',$sourceUser->id)->where('source_user_id',$likedUser->id)->first();
+        if($mutualLike) {
+            $mutualLike->is_mutual=true;
+            $userLike->is_mutual=true;
+            $mutualLike->save();
+        } else $userLike->is_mutual=false;
+
         Like::create($userLike->toArray());
         
         if ($sourceUser->save()) {

@@ -1,29 +1,11 @@
 <div class="row">
     <div class="col-4">
         <div class="card">
-            <img src="{{member.photoUrl || './assets/user.png'}}" alt="" class="card-img-top img-thumbnail">
+            <ngx-gallery [options]="galleryOptions" [images]="galleryImages" class="ngx-gallery img-thumbnail"></ngx-gallery>        
             <div class="card-body">
-                <div class="mb-2" *ngIf="(presenceService.onlineUsers$ | async)?.includes(member.userName)">
-                    <i class="fa fa-user-circle text-success">Online now</i>
-                </div>
-                <h1>{{member.knownAs}} {{member.age}}</h1>
+                <h1>{{member.knownAs}}, {{member.age}}</h1>
                 <div>
-                    <strong>Location: </strong>
-                    <p>{{member.city}}, {{member.country}}</p>
-                </div>
-                <div>
-                    <strong>Last active: </strong>
-                    <!-- <p>{{member.lastActive| timeago}}</p> -->
-                </div>
-                <div>
-                    <strong>Member since: </strong>
-                    <!-- <p>{{member.created | date}}</p> -->
-                </div>
-            </div>
-            <div class="card-footer">
-                <div class="btn-group d-flex">
-                    <button class="btn btn-primary ">Like</button>
-                    <button (click)="selectTab('Messages')" class="btn btn-primary bg-dark">Messeges</button>
+                    <p>Location: {{member.city}}, {{member.country}}</p>
                 </div>
             </div>
         </div>
@@ -40,11 +22,8 @@
                 <h4>Interests</h4>
                 <p>{{member.interests}}</p>
             </tab>
-            <tab heading="Photos" class="pt-3" (selectTab)="onTabActivated($event)">
-                <!-- <ngx-gallery [options]="galleryOptions" [images]="galleryImages" class="ngx-gallery"></ngx-gallery> -->
-            </tab>
             <tab heading="Messages" class="pt-3" (selectTab)="onTabActivated($event)">
-                <app-member-messages [username]="member.userName"></app-member-messages>
+                <app-member-messages [messages]="this.messages" [username]="member.userName"></app-member-messages>
             </tab>
         </tabset>
     </div>

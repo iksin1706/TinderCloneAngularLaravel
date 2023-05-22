@@ -5,6 +5,7 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { BehaviorSubject, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Message } from '../_models/message';
+import { MessageThreadInfo } from '../_models/messagesThreadInfo';
 import { User } from '../_models/user';
 import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
 
@@ -18,37 +19,40 @@ export class MessageService {
   private messageThreadSource = new BehaviorSubject<Message[]>([]);
   messageThread$ = this.messageThreadSource.asObservable(); 
 
+  private messageThreadsInfoSource = new BehaviorSubject<MessageThreadInfo[]>([]);
+  messageThreadsInfo$ = this.messageThreadsInfoSource.asObservable(); 
+
   constructor(private http: HttpClient) { }
 
-  createHubConnection(user: User, otherUsername: string){
-    this.hubConnection = new HubConnectionBuilder().withUrl(this.hubUrl + 'message?user=' + otherUsername ,{
-      accessTokenFactory: () => user.token
-    })
-    .withAutomaticReconnect()
-    .build();
+  // createHubConnection(user: User, otherUsername: string){
+  //   this.hubConnection = new HubConnectionBuilder().withUrl(this.hubUrl + 'message?user=' + otherUsername ,{
+  //     accessTokenFactory: () => user.token
+  //   })
+  //   .withAutomaticReconnect()
+  //   .build();
 
-    this.hubConnection.start().catch(error => console.log(error));
+  //   this.hubConnection.start().catch(error => console.log(error));
 
-    this.hubConnection.on('ReceiveMessageThread', messages => {
-      this.messageThreadSource.next(messages);
-    })
+  //   this.hubConnection.on('ReceiveMessageThread', messages => {
+  //     this.messageThreadSource.next(messages);
+  //   })
 
-    this.hubConnection.on('NewMessage', message => {
-      this.messageThread$.pipe(take(1)).subscribe({
-        next: messages => {
-          this.messageThreadSource.next([...messages,message])
-        }
-      })
-    })
+  //   this.hubConnection.on('NewMessage', message => {
+  //     this.messageThread$.pipe(take(1)).subscribe({
+  //       next: messages => {
+  //         this.messageThreadSource.next([...messages,message])
+  //       }
+  //     })
+  //   })
     
-  }
+  // }
 
-  stopHubConnection(){
-    if(this.hubConnection){
-      this.hubConnection.stop();
-    }
+  // stopHubConnection(){
+  //   if(this.hubConnection){
+  //     this.hubConnection.stop();
+  //   }
 
-  }
+  // }
 
   getMessages(pageNumber: number, pageSize:number, container: string){
     let params = getPaginationHeaders(pageNumber,pageSize);
@@ -58,12 +62,15 @@ export class MessageService {
   }
 
   getMessageThread(username: string){
-    return this.http.get<Message[]>(this.baseUrl + 'messages/thread/' + username);
+    return this.http.get<Message[]>(this.baseUrl + 'messages/' + username);
   }
 
-  async sendMessage(username: string, content: string){
-    return this.hubConnection?.invoke('SendMessage', {recipientUsername: username,content}).catch(error=>console.log(error)
-    )
+  getMessagesThreadsInfo(){
+    this.messageThreadsInfo$ = this.http.get<MessageThreadInfo[]>(this.baseUrl + 'messages/');
+  }
+
+  sendMessage(model: any){
+    return this.http.post(this.baseUrl + 'messages/',model);
   }
   deleteMessage(id: number){
     return this.http.delete(this.baseUrl + 'messages/' + id);

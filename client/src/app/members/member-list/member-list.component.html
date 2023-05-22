@@ -1,5 +1,5 @@
 <div class="text-center mt-3">
-    <h2>Your matchers - {{pagination?.totalItems}}</h2>
+    <h2>Members</h2>
 </div>
 
 <div class="container mt-3" *ngIf="userParams">
@@ -27,9 +27,9 @@
 
         <div class="col">
             <div class="btn-group float-end">
-                <button [(ngModel)]="userParams.orderBy" btnRadio="lastActive" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Last Active</button>
-                <button [(ngModel)]="userParams.orderBy" btnRadio="created" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Newest members</button>
-                <button [(ngModel)]="userParams.orderBy" btnRadio="lastActive" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Last Active</button>
+                <button [(ngModel)]="userParams.orderBy" btnRadio="lastActive" [class.unactive]="userParams.orderBy==='lastActive'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Last Active</button>
+                <button [(ngModel)]="userParams.orderBy" btnRadio="created" [class.unactive]="userParams.orderBy==='created'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Newest members</button>
+                <button [(ngModel)]="userParams.orderBy" btnRadio="lastActive" [class.unactive]="userParams.orderBy==='lastActive'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Last Active</button>
             </div>
         </div>
 

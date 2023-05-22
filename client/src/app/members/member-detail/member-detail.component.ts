@@ -39,13 +39,13 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
       })
   }
   ngOnDestroy(): void {
-    this.messageService.stopHubConnection();
+    // this.messageService.stopHubConnection();
   }
   ngOnInit(): void {
     this.route.data.subscribe({
       next: data => {
         this.member = data['member'];
-        this.memberService.getMember('davis').subscribe({
+        this.memberService.getMember(this.member.userName).subscribe({
           next: response => {
             if (response) this.member=response;
             console.log(this.member);
@@ -53,7 +53,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
         });
       }
     });
-
+    this.loadMessages();
     this.route.queryParams.subscribe({
       next: params => {
         params['tab'] && this.selectTab(params['tab'])
@@ -63,21 +63,24 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     this.galleryOptions = [
       {
         width: '500px',
-        height: '500px',
+        height: '50rem',
         imagePercent: 100,
-        thumbnailsColumns: 4,
+        thumbnails: false,
         imageAnimation: NgxGalleryAnimation.Slide,
         preview: false,
       }
     ]
 
 
-
+    
     this.galleryImages = this.getImages();
   }
   getImages() {
     if(!this.member) return [];
     const imageUrls= [];
+    console.log(this.member.photos);
+    console.log(this.member.photos);
+    console.log(this.member.photos);
     for(const photo of this.member.photos){
         imageUrls.push({
           small: photo.url,
@@ -104,9 +107,8 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   onTabActivated(data: TabDirective) {
     this.activeTab = data;
     if(this.activeTab.heading==='Messages' && this.user){
-      this.messageService.createHubConnection(this.user, this.member.userName);
+
     } else {
-      this.messageService.stopHubConnection();
     }
   }
 

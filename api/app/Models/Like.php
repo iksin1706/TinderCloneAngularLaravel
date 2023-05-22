@@ -24,6 +24,7 @@ class Like extends Model
     protected $fillable = [
         'source_user_id',
         'target_user_id',
+        'is_mutual'
     ];
 
     /**

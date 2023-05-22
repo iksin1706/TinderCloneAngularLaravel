@@ -32,6 +32,10 @@ import { UserManagementComponent } from './admin/user-management/user-management
 import { PhotoManagmentComponent } from './admin/photo-managment/photo-managment.component';
 import { RolesModalComponent } from './modals/roles-modal/roles-modal.component';
 import { LoginComponent } from './login/login.component';
+import { MessagesListComponent } from './messages-list/messages-list.component';
+import { MessagesThreadsComponent } from './messages-threads/messages-threads.component';
+import { MessagesThreadInfoComponent } from './messages-thread-info/messages-thread-info.component';
+import { TruncateWordsPipe } from './truncate-words.pipe';
 
 @NgModule({
   declarations: [
@@ -57,7 +61,11 @@ import { LoginComponent } from './login/login.component';
     UserManagementComponent,
     PhotoManagmentComponent,
     RolesModalComponent,
-    LoginComponent
+    LoginComponent,
+    MessagesListComponent,
+    MessagesThreadsComponent,
+    MessagesThreadInfoComponent,
+    TruncateWordsPipe
   ],
   imports: [
     BrowserAnimationsModule,

@@ -11,31 +11,62 @@ img {
     border-radius: 50%;
 }
 
-.nav{
+.navigation{
     margin: 0;
     padding: 0;
     left: 0;
     top:0;
-    width: 20rem;
+    width: 25rem;
     height: 100vh;
     position: fixed;
     display: flex;
+    align-content: flex-start;
+    flex-wrap: wrap;
     
-    background-color: rgba(163, 163, 163, 0.308);
+    background-color: #202020;
 
-    &-profile{
+
+    &-row{
         top: 0;
         width: 100%;
-        height: 5rem;
-        background: radial-gradient(circle at 0 0, $color-primary 0%, $color-secondary 100%);
+        height: 6rem;
         display: flex;
         padding-left: 1rem;
         align-items: center;
+        background-color: #151515;
+    }
+    &-profile{
+        background: radial-gradient(circle at 0 0, $color-primary 0%, $color-secondary 100%);
         justify-content: space-between;
     }
      &-likes{
         margin-right: 1rem;
         float: right;
         font-size: 2rem;
+        &:hover{
+            transform: scale(1.1);
+        }
      }
+
+     &-link{
+        font-size: 600;
+        width: 100%;
+        padding-right: 1rem;
+        text-align: center;
+        transition: 100ms;
+        font-weight: bold;
+        &:hover{
+            transform: scale(1.1);
+        }
+     }
+     &-header{
+        font-size: 1.2rem;
+        padding: 1rem;
+        flex: 1;
+        width: 100%;
+       
+     }
+}
+.thread{
+    flex: 1;
 }

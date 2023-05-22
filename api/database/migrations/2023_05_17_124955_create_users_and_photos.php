@@ -49,6 +49,7 @@ return new class extends Migration
                 $table->id();
                 $table->foreignId('source_user_id')->constrained('users');
                 $table->foreignId('target_user_id')->constrained('users');
+                $table->boolean('is_mutual');
                 $table->timestamps();
             });
 

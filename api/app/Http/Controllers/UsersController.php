@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class UsersController extends Controller
 {
@@ -40,7 +41,7 @@ class UsersController extends Controller
             $minBirthDate = date('Y-m-d', strtotime("-$minAge years"));
             $query->where('date_of_birth', '<=', $minBirthDate);
         }
-        
+
         if ($maxAge) {
             $maxBirthDate = date('Y-m-d', strtotime("-$maxAge years"));
             $query->where('date_of_birth', '>=', $maxBirthDate);
@@ -53,7 +54,7 @@ class UsersController extends Controller
         $query->orderBy($orderBy);
 
         $totalItems = $query->count();
-        $totalPages = ceil($totalItems/$pageSize);
+        $totalPages = ceil($totalItems / $pageSize);
 
         $users = $query->skip(($pageNumber - 1) * $pageSize)
             ->take($pageSize)
@@ -79,9 +80,9 @@ class UsersController extends Controller
             200
         );
 
-        $response->header('Content-Type','application/json');
-        $response->header('Access-Control-Expose-Headers','Pagination');
-        $response->header('Pagination', '{"currentPage":"'.$pageNumber.'","itemsPerPage":"'.$pageSize.'","totalItems":"'.$totalItems.'","totalPages":"'.$totalPages.'"}');
+        $response->header('Content-Type', 'application/json');
+        $response->header('Access-Control-Expose-Headers', 'Pagination');
+        $response->header('Pagination', '{"currentPage":"' . $pageNumber . '","itemsPerPage":"' . $pageSize . '","totalItems":"' . $totalItems . '","totalPages":"' . $totalPages . '"}');
         return $response;
     }
 
@@ -91,6 +92,13 @@ class UsersController extends Controller
     public function show($username)
     {
         $user = User::with('photos')->where('username', $username)->first();
+        $user['photoUrl'] = $user->Photos->first(function ($photo) {
+            return $photo->is_main;
+        })?->url;
+        $user['lookingFor'] = $user['looking_for'];
+        $user['age'] = $user->age();
+        $user['knownAs'] = $user['known_as'];
+        $user['userName'] = $user['username'];
         if ($user)
             return $user;
         else return response("Not found", 404);
@@ -99,39 +107,116 @@ class UsersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateUserRequest $request)
     {
-        $user->update($request->validated());
-        return new UserResource($user->refresh());
-    }
-    public function addPhoto(AddPhotoRequest $request)
-    {
-        $request = $request->validated();
-        if (!Auth::user()) return response("Not found", 404);
+        $user = User::where('username', auth()->user()->username)->first();
 
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
 
-        $uploadFolder = 'users';
-        $image = $request->file('image');
-        $image_uploaded_path = $image->store($uploadFolder, 'public');
+        $request['looking_for'] = $request['lookingFor'];
 
-        return response()->json(['path' => $image_uploaded_path], 201);
-    }
+        $user->fill($request->all());
 
-    public function setMainPhoto($id)
-    {
-        $currentMainPhoto = Photo::where('is_main', true)->first();
-        if ($currentMainPhoto) $currentMainPhoto->update("is_main", true);
-        Photo::find($id)->update("is_main", true);
+        if (!$user->isDirty()) {
+            return response()->json(['message' => 'No changes detected.'], 200);
+        }
 
-        return response("Succes", 204);
+        if ($user->save()) {
+            return response()->json(['message' => 'User updated successfully'], 200);
+        }
+
+        return response()->json(['error' => 'Failed to update user'], 500);
     }
 
-    public function deletePhoto($path)
+
+    public function addPhoto(Request $request)
     {
-        // if(File::exists($image_path)) {
-        //     File::delete($image_path);
-        // }
-        // $image = Storage::get($path);
-        // return response($image, 200)->header('Content-Type', Storage::getMimeType($path));
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        if (!$request->hasFile('file') || !$request->file('file')->isValid()) {
+            return response()->json(['error' => 'Invalid file'], 400);
+        }
+
+        $file = $request->file('file');
+        $path = $file->store('public/photos');
+
+        $photo = new Photo();
+        $photo->url = asset(Str::replaceFirst('public', 'storage', $path));
+        $photo->public_id = '';
+        $photo->user_id = $user->id;
+
+        if ($user->photos->isEmpty()) {
+            $photo->is_main = true;
+        } else {
+            $photo->is_main = false;
+        }
+
+        $photo->save();
+
+        return response()->json($photo);
+    }
+
+    public function deletePhoto($id)
+    {
+        $photo = Photo::find($id);
+
+        if (!$photo) {
+            return response()->json(['error' => 'Photo not found'], 404);
+        }
+
+        // Delete the photo from storage
+        // Assuming the photo URL is stored as `url` attribute in the `photos` table
+
+        $photoPath = public_path($photo->url);
+
+        if (file_exists($photoPath)) {
+            unlink($photoPath);
+        }
+
+        // Delete the photo record from the database
+        $photo->delete();
+
+        return response()->json(['message' => 'Photo deleted successfully']);
+    }
+
+    public function setMainPhoto($photoId)
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        $photo = Photo::where('id', $photoId)
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$photo) {
+            return response()->json(['error' => 'Photo not found'], 404);
+        }
+
+        if ($photo->isMain) {
+            return response()->json(['error' => 'This is already your main photo'], 400);
+        }
+
+        $currentMain = Photo::where('user_id', $user->id)
+            ->where('is_main', true)
+            ->first();
+
+        if ($currentMain) {
+            $currentMain->is_main = false;
+            $currentMain->save();
+        }
+
+        $photo->is_main = true;
+        $photo->save();
+
+        return response()->json(['message' => 'Main photo set successfully']);
     }
 }

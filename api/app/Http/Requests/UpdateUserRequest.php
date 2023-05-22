@@ -22,7 +22,11 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+                'Introduction' => 'sometimes|max:255',
+                'LookingFor' => 'sometimes|max:255',
+                'Interests' => 'sometimes|max:255',
+                'City' => 'sometimes|max:255',
+                'Country' => 'sometimes|max:255',
         ];
     }
 }
