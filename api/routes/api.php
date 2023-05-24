@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MessageController;
@@ -44,3 +45,11 @@ Route::controller(MessageController::class)->group(function () {
     Route::get('messages/{username}', 'thread');
     Route::post('messages', 'store');
 });
+
+
+Route::controller(AdminController::class)->group(function () {
+    Route::get('admin/users-with-roles', 'usersWithRoles');
+    Route::put('admin/edit-role/{username}', 'editRole');
+});
+
+

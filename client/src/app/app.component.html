@@ -1,7 +1,6 @@
-<ngx-spinner type="ball-atom">
-    <h3>Loading...</h3>
-</ngx-spinner>
-<app-nav></app-nav>
-<div class="container mt-4 mb-0 main">
+<div id="rainbow-progress-bar"></div>
+<app-nav *ngIf="accountService.currentUser$ |async"></app-nav>
+<div [class.main-nav-margin]="accountService.currentUser$ |async"
+class="container mb-0 main-nav-margin main-container">
 <router-outlet></router-outlet>
 </div>

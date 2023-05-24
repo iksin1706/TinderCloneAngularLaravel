@@ -16,8 +16,8 @@ export class AdminService {
     return this.http.get<User[]>(this.baseUrl + 'admin/users-with-roles')
   }
 
-  updateUserRoles(username: string, roles: string[]) {
-    return this.http.put<string[]>(this.baseUrl + 'admin/edit-roles/' + username + '?roles=' + roles, {});
+  updateUserRoles(username: string, role: string) {
+    return this.http.put<string>(this.baseUrl + 'admin/edit-role/' + username + '?role=' + role, {});
   }
 }
 

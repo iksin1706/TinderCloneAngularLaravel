@@ -1,6 +1,6 @@
 export interface MessageThreadInfo {
     photoUrl : string;
     username: string
-    lastMessage: string;
-    isRead?:boolean;
+    content: string;
+    dateRead :Date;
 }

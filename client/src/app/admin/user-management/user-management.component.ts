@@ -15,7 +15,7 @@ export class UserManagementComponent implements OnInit {
   availableRoles = [
     'Admin',
     'Moderator',
-    'Member'
+    'User'
   ]
 
   constructor(private adminService: AdminService, private modalService: BsModalService){
@@ -38,24 +38,19 @@ export class UserManagementComponent implements OnInit {
       initialState: {
         username: user.username,
         availableRoles: this.availableRoles,
-        selectedRoles: [...user.roles]
+        selectedRole: user.role
       }
     }
     this.bsModalRef = this.modalService.show(RolesModalComponent, config);
     this.bsModalRef.onHide?.subscribe({
       next: () => {
-        const selectedRoles = this.bsModalRef.content?.selectedRoles;
-        if (!this.arrayEqual(selectedRoles!, user.roles)) {
-          this.adminService.updateUserRoles(user.username, selectedRoles!).subscribe({
-            next: roles => user.roles = roles
+        const selectedRole = this.bsModalRef.content?.selectedRole;
+        if (selectedRole !== user.role && selectedRole) {
+          this.adminService.updateUserRoles(user.username, selectedRole).subscribe({
+            next: role => user.role = role
           })
         }
       }
     })
   }
-
-  private arrayEqual(arr1: any[], arr2: any[]) {
-    return JSON.stringify(arr1.sort()) === JSON.stringify(arr2.sort());
-  }
-
 }

@@ -9,7 +9,8 @@
 body{
     // background: -webkit-radial-gradient(58% 130%,$color-secondary 0%, $color-primary 100%) no-repeat center bottom fixed;
     background-position: bottom;
-    background: #303030
+    background: #101010;
+    height: 100vh;
 }
 
 *{
@@ -20,7 +21,7 @@ body{
 .btn-primary{
     background-image: linear-gradient( $color-secondary 0%, $color-primary 100%);;;
     border: none;
-    border-radius: 0;
+    border-radius: .5rem;
     transition: .1s;
     &:hover{
         transform: scale(1.05);
@@ -31,3 +32,24 @@ body{
 .unactive{
     background: gray !important;
 }
+
+#rainbow-progress-bar {
+    position: absolute;
+    left:0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  
+    width: 100%;
+    height: 4px;
+  
+    background: linear-gradient(124deg,$color-primary,$color-secondary);
+    background-size: 900% 900%;
+   z-index: 100;
+    animation: rainbow 1s ease infinite;
+  }
+  @keyframes rainbow { 
+    0% { background-position: 0% 100%; }
+    50% { background-position: 100% 200%; }
+    100% {background-position: 0% 100%; }
+  }

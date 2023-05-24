@@ -1,0 +1,16 @@
+td {
+    height: 4rem;
+
+    & a{
+        line-height: 4rem;
+    }
+}
+
+.user-table {
+    overflow-y: scroll;
+    height: 40rem;
+    margin-top: 2rem;
+    &-row{
+        border-top: 2px solid #aaaaaa5d;
+    }
+}

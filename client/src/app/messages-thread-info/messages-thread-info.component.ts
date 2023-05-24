@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { MessageThreadInfo } from '../_models/messagesThreadInfo';
 
 @Component({
   selector: 'app-messages-thread-info',
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./messages-thread-info.component.scss']
 })
 export class MessagesThreadInfoComponent {
-
+  @Input() info: MessageThreadInfo | undefined
 }

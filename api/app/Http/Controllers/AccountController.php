@@ -80,7 +80,8 @@ class AccountController extends Controller
             'type' => 'bearer',
             'knownAs' => $user->known_as,
             'gender' => $user->gender,
-            'photoUrl' => $photoUrl
+            'photoUrl' => $photoUrl,
+            'role' => $user->role->name
         ],201);
     }
     public function logout()
@@ -103,6 +104,7 @@ class AccountController extends Controller
             'knownAs' => $user->know_as,
             'gender' => $user->gender,
             'photoUrl' => $mainPhoto,
+            'roleId' => $user->role_id
         ]);
     }
 }

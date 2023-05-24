@@ -23,7 +23,7 @@ export class HasRoleDirective {
       }
 
       ngOnInit(): void {
-        if(this.user.roles.some(r => this.appHasRole.includes(r))) {
+        if(this.appHasRole.includes(this.user.role)) {
           this.viewContainerRef.createEmbeddedView(this.templateRef);
         } else {
           this.viewContainerRef.clear();

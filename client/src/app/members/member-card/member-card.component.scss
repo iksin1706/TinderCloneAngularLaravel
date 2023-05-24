@@ -2,6 +2,8 @@
 $transition-time: 350ms;
 
 .card{
+    width: 20rem;
+    height: 50rem;
     transition: $transition-time ease-out;
     box-shadow: 0px 5px 20px #f2f2f200;
     & img{

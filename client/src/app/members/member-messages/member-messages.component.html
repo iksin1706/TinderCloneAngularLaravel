@@ -5,10 +5,10 @@
         </div>
         <ul *ngIf="(messages)!.length>0" class="chat">
             <li *ngFor="let message of (messages)">
-                <div [class.me]="message.senderId==1">
-                    <span class="chat-img float-end">
+                <div [class.me]="message.senderUsername==='Lisa'">
+                    <div class="chat-img float-end">
                         <img class="rounded-circle" src="{{message.senderPhotoUrl || './assets/user.png'}}" alt="image of user">
-                    </span>
+                    </div>
                     <div class="chat-body">
                         <div class="header">
                             <small class="text-muted">

@@ -17,15 +17,24 @@
 
     </div>
     <div class="navigation-row navigation-members">
-            <a *ngIf="router.isActive('/cards',true)" routerLink="/members" class="navigation-link text-gradient">Can't find love in cards? Click here and look at all of our members</a>
-            <a *ngIf="!router.isActive('/cards',true)" routerLink="/members" class="navigation-link text-gradient">Click here to find love in cards</a>
+        <a *ngIf="router.isActive('/cards',true)" routerLink="/members" class="navigation-link text-gradient">Can't find
+            love in cards? Click here and look at all of our members</a>
+        <a *ngIf="!router.isActive('/cards',true)" routerLink="/members" class="navigation-link text-gradient">All
+            Members</a><br> <br> <a *ngIf="!router.isActive('/cards',true)" routerLink="/members"
+            class="navigation-link text-gradient">Cards</a>
     </div>
-    <h2 class="navigation-header text-gradient ">
-        Messages
+        <div class="navigation-row navigation-members"
+            *ngIf="(accountService.currentUser$ | async)?.role==='Admin'">
+            <a routerLink="/admin" class="navigation-link text-gradient">Admin Panel</a>
+        </div>
 
+    <h2 class="navigation-header  ">
+        Last messages
+        <button class="btn"><i class="fa fa-refresh" (click)="messageService.getMessagesThreadsInfo()"></i></button>
     </h2>
-    <app-messages-thread-info></app-messages-thread-info>
-
+    <div *ngFor="let thread of messageService.messageThreadsInfo$ | async">
+        <app-messages-thread-info [info]="thread"></app-messages-thread-info>
+    </div>
     <!-- <div class="container-fluid">
         <a class="navbar-brand" routerLink="/" routerLinkActive="active">{{title}}</a>
         <ul class="navbar-nav me-auto mb-2 mb-md-0" >

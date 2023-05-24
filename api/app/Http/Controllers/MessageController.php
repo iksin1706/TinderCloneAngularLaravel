@@ -18,27 +18,41 @@ class MessageController extends Controller
     {
         $user = Auth::user();
 
-        $messages = Message::where('recipient_id', $user->id)
-        ->orWhere('sender_id', $user->id)
-        ->groupBy('recipient_id')
-        ->groupBy('sender_id')
-        ->orderBy('message_sent', 'desc')
-        ->get();
+        $messages = Message::whereIn('id', function ($query) use ($user) {
+            $query->selectRaw('MAX(id)')
+                ->from('messages')
+                ->where('recipient_id', $user->id)
+                ->orWhere('sender_id', $user->id)
+                ->groupBy('recipient_id', 'sender_id');
+        })
+            ->orderBy('message_sent', 'desc')
+            ->get();
 
-        
 
 
-        $messages = collect($messages)->map(function ($message) {
-            $photoUrl = User::where('id',$message->recipient_id)->first()->Photos->first(function ($photo) {
+
+        $messages = collect($messages)->map(function ($message) use ($user) {
+            $photoUrl = User::where('id', $message->sender_id)->first()->Photos->first(function ($photo) {
                 return $photo->is_main;
             })?->url;
+
+            $username = strtolower($message->sender_username);
+
+            if ($username === strtolower($user->username)) {
+                return null; // Wyklucz rekord, który ma zgodne username
+            }
+
             return [
                 'content' => $message->content,
                 'photoUrl' => $photoUrl,
-                'username' => $message->recipient_username,
+                'username' => $username,
                 'dateRead' => $message->date_read
             ];
-        });
+        })
+            ->filter(); // Usuń wartości null
+
+        $messages = $messages->values();
+
 
         return response()->json($messages);
     }
@@ -46,17 +60,17 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         $username = Auth::user()->username;
-    
+
         if (strtolower($username) === strtolower($request->recipient_username)) {
             return response()->json("You cannot send messages to yourself", 400);
         }
-    
+
         $sender = User::where('username', $username)->first();
         $recipient = User::where('username', $request->recipient_username)->first();
-        // if (!$recipient) {
-        //     return response()->json("Recipient not found", 404);
-        // }
-    
+        if (!$recipient) {
+            return response()->json("Recipient not found", 404);
+        }
+
         $responseMessage = new Message();
         $responseMessage->sender_id = $sender->id;
         $responseMessage->recipient_id = $recipient->id;
@@ -64,24 +78,51 @@ class MessageController extends Controller
         $responseMessage->recipient_username = $recipient->username;
         $responseMessage->content = $request->content;
         $responseMessage->save();
-    
+        $responseMessage->senderPhotoUrl = $request->senderPhotoUrl;
+
         return response()->json($responseMessage, 200);
     }
 
 
-    public function thread($username){
+    public function thread($username)
+    {
 
         $user = Auth::user();
 
-        $messages = Message::where(function ($query) use ($user,$username) {
+        $messages = Message::where(function ($query) use ($user, $username) {
             $query->where('recipient_username', $user->username)
                 ->where('sender_username', $username);
         })
-        ->orWhere(function ($query) use ($user,$username) {
-            $query->where('recipient_username', $username)
-                ->where('sender_username', $user->username);
-        })
-        ->orderBy('message_sent', 'desc')->get();
+            ->orWhere(function ($query) use ($user, $username) {
+                $query->where('recipient_username', $username)
+                    ->where('sender_username', $user->username);
+            })
+            ->orderBy('message_sent', 'desc')->get();
+
+        $unreadMessages = $messages->whereNull('date_read')
+            ->where('recipient_username', $user->username);
+
+        if ($unreadMessages->isNotEmpty()) {
+            $unreadMessages->each(function ($message) {
+                $message->date_read = now();
+                $message->save();
+            });
+        }
+
+        $messages = collect($messages)->map(function ($message) use ($user) {
+            $photoUrl = User::where('id', $message->sender_id)->first()->Photos->first(function ($photo) {
+                return $photo->is_main;
+            })?->url;
+
+            return [
+                'content' => $message->content,
+                'senderPhotoUrl' => $photoUrl,
+                'dateRead' => $message->date_read,
+                'senderUsername' => $message->sender_username,
+            ];
+        });
+
+
 
         return response()->json($messages);
     }

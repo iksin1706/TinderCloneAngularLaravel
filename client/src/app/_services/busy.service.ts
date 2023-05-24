@@ -11,18 +11,16 @@ export class BusyService {
 
   busy(){
     this.busyRequestCount++;
-    this.spinnerService.show(undefined,{
-      type: 'ball-atom'
-      // bdColor: 'rgba(255,255,255,0)',
-      // color: '#333333'
-    })
+    let progressBar = document.querySelector("#rainbow-progress-bar") as HTMLElement;
+    if(progressBar)  progressBar.style.display = 'block';
   }
 
   idle(){
     this.busyRequestCount--;
     if(this.busyRequestCount <=0){
       this.busyRequestCount=0;
-      this.spinnerService.hide();
+      let progressBar = document.querySelector("#rainbow-progress-bar") as HTMLElement;
+      if(progressBar)  progressBar.style.display = 'none';
     }
   }
 }

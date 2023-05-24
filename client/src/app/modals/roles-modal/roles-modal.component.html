@@ -6,10 +6,11 @@
   </div>
   <div class="modal-body">
     <form #rolesForm="ngForm" id="rolesForm" action="">
-        <div class="form-check" *ngFor="let role of availableRoles">
-            <input type="checkbox" class="form-check-input" [checked]="selectedRoles.includes(role)" value="role" (change)="updateChecked(role)" [disabled]="role === 'Admin' && username === 'admin'">
-            <label>{{role}}</label>
-        </div>
+      <select [value]="selectedRole" name="" id="" (change)="update($event)">
+        <option class="form-check"  [value]="role" *ngFor="let role of availableRoles">
+            <label >{{role}}</label>
+        </option>
+      </select>
     </form>
   </div>
   <div class="modal-footer">

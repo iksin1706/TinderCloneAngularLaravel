@@ -10,13 +10,13 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 export class RolesModalComponent {
   username = '';
   availableRoles: any[] = [];
-  selectedRoles: any[] = [];
+  selectedRole: string='';
 
   constructor(public bsModalRef: BsModalRef){ }
 
-  updateChecked(checkedValue: string) {
-    const index = this.selectedRoles.indexOf(checkedValue);
-    index !== -1 ? this.selectedRoles.splice(index, 1) : this.selectedRoles.push(checkedValue);
-
+  update(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.selectedRole=value;
+    console.log(this.selectedRole);
   }
 }

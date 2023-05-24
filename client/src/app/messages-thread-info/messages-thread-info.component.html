@@ -1,7 +1,9 @@
-<div class="thread">
-    <img class="thread-photo" src="{{'./assets/user.png'}}" alt="">
+<div class="thread" *ngIf="info" routerLink="/members/{{info.username}}"
+[queryParams]="{tab: 'Messages',skipLocationChange: true}">
+    <img class="thread-photo" src="{{ info.photoUrl || './assets/user.png'}}" alt="">
     <div class="thread-details">
-        <h3 class="thread-username text-gradient">Davis</h3>
-        <h3 class="thread-last-message">Nooo siemano</h3>
+        <h3 class="thread-username text-gradient" >{{info.username}}</h3>
+        <h3 class="thread-last-message">{{info.content}}</h3>
     </div>
+
 </div>

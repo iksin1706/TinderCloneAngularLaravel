@@ -67,6 +67,7 @@ export class MessageService {
 
   getMessagesThreadsInfo(){
     this.messageThreadsInfo$ = this.http.get<MessageThreadInfo[]>(this.baseUrl + 'messages/');
+    return this.messageThreadsInfo$;
   }
 
   sendMessage(model: any){
