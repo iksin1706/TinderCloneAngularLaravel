@@ -1,0 +1,26 @@
+.cards-container{
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+.card-wrapper{
+    position: absolute;
+}
+
+.btn{
+    border-radius: 50%;
+    font-size: 2rem;
+    width: 5rem;
+    height: 5rem;
+}
+
+.buttons-wrapper {
+    margin-top: 42rem;
+    display: flex;
+    width: 25rem;
+    justify-content: space-around;
+}
+
+.card-wrapper *{
+    user-select: none;
+}

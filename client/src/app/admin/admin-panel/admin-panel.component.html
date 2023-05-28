@@ -5,7 +5,11 @@
         <div class="container">
             <app-user-management></app-user-management>
         </div>
-        <tab heading="Photo managment" *appHasRole="['Admin','Moderator']"></tab>
+        <tab heading="Reports" *appHasRole="['Admin','Moderator']"></tab>
+        <div class="container">
+            <app-photo-managment></app-photo-managment>
+        </div>
+        <tab heading="Bans" *appHasRole="['Admin','Moderator']"></tab>
         <div class="container">
             <app-photo-managment></app-photo-managment>
         </div>

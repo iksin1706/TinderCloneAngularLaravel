@@ -10,7 +10,12 @@ body{
     // background: -webkit-radial-gradient(58% 130%,$color-secondary 0%, $color-primary 100%) no-repeat center bottom fixed;
     background-position: bottom;
     background: #101010;
-    height: 100vh;
+    min-height: 100vh;
+    min-width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
 }
 
 *{
@@ -19,14 +24,22 @@ body{
 }
 
 .btn-primary{
-    background-image: linear-gradient( $color-secondary 0%, $color-primary 100%);;;
-    border: none;
-    border-radius: .5rem;
-    transition: .1s;
-    &:hover{
-        transform: scale(1.05);
-        z-index: 100;
-    }
+         
+        background-image: linear-gradient(to right, $color-primary,$color-secondary);
+        text-align: center;
+        transition: 0.3s;
+        background-size: 200% auto;
+        color: white;            
+        border-radius: 10px;
+        border: none;
+
+
+      &:hover {
+        background-position: right center; /* change the direction of the change here */
+        color: #fff;
+        text-decoration: none;
+      }
+     
 }
 
 .unactive{

@@ -1,6 +1,6 @@
-<div id="rainbow-progress-bar"></div>
+<div id="rainbow-progress-bar" *ngIf="accountService.currentUser$ |async"></div>
 <app-nav *ngIf="accountService.currentUser$ |async"></app-nav>
 <div [class.main-nav-margin]="accountService.currentUser$ |async"
-class="container mb-0 main-nav-margin main-container">
+class="mb-0 main-nav-margin main-container">
 <router-outlet></router-outlet>
 </div>

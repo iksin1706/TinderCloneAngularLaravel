@@ -47,13 +47,9 @@ export class MemberEditComponent implements OnInit {
   getImages() {
     if (!this.member) return [];
     const imageUrls = [];
-    console.log(this.member.photos);
-    console.log(this.member.photos);
-    console.log(this.member.photos);
     this.member.photos.sort(value => {
       return value.isMain ? -1 : 1 
     })
-   console.log("TEST");
     for (const photo of this.member.photos) {
       imageUrls.push({
         small: photo.url,

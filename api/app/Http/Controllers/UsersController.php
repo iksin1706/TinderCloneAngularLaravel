@@ -71,7 +71,8 @@ class UsersController extends Controller
                 'city' => $user->city,
                 'country' => $user->country,
                 'id' => $user->id,
-                'created' => $user->created_at
+                'created' => $user->created_at,
+                'photos' => $user->photos
             ];
         });
 
@@ -170,16 +171,12 @@ class UsersController extends Controller
             return response()->json(['error' => 'Photo not found'], 404);
         }
 
-        // Delete the photo from storage
-        // Assuming the photo URL is stored as `url` attribute in the `photos` table
-
         $photoPath = public_path($photo->url);
 
         if (file_exists($photoPath)) {
             unlink($photoPath);
         }
 
-        // Delete the photo record from the database
         $photo->delete();
 
         return response()->json(['message' => 'Photo deleted successfully']);

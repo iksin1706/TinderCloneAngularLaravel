@@ -80,6 +80,9 @@ class MessageController extends Controller
         $responseMessage->save();
         $responseMessage->senderPhotoUrl = $request->senderPhotoUrl;
 
+        $responseMessage->toArray();
+        $responseMessage['senderUsername']=$responseMessage['sender_username'];
+
         return response()->json($responseMessage, 200);
     }
 

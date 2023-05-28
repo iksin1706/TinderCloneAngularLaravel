@@ -8,17 +8,9 @@
         </div>
     </div>
     <div class="col-4">
-        <div class="card">
-            <ngx-gallery [options]="galleryOptions" [images]="galleryImages" class="ngx-gallery img-thumbnail"></ngx-gallery>        
-            <div class="card-body">
-                <h1>{{member.knownAs}}, {{member.age}}</h1>
-                <div>
-                    <p>Location: {{member.city}}, {{member.country}}</p>
-                </div>
-            </div>
-        </div>
+        <app-member-profile-card [member]="member"></app-member-profile-card>
     </div>
-    <div class="col-8">
+    <div class="col-7">
         <tabset class="member-tabs">
             <tab heading="About {{member.knownAs}}" class="pt-1">
                 <form id="editForm" #editForm="ngForm" (ngSubmit)="updateMember()">

@@ -10,6 +10,8 @@ import { MemberDetailComponent } from './members/member-detail/member-detail.com
 import { MemberEditComponent } from './members/member-edit/member-edit.component';
 import { MemberListComponent } from './members/member-list/member-list.component';
 import { MessegesComponent } from './messeges/messeges.component';
+import { RegisterComponent } from './register/register.component';
+import { SwipeCardsComponent } from './swipe-cards/swipe-cards.component';
 import { AdminGuard } from './_guards/admin.guard';
 import { AuthGuard } from './_guards/auth.guard';
 import { PreventUnsavedChangesGuard } from './_guards/prevent-unsaved-changes.guard';
@@ -26,9 +28,11 @@ const routes: Routes = [
   {path: 'members',component: MemberListComponent},
   {path: 'members/:username',component: MemberDetailComponent, resolve: {member:MemberDetailedResolver}},
   {path: 'member/edit',component: MemberEditComponent,canDeactivate: [PreventUnsavedChangesGuard]},
-  {path: 'lists',component: ListsComponent}],
+  {path: 'lists',component: ListsComponent},
+  {path: 'cards',component: SwipeCardsComponent}],
   },
   {path: 'login',component: LoginComponent},
+  {path: 'register',component: RegisterComponent},
   {path: 'not-found',component: NotFoundComponent},
   {path: 'server-error', component: ServerErrorComponent},
   {path: '**',component: NotFoundComponent, pathMatch: 'full'},

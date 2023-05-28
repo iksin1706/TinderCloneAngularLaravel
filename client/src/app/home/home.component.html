@@ -1,20 +1,18 @@
-<div class="background">
-    <div class="container mt-5">
+<div class="home">
+    <div class="">
         <div *ngIf="!registerMode" style="text-align: center;">
-            <h1 class="text-gradient">
-                Find your match
+            <h1 class="home-header text-gradient">
+                Find your love here
             </h1>
-            <p class="lead">Come on in to view your matches... all you need to do is sign up!</p>
-            <div class="text-center">
-                <button class="btn btn-primary btn-lg me-2" (click)="registerToggle()">Register</button>
-                <button class="btn btn-primary btn-info btn-lg" routerLink="/login">Login</button>
+            <div class="text-center home-container">
+                <button class="home-btn btn btn-primary btn-lg me-2" routerLink="/login">Log in</button>
+                <button class="btn" (click)="registerToggle()">Sign up</button>
+
             </div>
         </div>
         <div *ngIf="registerMode" class="container">
             <div class="row justify-content-center">
-                <div class="col-4">
                     <app-register (cancelRegister)="cancelRegisterMode($event)"></app-register>
-                </div>
             </div>
         </div>
     </div>

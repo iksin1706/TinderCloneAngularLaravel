@@ -1,23 +1,61 @@
+@import "../../../vars.scss";
+
 .card {
     border: none;
     height: 35rem;
+    background: #202020;
 }
 
-.chat{
+.chat {
     height: 25rem;
     overflow-y: scroll;
     list-style: none;
-    margin:0;
+    margin: 0;
     padding: 1rem;
     display: flex;
     flex-direction: column-reverse;
+    &-body {
+        height: 100%;
+    }
 }
 
-.chat li{
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px dotted #b3a3ad3d;
+.chat li {
+    margin-bottom: 5px;
 }
-.rounded-circle{
-    max-height: 50px;
+.rounded-circle {
+    max-height: 20px;
+    margin-top: 1rem;
+    margin-left: 0.5rem;
+}
+.message {
+    display: flex;
+
+    &-container {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        background: linear-gradient(to right, $color-primary, $color-secondary);
+        padding: 0.5rem;
+        border-radius: 2rem;
+        flex-grow: 0;
+        p {
+            margin-bottom: 0;
+            margin-left: 1rem;
+            margin-right: 1rem;
+            flex-grow: 0;
+            max-width: 30rem;
+        }
+    }
+}
+.me {
+    flex-direction: row-reverse;
+    .message-container {
+        flex-direction: row-reverse;
+        background: linear-gradient(to right, $color-primary, $color-secondary);
+    }
+}
+
+.chat-img {
+    display: flex;
+    align-items: flex-end;
 }
