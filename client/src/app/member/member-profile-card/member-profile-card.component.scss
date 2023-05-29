@@ -5,6 +5,9 @@
     padding: 0;
     margin: 0;
     object-fit:cover;
+    background-color: #303030;
+    border: none;
+
 }
 
 .card {
@@ -12,6 +15,8 @@
     margin: 0;
     height: 40em;
     width: 25em;
+    border-radius: 1rem;
+    overflow: hidden;
 
     position: relative;
     &-body{

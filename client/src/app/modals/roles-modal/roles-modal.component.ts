@@ -1,5 +1,5 @@
 import { AnimateTimings } from '@angular/animations';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -10,7 +10,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 export class RolesModalComponent {
   username = '';
   availableRoles: any[] = [];
-  selectedRole: string='';
+  @Input() selectedRole: string='';
 
   constructor(public bsModalRef: BsModalRef){ }
 

@@ -2,6 +2,7 @@
 
 .home {
     background-image:linear-gradient(#000000aa,#000000aa), url("/assets/background.png") ;
+    background-attachment: fixed;
     background-repeat: no-repeat;
     background-position: 0% 15%;
     background-size: cover;
@@ -13,6 +14,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
     filter: saturate(1);
 
     &-header{
@@ -37,11 +39,40 @@
           }
          
     }
+}
+.header {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.members {
 
-    & *{
-        position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding-bottom: 10rem;
+  &-header{
+    text-align: center;
+    margin: 10rem;
+    font-size: 2.5rem;
+  }
+
+  &-container{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+
+    & > *:nth-child(2){
+      padding-bottom: 50px;
     }
+  }
+  &-card{
+    transition: .3s;
+    &:hover{
+      transform: translateY(-2rem);
 
+    }
+  }
 
-    
 }

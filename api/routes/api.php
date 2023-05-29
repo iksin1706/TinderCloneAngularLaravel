@@ -45,6 +45,9 @@ Route::controller(MessageController::class)->group(function () {
     Route::get('messages/{username}', 'thread');
     Route::post('messages', 'store');
 });
+Route::group(['middleware' => 'check.blockage'], function () {
+    // Tutaj umieść swoje trasy, które będą kontrolowane przez middleware
+});
 
 
 Route::controller(AdminController::class)->group(function () {

@@ -32,6 +32,7 @@ return new class extends Migration
                 $table->string('city');
                 $table->string('country');
                 $table->string('password');
+                $table->integer('points');
                 $table->foreignId('role_id')->constrained('roles');
                 $table->timestamps();
             });
@@ -85,7 +86,12 @@ return new class extends Migration
                 $table->timestamps();
 
                 $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-                $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
+                $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
+            });
+            Schema::create('default_points', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('what_for');
+                $table->integer('points');
             });
     }
 

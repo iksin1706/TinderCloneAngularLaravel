@@ -1,5 +1,5 @@
 <div class="home">
-    <div class="">
+    <div class="header">
         <div *ngIf="!registerMode" style="text-align: center;">
             <h1 class="home-header text-gradient">
                 Find your love here
@@ -12,8 +12,17 @@
         </div>
         <div *ngIf="registerMode" class="container">
             <div class="row justify-content-center">
-                    <app-register (cancelRegister)="cancelRegisterMode($event)"></app-register>
+                <app-register (cancelRegister)="cancelRegisterMode($event)"></app-register>
             </div>
         </div>
+    </div>
+
+    <div class="members">
+        <h2 class="members-header">Look at out best members</h2>
+
+        <div class="members-container">
+            <app-member-profile-card class="members-card" *ngFor="let member of members" [member]="member"></app-member-profile-card>
+        </div>
+        <h2 class="members-header">Join and become one of them</h2>
     </div>
 </div>

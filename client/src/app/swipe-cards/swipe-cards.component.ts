@@ -9,28 +9,30 @@ import { MembersService } from '../_services/members.service';
   selector: 'app-swipe-cards',
   templateUrl: './swipe-cards.component.html',
   styleUrls: ['./swipe-cards.component.scss'],
-animations: [
-    trigger('fadeout', [
-      state('start', style({
-        opacity: 1,
-        transform: 'translateY(0)'
-      })),
-      transition('start => left', [
-        style({ opacity: 1 }),
-        animate(400, style({ opacity: 0, transform: 'translateX(-100%)' }))
+  animations: [
+    // the fade-in/fade-out animation.
+    trigger('simpleFadeAnimation', [
+
+      // the "in" style determines the "resting" state of the element when it is visible.
+      state('in', style({opacity: 1})),
+      
+
+      // fade in when created. this could also be written as transition('void => *')
+      transition(':enter', [
+        style({opacity: 0}),
+        animate(200)
       ]),
-      transition('start => right', [
-        style({ opacity: 1 }),
-        animate(400, style({ opacity: 0, transform: 'translateX(-100%)' }))
-      ])
-    ]),
+
+      // fade out when destroyed. this could also be written as transition('void => *')
+      transition(':leave',
+        animate(400, style({opacity: 0,transform: 'translate(-400px,-100px) rotate(-15deg)'})))
+    ])
   ]
 })
 export class SwipeCardsComponent {
    members : Member[] = [] ;
    pagination: Pagination | undefined;
    userParams: UserParams | undefined;
-    animationState: string = 'start';
 
    constructor(private memberService: MembersService) {
     this.userParams = this.memberService.getUserParams();
@@ -67,15 +69,5 @@ export class SwipeCardsComponent {
   dislikeUser(member:Member){
     this.removeMember(member);
   }
-
-  fadeOutToLeft() {
-    this.animationState='left';
-  }
-
-  fadeOutToRight() {
-    this.animationState='right';
-  }
-  resetAnimationState(state:any) {
-    this.animationState = 'start';
-  }
+  
 }

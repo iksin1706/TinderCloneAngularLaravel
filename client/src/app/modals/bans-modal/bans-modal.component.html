@@ -1,0 +1,15 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Ban {{username}}</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #bansForm="ngForm" id="rolesForm" action="">
+        <input type="text" class="form-text-input" placeholder="reason">
+        <app-date-picker [formControl]="$any(bansForm.controls['dateOfBirth'])" [label]="'Ban until'"></app-date-picker>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Submit</button>
+  </div>

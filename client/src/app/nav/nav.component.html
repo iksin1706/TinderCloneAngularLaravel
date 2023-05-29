@@ -24,7 +24,7 @@
             class="navigation-link text-gradient">Cards</a>
     </div>
         <div class="navigation-row navigation-members"
-            *ngIf="(accountService.currentUser$ | async)?.role==='Admin'">
+            *ngIf="(accountService.currentUser$ | async)?.role==='admin'">
             <a routerLink="/admin" class="navigation-link text-gradient">Admin Panel</a>
         </div>
 

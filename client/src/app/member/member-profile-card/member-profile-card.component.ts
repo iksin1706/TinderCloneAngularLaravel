@@ -12,8 +12,12 @@ export class MemberProfileCardComponent implements OnInit{
   @Input() profileLink: boolean = false;
   galleryOptions: NgxGalleryOptions[] = [];
   galleryImages: NgxGalleryImage[] = []
+  imageArrows:boolean | undefined;
 
   ngOnInit(){
+    if(this.member)
+    this.imageArrows=(this.member.photos?.length>1);
+
     this.galleryOptions = [
       {
         width: '500px',
@@ -22,6 +26,7 @@ export class MemberProfileCardComponent implements OnInit{
         thumbnails: false,
         imageAnimation: NgxGalleryAnimation.Slide,
         preview: false,
+        imageArrows: this.imageArrows
       }
     ]
     this.galleryImages = this.getImages();

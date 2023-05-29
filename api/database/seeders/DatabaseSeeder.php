@@ -36,7 +36,8 @@ class DatabaseSeeder extends Seeder
         foreach ($data as $item) {
             // Insert user data
             $userId = DB::table('users')->insertGetId([
-                'username' => $item['username'],
+                'username' => strtolower($item['username']),
+                'email' => strtolower($item['username']).'@email.com',
                 'gender' => $item['gender'],
                 'date_of_birth' => $item['date_of_birth'],
                 'known_as' => $item['known_as'],
@@ -62,8 +63,8 @@ class DatabaseSeeder extends Seeder
                     'public_id' => "temp",
                     'url' => $photo['url'],
                     'is_main' => $photo['is_main'],
-                    // 'created_at' => now(),
-                    // 'updated_at' => now(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
             }
         }

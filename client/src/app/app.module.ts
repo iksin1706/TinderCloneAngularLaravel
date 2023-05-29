@@ -38,6 +38,8 @@ import { MessagesThreadInfoComponent } from './messages-thread-info/messages-thr
 import { TruncateWordsPipe } from './truncate-words.pipe';
 import { MemberProfileCardComponent } from './member/member-profile-card/member-profile-card.component';
 import { SwipeCardsComponent } from './swipe-cards/swipe-cards.component';
+import { BansModalComponent } from './modals/bans-modal/bans-modal.component';
+import { ReportModalComponent } from './modals/report-modal/report-modal.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +71,9 @@ import { SwipeCardsComponent } from './swipe-cards/swipe-cards.component';
     MessagesThreadInfoComponent,
     TruncateWordsPipe,
     MemberProfileCardComponent,
-    SwipeCardsComponent
+    SwipeCardsComponent,
+    BansModalComponent,
+    ReportModalComponent
   ],
   imports: [
     BrowserAnimationsModule,

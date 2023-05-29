@@ -42,6 +42,7 @@ export class MemberMessagesComponent {
     }).subscribe({
       next: (response) => {
         this.messages.unshift(response as Message);
+        this.messageContent='';
       }
     })
   }
