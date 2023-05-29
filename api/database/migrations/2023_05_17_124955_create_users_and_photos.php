@@ -62,11 +62,30 @@ return new class extends Migration
                 $table->string('recipient_username');
                 $table->text('content');
                 $table->timestamp('date_read')->nullable();
-                $table->timestamp('message_sent')->default(DB::raw('CURRENT_TIMESTAMP'));
                 $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
                 $table->foreign('recipient_id')->references('id')->on('users')->onDelete('cascade');
     
                 $table->timestamps();
+            });
+            Schema::create('reports', function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedBigInteger('reporting_id');
+                $table->unsignedBigInteger('reported_id');
+                $table->string('reason', 300);
+                $table->timestamps(); 
+                $table->foreign('reported_id')->references('id')->on('users');
+                $table->foreign('reporting_id')->references('id')->on('users');
+            });
+            Schema::create('blockages', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('user_id');
+                $table->unsignedBigInteger('admin_id');
+                $table->string('reason', 300);
+                $table->timestamp('until')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+                $table->timestamps();
+
+                $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+                $table->foreign('admin_id')->references('id')->on('admins')->onDelete('cascade');
             });
     }
 
@@ -81,5 +100,7 @@ return new class extends Migration
         Schema::dropIfExists('messages');
         Schema::dropIfExists('users');
         Schema::dropIfExists('likes');
+        Schema::dropIfExists('reports');
+        Schema::dropIfExists('blockages');
     }
 };

@@ -25,7 +25,7 @@ class MessageController extends Controller
                 ->orWhere('sender_id', $user->id)
                 ->groupBy('recipient_id', 'sender_id');
         })
-            ->orderBy('message_sent', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
 
@@ -100,7 +100,7 @@ class MessageController extends Controller
                 $query->where('recipient_username', $username)
                     ->where('sender_username', $user->username);
             })
-            ->orderBy('message_sent', 'desc')->get();
+            ->orderBy('created_at', 'desc')->get();
 
         $unreadMessages = $messages->whereNull('date_read')
             ->where('recipient_username', $user->username);

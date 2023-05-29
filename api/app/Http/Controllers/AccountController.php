@@ -96,7 +96,7 @@ class AccountController extends Controller
     public function refresh()
     {
         $user = User::find(Auth::user());
-        $mainPhoto = $user->photos()->where('isMain', true)->first();
+        $mainPhoto = $user->photos()->where('is_main', true)->first();
         return response()->json([
             'username' => $user->username,
             'token' => Auth::refresh(),

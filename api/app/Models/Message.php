@@ -12,12 +12,10 @@ class Message extends Model
         'recipient_username',
         'content',
         'date_read',
-        'message_sent',
     ];
 
     protected $dates = [
         'date_read',
-        'message_sent',
     ];
 
     // Define relationships
