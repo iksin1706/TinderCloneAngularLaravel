@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Blockage extends Model
+class Blockade extends Model
 {
+    protected $table = 'blockages';
     protected $fillable = ['user_id', 'admin_id', 'reason', 'until'];
 
     // Relacja z użytkownikiem

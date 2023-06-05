@@ -4,9 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BanController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,14 +47,21 @@ Route::controller(MessageController::class)->group(function () {
     Route::get('messages/{username}', 'thread');
     Route::post('messages', 'store');
 });
-Route::group(['middleware' => 'check.blockage'], function () {
-    // Tutaj umieść swoje trasy, które będą kontrolowane przez middleware
-});
-
 
 Route::controller(AdminController::class)->group(function () {
     Route::get('admin/users-with-roles', 'usersWithRoles');
     Route::put('admin/edit-role/{username}', 'editRole');
 });
+
+Route::controller(BanController::class)->group(function () {
+    Route::get('admin/blockages', 'index');
+    Route::post('user/{username}/ban', 'ban');
+})
+;Route::controller(ReportController::class)->group(function () {
+    Route::get('admin/reports', 'index');
+    Route::post('user/{username}/report', 'report');
+});
+
+
 
 

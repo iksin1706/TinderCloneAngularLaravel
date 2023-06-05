@@ -1,1 +1,12 @@
-<p>report-modal works!</p>
+<div class="modal-header">
+    <h4 class="modal-title pull-left">Ban {{username}}</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="reportForm" class="register" (ngSubmit)="reportForm.valid && report()" id="rolesForm" action="">
+        <app-text-input [formControl]="$any(reportForm.controls['reason'])" [label]="'Reason'" [type]="'text'"></app-text-input>
+        <button type="submit" class="btn btn-default" (click)="reportForm.valid && bsModalRef.hide()">Submit</button>
+    </form>
+  </div>

@@ -38,6 +38,11 @@ export class ErrorInterceptor implements HttpInterceptor {
               this.accountService.logout();
               this.router.navigateByUrl('/login');
               break;
+              case 403:
+                this.toastr.error(error.error);
+                this.accountService.logout();
+                this.router.navigateByUrl('/login');
+                break;
             case 404:
               this.router.navigateByUrl('/not-found');
               break;

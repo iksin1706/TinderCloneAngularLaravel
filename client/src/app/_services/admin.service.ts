@@ -19,5 +19,14 @@ export class AdminService {
   updateUserRoles(username: string, role: string) {
     return this.http.put<string>(this.baseUrl + 'admin/edit-role/' + username + '?role=' + role, {});
   }
+  banUser(username: string,values : any){
+    return this.http.post<string>(this.baseUrl + 'user/'+ username + '/ban',values);
+  }
+
+  getReports(){
+    return this.http.get<Report []>(this.baseUrl + 'admin/users-with-roles')
+  }
+
+
 }
 

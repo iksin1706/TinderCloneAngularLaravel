@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
+import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
+import { ReportModalComponent } from 'src/app/modals/report-modal/report-modal.component';
 import { Member } from 'src/app/_models/member';
 import { Message } from 'src/app/_models/message';
 import { User } from 'src/app/_models/user';
@@ -25,13 +28,15 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   activeTab?: TabDirective;
   messages: Message[] = [];
   user?: User;
-
+  bsModalRefBans: BsModalRef<ReportModalComponent> = new BsModalRef<ReportModalComponent>();
 
   constructor(private accountService: AccountService,
     private route:ActivatedRoute,
     private messageService: MessageService,
     private memberService: MembersService,
-    public presenceService: PresenceService){
+    public presenceService: PresenceService,
+    private modalService: BsModalService, 
+    private toaster: ToastrService){
       this.accountService.currentUser$.pipe(take(1)).subscribe({
         next: user => {
           if(user) this.user=user;
@@ -111,6 +116,15 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
 
     } else {
     }
+  }
+  openReportModal(username:string) {
+    const config = {
+      class: 'modal-dialog-centered',
+      initialState: {
+        username: username,
+      }
+    }
+    this.bsModalRefBans = this.modalService.show(ReportModalComponent, config);
   }
 
 }

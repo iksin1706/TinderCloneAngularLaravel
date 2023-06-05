@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Models\Blockade;
 use App\Services\TokenService;
 use Illuminate\Auth\Events\Registered;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -41,14 +44,14 @@ class AccountController extends Controller
 
         $token = Auth::login($user);
 
-        
+
 
         return response()->json([
             'username' => $user->username,
             'token' => $token,
             'knownAs' => $user->know_as,
             'gender' => $user->gender,
-        ],201);
+        ], 201);
     }
 
     public function login(LoginRequest $request)
@@ -64,14 +67,28 @@ class AccountController extends Controller
             ], 401);
         }
 
-        $user=User::find(Auth::user()->id);
-        
+        $user = User::find(Auth::user()->id);
+
         $mainPhoto = $user->photos()->where('is_main', true)->first();
-        
+
         if ($mainPhoto) {
             $photoUrl = $mainPhoto->url;
         } else {
             $photoUrl = null;
+        }
+
+        if (Auth::check()) {
+            $ban = Blockade::where('user_id', Auth::user()->id)->orderBy('until', 'desc')->first();
+            if ($ban) {
+                $banned_days = Carbon::now()->diffInDays($ban->until, false);
+                if ($banned_days > 0) {
+                    Auth::logout();
+                    return response(
+                        'Jestes zablokowany na ' . $banned_days . ' dni. Skontaktuj się z administratorem.',
+                        Response::HTTP_FORBIDDEN
+                    );
+                }
+            }
         }
 
         return response()->json([
@@ -82,7 +99,7 @@ class AccountController extends Controller
             'gender' => $user->gender,
             'photoUrl' => $photoUrl,
             'role' => $user->role->name
-        ],201);
+        ], 201);
     }
     public function logout()
     {

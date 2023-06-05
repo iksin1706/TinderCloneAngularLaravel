@@ -15,7 +15,7 @@
 }
 
 .buttons-wrapper {
-    margin-top: 42rem;
+    margin-top: 36rem;
     display: flex;
     width: 25rem;
     justify-content: space-around;
@@ -23,4 +23,32 @@
 
 .card-wrapper *{
     user-select: none;
+}
+
+.swipe-left{
+    animation: fadeLeft .5s forwards;
+}
+
+.swipe-right{
+    animation: fadeRight .5s forwards;
+}
+
+@keyframes fadeLeft {
+    0%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        transform: translate(-300px,-100px) rotate(25deg);
+    }
+}
+
+@keyframes fadeRight {
+    0%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+        transform: translate(300px,-100px) rotate(25deg);
+    }
 }

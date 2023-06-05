@@ -88,7 +88,7 @@ class LikeController extends Controller
             ->first();
         
         if ($userLike) {
-            return response()->json(['error' => 'You already like this user'], 400);
+            return response('You already like this user', 400);
         }
         
         $userLike = new Like();
@@ -108,6 +108,6 @@ class LikeController extends Controller
             return response()->json(['message' => 'User liked successfully'], 200);
         }
         
-        return response()->json(['error' => 'Failed to like user'], 400);
+        return response('Failed to like user', 400);
     }
 }

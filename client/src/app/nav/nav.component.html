@@ -23,9 +23,14 @@
             Members</a><br> <br> <a *ngIf="!router.isActive('/cards',true)" routerLink="/cards"
             class="navigation-link text-gradient">Cards</a>
     </div>
+    <h2 class="navigation-header" *ngIf="(accountService.currentUser$ | async)?.role==='admin'">
+        Admin options
+    </h2>
         <div class="navigation-row navigation-members"
             *ngIf="(accountService.currentUser$ | async)?.role==='admin'">
-            <a routerLink="/admin" class="navigation-link text-gradient">Admin Panel</a>
+
+            <a routerLink="/admin" class="navigation-link text-gradient">Users</a>
+            <a routerLink="/admin" class="navigation-link text-gradient">Reports</a>
         </div>
 
     <h2 class="navigation-header  ">

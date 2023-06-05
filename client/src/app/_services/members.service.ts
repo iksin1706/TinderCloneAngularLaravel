@@ -56,6 +56,7 @@ export class MembersService {
 
     params = params.append('minAge',userParams.minAge);
     params = params.append('maxAge',userParams.maxAge);
+    if(userParams.gender && userParams.gender!=='')
     params = params.append('gender',userParams.gender);
     params = params.append('orderBy', userParams.orderBy);
 
@@ -101,5 +102,9 @@ export class MembersService {
     params = params.append('predicate',predicate);
 
     return getPaginatedResult<Member[]>(this.baseUrl + 'likes', params,this.http);
+  }
+
+  reportUser(username: string,values : any){
+    return this.http.post<string>(this.baseUrl + 'user/'+ username + '/report',values);
   }
 }

@@ -2,21 +2,18 @@
     <table>
         <thead>
             <tr>
-                <th style="width: 20%;">Username</th>
-                <th style="width: 20%;">ActiveRoles</th>
-                <th style="width: 20%;">Actions</th>
-                <th style="width: 20%;">Actions</th>
-                <th style="width: 20%;">Actions</th>
+                <th style="width: 25%;">Username</th>
+                <th style="width: 25%;">Roles</th>
+                <th style="width: 25%;">Edit Role</th>
+                <th style="width: 25%;">Ban User</th>
             </tr>
         </thead>
         <tbody>
             <tr class="user-table-row" *ngFor="let user of users">
                 <td> <a routerLink="/members/{{user.username}}">{{user.username}}</a></td>
                 <td>{{user.role}}</td>
-                <td><button (click)="openRolesModal(user)" class="btn btn-info">Edit role</button></td>
-                <td><button (click)="openRolesModal(user)" class="btn btn-info">Points</button></td>
-                <td><button (click)="openRolesModal(user)" class="btn btn-danger">Block user</button></td>
-
+                <td><button (click)="openRolesModal(user)" class="btn btn-primary">Edit role</button></td>
+                <td><button (click)="openBanModal(user)" class="btn btn-danger">Ban user</button></td>
             </tr>
         </tbody>
     </table>

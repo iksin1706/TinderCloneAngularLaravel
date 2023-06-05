@@ -33,7 +33,7 @@ export class SwipeCardsComponent {
    members : Member[] = [] ;
    pagination: Pagination | undefined;
    userParams: UserParams | undefined;
-
+   animation:string='left';
    constructor(private memberService: MembersService) {
     this.userParams = this.memberService.getUserParams();
   }

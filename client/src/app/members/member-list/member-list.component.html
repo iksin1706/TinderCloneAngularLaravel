@@ -22,16 +22,16 @@
             </select>
         </div>
 
-        <button class="btn btn-primary ms-1" type="submit">Apply Filters</button>
-        <button (click)="resetFilters()" class="btn btn-secondary ms-1" type="reset">Reset Filters</button>
-
         <div class="sort-by mx-1">
             <div class="btn-group float-end">
-                <button [(ngModel)]="userParams.orderBy" btnRadio="lastActive" [class.unactive]="userParams.orderBy==='lastActive'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Last Active</button>
-                <button [(ngModel)]="userParams.orderBy" btnRadio="created" [class.unactive]="userParams.orderBy==='created'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Newest members</button>
-                <button [(ngModel)]="userParams.orderBy" btnRadio="lastActive" [class.unactive]="userParams.orderBy==='lastActive'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Active</button>
+                <button [(ngModel)]="userParams.orderBy" btnRadio="lastActive" [class.unactive]="userParams.orderBy!=='newest'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Last Active</button>
+                <button [(ngModel)]="userParams.orderBy" btnRadio="created" [class.unactive]="userParams.orderBy!=='created_at'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Newest members</button>
+                <button [(ngModel)]="userParams.orderBy" btnRadio="lastActive" [class.unactive]="userParams.orderBy!=='best'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Active</button>
             </div>
         </div>
+
+        <button class="btn btn-primary ms-1" type="submit">Apply Filters</button>
+        <button (click)="resetFilters()" class="btn ms-1" type="reset">Reset Filters</button>
 
     </form>
 </div>

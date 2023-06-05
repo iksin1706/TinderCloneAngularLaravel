@@ -22,6 +22,6 @@ class ReportController extends Controller
         $report->reporting_id=Auth::user()->id;
         $report->reason=$request->reason;
         $report->save();
-        return response()->json(['message'=>'User reported, thank you for making our service better place']);
+        return response()->json(['User reported, thank you for making our service better place'],200);
     }
 }

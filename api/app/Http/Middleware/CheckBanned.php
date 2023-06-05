@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Blockage;
+use App\Models\Blockade;
 use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
@@ -22,16 +22,14 @@ class CheckBanned
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check()) {
-            Auth::logout();
-
-            $ban = Blockage::where('user_id',Auth::user()->id)->orderBy('until','desc')->first();
-
-            $banned_days = Carbon::now()->diffInDays($ban->until, false);
-
-            if ($ban->until && now() > $ban->until) {
-                return response()->json([
-                    'error' => 'Jesteś zablokowany na ' . $banned_days . ' dni. Skontaktuj się z administratorem.'
-                ], Response::HTTP_FORBIDDEN);
+            $ban = Blockade::where('user_id',Auth::user()->id)->orderBy('until','desc')->first();
+            if(!$ban) return $next($request);
+            $banned_days = Carbon::now()->diffInDays($ban->until, false)+1;
+            if ($banned_days>0) {
+                Auth::logout();
+                return response(
+                    'Jestes zablokowany na ' . $banned_days . ' dni. Skontaktuj się z administratorem.'
+                , Response::HTTP_FORBIDDEN);
             }
         }
 

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
+import { BansModalComponent } from 'src/app/modals/bans-modal/bans-modal.component';
 import { RolesModalComponent } from 'src/app/modals/roles-modal/roles-modal.component';
 import { User } from 'src/app/_models/user';
 import { AdminService } from 'src/app/_services/admin.service';
@@ -10,25 +12,26 @@ import { AdminService } from 'src/app/_services/admin.service';
   styleUrls: ['./user-management.component.scss']
 })
 export class UserManagementComponent implements OnInit {
-  users: User[]=[];
-  bsModalRef: BsModalRef<RolesModalComponent> = new BsModalRef<RolesModalComponent>();
+  users: User[] = [];
+  bsModalRefRoles: BsModalRef<RolesModalComponent> = new BsModalRef<RolesModalComponent>();
+  bsModalRefBans: BsModalRef<BansModalComponent> = new BsModalRef<BansModalComponent>();
   availableRoles = [
     'Admin',
     'Moderator',
     'User'
   ]
 
-  constructor(private adminService: AdminService, private modalService: BsModalService){
+  constructor(private adminService: AdminService, private modalService: BsModalService, private toaster: ToastrService) {
 
   }
 
-  getUsersWithRoles(){
+  getUsersWithRoles() {
     this.adminService.getUsersWithRoles().subscribe({
       next: users => this.users = users
     })
   }
 
-  ngOnInit(): void{
+  ngOnInit(): void {
     this.getUsersWithRoles();
   }
 
@@ -41,10 +44,10 @@ export class UserManagementComponent implements OnInit {
         selectedRole: user.role
       }
     }
-    this.bsModalRef = this.modalService.show(RolesModalComponent, config);
-    this.bsModalRef.onHide?.subscribe({
+    this.bsModalRefRoles = this.modalService.show(RolesModalComponent, config);
+    this.bsModalRefRoles.onHide?.subscribe({
       next: () => {
-        const selectedRole = this.bsModalRef.content?.selectedRole;
+        const selectedRole = this.bsModalRefRoles.content?.selectedRole;
         if (selectedRole !== user.role && selectedRole) {
           this.adminService.updateUserRoles(user.username, selectedRole).subscribe({
             next: role => user.role = role
@@ -52,5 +55,14 @@ export class UserManagementComponent implements OnInit {
         }
       }
     })
+  }
+  openBanModal(user: User) {
+    const config = {
+      class: 'modal-dialog-centered',
+      initialState: {
+        username: user.username,
+      }
+    }
+    this.bsModalRefBans = this.modalService.show(BansModalComponent, config);
   }
 }
