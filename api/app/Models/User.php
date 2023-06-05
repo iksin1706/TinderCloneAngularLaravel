@@ -109,7 +109,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function blockages(): HasMany
     {
-        return $this->hasMany(Blockage::class);
+        return $this->hasMany(Blockade::class);
     }
 
     public function getJWTIdentifier()

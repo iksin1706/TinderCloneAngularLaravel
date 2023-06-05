@@ -65,4 +65,13 @@ export class UserManagementComponent implements OnInit {
     }
     this.bsModalRefBans = this.modalService.show(BansModalComponent, config);
   }
+
+  unbanUser(user: User){
+    this.adminService.unbanUser(user.username).subscribe({
+      next:  reposnse => {
+         this.toaster.success("User unbanned");
+         user.isBlocked=false;
+      }
+    });
+  }
 }

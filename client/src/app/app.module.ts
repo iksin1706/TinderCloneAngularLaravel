@@ -40,6 +40,7 @@ import { MemberProfileCardComponent } from './member/member-profile-card/member-
 import { SwipeCardsComponent } from './swipe-cards/swipe-cards.component';
 import { BansModalComponent } from './modals/bans-modal/bans-modal.component';
 import { ReportModalComponent } from './modals/report-modal/report-modal.component';
+import { ReportsComponent } from './admin/reports/reports.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { ReportModalComponent } from './modals/report-modal/report-modal.compone
     MemberProfileCardComponent,
     SwipeCardsComponent,
     BansModalComponent,
-    ReportModalComponent
+    ReportModalComponent,
+    ReportsComponent
   ],
   imports: [
     BrowserAnimationsModule,

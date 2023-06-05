@@ -1,0 +1,22 @@
+<div class="row user-table">
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 20%;">Reporting</th>
+                <th style="width: 20%;">Reported</th>
+                <th style="width: 20%;" >Reason</th>
+                <th style="width: 20%;">Date</th>
+                <th style="width: 20%;">Ban Reported</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="user-table-row" *ngFor="let report of reports">
+                <td> <a routerLink="/members/{{report.reporting_username}}">{{report.reporting_username}}</a></td>
+                <td> <a routerLink="/members/{{report.reported_username}}">{{report.reported_username}}</a></td>
+                <td class="reason">{{report.reason}}</td>
+                <td>{{report.created_at | timeago}}</td>
+                <td><button (click)="openBanModal(report.reported_username)" class="btn btn-danger">Ban reported</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

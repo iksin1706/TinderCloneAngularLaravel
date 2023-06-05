@@ -10,9 +10,18 @@ use Illuminate\Support\Facades\Auth;
 class ReportController extends Controller
 {
     public function index(){
-        if (!Auth::payload()->get('role') == 'admin') return response('Only admin has access',403);
-        $reponse = Report::all();
-        return response()->json($reponse);
+        if (!Auth::payload()->get('role') == 'admin') {
+            return response('Only admin has access', 403);
+        }
+        
+        $response = Report::with(['reportedUser', 'reportingUser'])->get();
+        
+        $response->each(function ($report) {
+            $report->reported_username = $report->reportedUser->username;
+            $report->reporting_username = $report->reportingUser->username;
+        });
+        
+        return response()->json($response);
     }
 
     public function report(Request $request,$username){
@@ -24,4 +33,6 @@ class ReportController extends Controller
         $report->save();
         return response()->json(['User reported, thank you for making our service better place'],200);
     }
+
+    
 }

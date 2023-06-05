@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { Report } from '../_models/report';
 import { User } from '../_models/user';
 
 @Injectable({
@@ -22,9 +23,12 @@ export class AdminService {
   banUser(username: string,values : any){
     return this.http.post<string>(this.baseUrl + 'user/'+ username + '/ban',values);
   }
+  unbanUser(username: string){
+    return this.http.post<string>(this.baseUrl + 'user/'+ username + '/unban',{});
+  }
 
   getReports(){
-    return this.http.get<Report []>(this.baseUrl + 'admin/users-with-roles')
+    return this.http.get<Report []>(this.baseUrl + 'admin/reports')
   }
 
 

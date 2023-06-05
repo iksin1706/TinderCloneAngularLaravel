@@ -13,7 +13,10 @@
                 <td> <a routerLink="/members/{{user.username}}">{{user.username}}</a></td>
                 <td>{{user.role}}</td>
                 <td><button (click)="openRolesModal(user)" class="btn btn-primary">Edit role</button></td>
-                <td><button (click)="openBanModal(user)" class="btn btn-danger">Ban user</button></td>
+                <td>
+                    <button (click)="openBanModal(user)" class="btn btn-danger" *ngIf="!user.isBlocked">Ban user</button>
+                    <button (click)="unbanUser(user)" class="btn btn-info" *ngIf="user.isBlocked">Unban user</button>              
+                </td>
             </tr>
         </tbody>
     </table>

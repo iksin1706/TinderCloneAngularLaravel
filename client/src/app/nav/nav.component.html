@@ -29,8 +29,8 @@
         <div class="navigation-row navigation-members"
             *ngIf="(accountService.currentUser$ | async)?.role==='admin'">
 
-            <a routerLink="/admin" class="navigation-link text-gradient">Users</a>
-            <a routerLink="/admin" class="navigation-link text-gradient">Reports</a>
+            <a routerLink="/admin/users" class="navigation-link text-gradient">Users</a>
+            <a routerLink="/admin/reports" class="navigation-link text-gradient">Reports</a>
         </div>
 
     <h2 class="navigation-header  ">

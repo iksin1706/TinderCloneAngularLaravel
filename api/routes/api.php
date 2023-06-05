@@ -56,6 +56,7 @@ Route::controller(AdminController::class)->group(function () {
 Route::controller(BanController::class)->group(function () {
     Route::get('admin/blockages', 'index');
     Route::post('user/{username}/ban', 'ban');
+    Route::post('user/{username}/unban', 'unban');
 })
 ;Route::controller(ReportController::class)->group(function () {
     Route::get('admin/reports', 'index');

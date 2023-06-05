@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { ReportsComponent } from './admin/reports/reports.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { ServerErrorComponent } from './errors/server-error/server-error.component';
 import { HomeComponent } from './home/home.component';
@@ -24,7 +25,8 @@ const routes: Routes = [
   canActivate: [AuthGuard],
   children: [  
   {path: 'messeges',component: MessegesComponent},
-  {path: 'admin',component: AdminPanelComponent,canActivate: [AdminGuard]},
+  {path: 'admin/users',component: AdminPanelComponent,canActivate: [AdminGuard]},
+  {path: 'admin/reports',component: ReportsComponent,canActivate: [AdminGuard]},
   {path: 'members',component: MemberListComponent},
   {path: 'members/:username',component: MemberDetailComponent, resolve: {member:MemberDetailedResolver}},
   {path: 'member/edit',component: MemberEditComponent,canDeactivate: [PreventUnsavedChangesGuard]},

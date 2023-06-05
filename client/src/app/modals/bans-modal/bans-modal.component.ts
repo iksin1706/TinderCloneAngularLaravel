@@ -39,7 +39,9 @@ export class BansModalComponent implements OnInit{
   ban(){
     let values = {...this.banForm.value}
     this.adminService.banUser(this.username,values).subscribe({
-      next: responese => this.toaster.success(responese)
+      next: response => {
+         this.toaster.success(response);
+      }
     })
   }
 }
