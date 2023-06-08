@@ -9,6 +9,9 @@
     </div>
     <div class="col-4">
         <app-member-profile-card [member]="member"></app-member-profile-card>
+        <div class="buttons-wrapper">
+            <button class="btn btn-primary"  [disabled]="!editForm.dirty" type="submit" form="editForm">Save changes</button>
+        </div>
     </div>
     <div class="col-7">
         <tabset class="member-tabs">

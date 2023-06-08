@@ -1,17 +1,19 @@
-<div class="mb-3">
-    <input type="{{type}}"
+<div class="mb-2">
+    <input [type]="type"
         [class.is-invalid]="control.touched && control.invalid"
         placeholder="{{label}}" 
         class="form-control" 
-        [formControl]="control">
+        [formControl]="control"
+        [email]="type==='email'"
+        >
     <div class="invalid-feedback" *ngIf="control.errors?.['required']">
-        Please enter a {{type}}
+        Please enter a {{label}}
     </div>
-    <div class="invalid-feedback" *ngIf="control.errors?.['minLength']">
-        {{label}} must be at least {{control.errors?.['minlenght'].reqiuredLenght}} characters long
+    <div class="invalid-feedback" *ngIf="control.errors?.['minlength']">
+        {{label}} is too short
     </div>
-    <div class="invalid-feedback" *ngIf="control.errors?.['maxLength']">
-        {{label}} must be at most {{control.errors?.['maxlenght'].reqiuredLenght}} characters long
+    <div class="invalid-feedback" *ngIf="control.errors?.['maxlength']">
+        {{label}} is too long
     </div>
     <div class="invalid-feedback" *ngIf="control.errors?.['notMatching']">
         Passwords are not equal

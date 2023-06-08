@@ -13,13 +13,24 @@ export class MemberCardComponent {
   @Input() member: Member | undefined
 
 
-  constructor(private membersService: MembersService, private toastr: ToastrService){
+  constructor(private membersService: MembersService, private toastr: ToastrService) {
 
-    }
-  
-  addLike(member: Member){
+  }
+
+  addLike(member: Member) {
     this.membersService.addLike(member.userName).subscribe({
-      next: () => this.toastr.success('You have liked ' +  member.knownAs)
+      next: () => {
+        this.toastr.success('You have liked ' + member.knownAs)
+        member.likeStatus = 'liked';
+      }
+    })
+  }
+  unlike(member: Member) {
+    this.membersService.addLike(member.userName).subscribe({
+      next: () => {
+        this.toastr.success('You have liked ' + member.knownAs)
+        member.likeStatus = 'liked';
+      }
     })
   }
 }

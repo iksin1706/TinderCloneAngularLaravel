@@ -1,5 +1,7 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, Input } from '@angular/core';
+import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Member } from '../_models/member';
 import { Pagination } from '../_models/pagination';
 import { UserParams } from '../_models/userParams';
@@ -13,47 +15,64 @@ import { MembersService } from '../_services/members.service';
     // the fade-in/fade-out animation.
     trigger('simpleFadeAnimation', [
 
-      // the "in" style determines the "resting" state of the element when it is visible.
       state('in', style({opacity: 1})),
-      
-
-      // fade in when created. this could also be written as transition('void => *')
-      transition(':enter', [
-        style({opacity: 0}),
-        animate(200)
-      ]),
-
-      // fade out when destroyed. this could also be written as transition('void => *')
       transition(':leave',
-        animate(400, style({opacity: 0,transform: 'translate(-400px,-100px) rotate(-15deg)'})))
+        animate(400, style({opacity: 0,transform: 'translateY(-200px)'})))
+    ]),
+    trigger('like', [
+      state('in', style({ opacity: 0, transform: 'scale(1)' })),
+      transition('* => like', [
+        animate('550ms', keyframes([
+          style({ opacity: .7, transform: 'scale(1)', offset: 0 }), // Initial state
+          style({ opacity: 0, transform: 'scale(3)', offset: 1 }) // Fade out completely
+        ]))
+      ])
+    ]),
+    trigger('dislike', [
+      state('in', style({ opacity: 0, transform: 'scale(1)' })),
+      transition('* => dislike', [
+        animate('550ms', keyframes([
+          style({ opacity: .7, transform: 'scale(1)', offset: 0 }), // Initial state
+          style({ opacity: 0, transform: 'scale(3)', offset: 1 }) // Fade out completely
+        ]))
+      ])
     ])
   ]
 })
-export class SwipeCardsComponent {
+export class SwipeCardsComponent implements OnInit {
    members : Member[] = [] ;
    pagination: Pagination | undefined;
    userParams: UserParams | undefined;
-   animation:string='left';
-   constructor(private memberService: MembersService) {
+   animationState:string='in';
+   animationState2:string='in';
+   constructor(private memberService: MembersService, private route: ActivatedRoute,private toastr:ToastrService) {
     this.userParams = this.memberService.getUserParams();
   }
 
   ngOnInit(): void {
-    this.loadMembers();
+
+    this.route.params.subscribe(() => {
+      this.loadMembers();
+      console.log("NOOOO WYSOW");
+    });
   }
+
 
   loadMembers() {
     if (this.userParams){
-      this.memberService.setUserParams(this.userParams);
+      this.userParams.withoutLikes=true;
+      this.userParams.orderBy='points';
+      this.userParams.pageSize=3;
       this.memberService.getMembers(this.userParams).subscribe({
-        next: response => {         
-          if (response.result && response.pagination) {
-            this.members = response.result;
+        next: response => {     
+          if(response.result)    
+            this.members.unshift(...response.result.reverse());
             console.log(this.members);
+            console.log("NOOOO WYSOW3333333");
             this.pagination = response.pagination;          
-          }
         }
       })
+      console.log("NOOOO WYSOW222222222");
     }
   }
 
@@ -63,11 +82,41 @@ export class SwipeCardsComponent {
     });
   }
 
-  likeUser(member:Member){
-    this.removeMember(member);
+  addLike(member: Member){
+    this.memberService.addLike(member.userName).subscribe({
+      next: () => this.toastr.success('You have liked ' +  member.knownAs)
+    })
   }
+
+  likeUser(member:Member){
+    this.memberService.addLike(member.userName).subscribe({
+      next: () => {
+        this.removeMember(member);
+        this.animationState = 'like';
+        setTimeout(() => {
+          this.animationState = 'in';
+        }, 550);
+        this.checkEmpty();
+      }
+    })
+  }
+
   dislikeUser(member:Member){
-    this.removeMember(member);
+    this.memberService.dislike(member.userName).subscribe({
+      next: () => {
+        this.removeMember(member);
+        this.animationState2 = 'dislike';
+        setTimeout(() => {
+          this.animationState2 = 'in';
+        }, 550);
+        this.checkEmpty();
+      }
+    })
+
+  }
+
+  checkEmpty(){
+    if(this.members.length===1)this.loadMembers();
   }
   
 }

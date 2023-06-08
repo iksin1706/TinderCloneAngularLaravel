@@ -1,15 +1,16 @@
-<form class="form-group login-form" #loginForm="ngForm" (ngSubmit)="login()" autocomplete="off">
+<form [formGroup]="loginForm" class="login-form" (ngSubmit)="loginForm.valid && login()"  autocomplete="on">
     <div>
         <h2 class="text-center text-gradient">Log in</h2>
         <hr>
 
-        <input name="username" [(ngModel)]="model.username" class="form-control mb-2" type="text" placeholder="Username"
-            aria-label="Search">
-        <input name="password" [(ngModel)]="model.password" class="form-control mb-2" type="password"
-            placeholder="Password" aria-label="Search">
+        <app-text-input [formControl]="$any(loginForm.controls['username'])" [label]="'Username'" [type]="'text'">
+        </app-text-input>
+        <app-text-input [formControl]="$any(loginForm.controls['password'])" [maxlength]="16" [minlength]="4" [label]="'Password'" [type]="'password'">
+        </app-text-input>
 
         <div class="text-center">
-            <button class="btn btn-primary mb-2" type="submit">Login</button>
+            <button class="btn btn-primary me-2" type="submit">Login</button>
+            <button class="btn btn-default" type="submit" routerLink="/register">Sign Up</button>
         </div>
     </div>
 </form>

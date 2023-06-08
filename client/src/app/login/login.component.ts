@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { UserParams } from '../_models/userParams';
 import { AccountService } from '../_services/account.service';
+import { MembersService } from '../_services/members.service';
 import { MessageService } from '../_services/message.service';
 
 @Component({
@@ -10,16 +12,33 @@ import { MessageService } from '../_services/message.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
-  constructor(private messageService: MessageService, private accountService: AccountService, private toastr: ToastrService, private fb: FormBuilder, private router: Router) { }
+export class LoginComponent implements OnInit{
+  constructor(private messageService: MessageService, private accountService: AccountService, private memberService:MembersService, private toastr: ToastrService, private fb: FormBuilder, private router: Router) { }
   model: any = {};
+  loginForm: FormGroup = new FormGroup({});
+
+  ngOnInit(){
+    this.initializeForm();
+  }
+
+  initializeForm(){
+    this.loginForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(16)]],
+    });
+  }
+  
   login() {
     console.log(this.model);
     
-    this.accountService.login(this.model).subscribe({
-      next: () => {
-        this.router.navigateByUrl('/cards');
+    this.accountService.login(this.loginForm.value).subscribe({
+      next: _ => {
         this.messageService.getMessagesThreadsInfo();
+        this.router.navigateByUrl('/cards');
+        this.memberService.createUserParams();
+      },
+      error: _ => {
+        this.toastr.warning('Wrong username or password')
       }
     }
     )

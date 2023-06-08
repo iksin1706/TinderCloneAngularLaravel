@@ -1,5 +1,5 @@
 <div class="modal-header">
-    <h4 class="modal-title pull-left">Ban {{username}}</h4>
+    <h4 class="modal-title pull-left">Ban {{user?.username}}</h4>
     <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
       <span aria-hidden="true" class="visually-hidden">&times;</span>
     </button>
@@ -8,6 +8,6 @@
     <form [formGroup]="banForm" class="register" (ngSubmit)="banForm.valid && ban()" id="rolesForm" action="">
         <app-text-input [formControl]="$any(banForm.controls['reason'])" [label]="'Reason'" [type]="'text'"></app-text-input>
         <app-date-picker [formControl]="$any(banForm.controls['until'])" [label]="'Until'" [minDate]="now"></app-date-picker>
-        <button type="submit" class="btn btn-default" (click)="banForm.valid && bsModalRef.hide()">Submit</button>
+        <button type="submit" class="btn btn-primary" (click)="banForm.valid && bsModalRef.hide()">Ban</button>
     </form>
   </div>

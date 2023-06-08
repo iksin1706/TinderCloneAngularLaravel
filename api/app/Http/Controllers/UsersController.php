@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AddPhotoRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Dislike;
+use App\Models\Like;
 use App\Models\User;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
@@ -34,8 +36,24 @@ class UsersController extends Controller
         $maxAge = $request->query('maxAge');
         $gender = $request->query('gender');
         $orderBy = $request->query('orderBy', 'created_at');
+        $withoutLikes = $request->query('withoutLikes');
 
         $query = User::with('photos');
+        if (Auth::user()) {
+            $userId = Auth::user()->id;
+
+
+            $dislikedUserIds = Dislike::where('source_user_id', $userId)->pluck('target_user_id');
+            $likedUserIds = Like::where('source_user_id', $userId)->pluck('target_user_id');
+
+
+            if ($withoutLikes == 'true') {
+                $query = $query->whereNotIn('id', $likedUserIds);
+                $query = $query->whereNotIn('id', $dislikedUserIds);
+            }
+        }
+
+
 
         if ($minAge) {
             $minBirthDate = date('Y-m-d', strtotime("-$minAge years"));
@@ -47,11 +65,15 @@ class UsersController extends Controller
             $query->where('date_of_birth', '>=', $maxBirthDate);
         }
 
-        if ($gender) {
+        if ($gender && $gender != 'any') {
             $query->where('gender', $gender);
         }
 
-        $query->orderBy($orderBy);
+        if ($orderBy == 'created_at' || $orderBy == 'points' || $orderBy == 'last_active')
+            $query->orderBy($orderBy, 'desc');
+
+
+
 
         $totalItems = $query->count();
         $totalPages = ceil($totalItems / $pageSize);
@@ -60,21 +82,51 @@ class UsersController extends Controller
             ->take($pageSize)
             ->get();
 
-        $users = collect($users)->map(function ($user) {
-            return [
-                'userName' => $user->username,
-                'knownAs' => $user->known_as,
-                'age' => $user->age(),
-                'photoUrl' => $user->Photos->first(function ($photo) {
-                    return $photo->is_main;
-                })?->url,
-                'city' => $user->city,
-                'country' => $user->country,
-                'id' => $user->id,
-                'created' => $user->created_at,
-                'photos' => $user->photos
-            ];
-        });
+        if (Auth::user())
+            $users = $users->map(function ($user) use ($likedUserIds, $dislikedUserIds) {
+                $userData = [
+                    'userName' => $user->username,
+                    'knownAs' => $user->known_as,
+                    'age' => $user->age(),
+                    'photoUrl' => optional($user->Photos->first(function ($photo) {
+                        return $photo->is_main;
+                    }))->url,
+                    'city' => $user->city,
+                    'country' => $user->country,
+                    'id' => $user->id,
+                    'created' => $user->created_at,
+                    'photos' => $user->photos->sortByDesc('is_main')
+                ];
+
+                if (Auth::check()) {
+                    if ($dislikedUserIds->contains($user->id)) {
+                        $userData['likeStatus'] = 'disliked';
+                    } elseif ($likedUserIds->contains($user->id)) {
+                        $userData['likeStatus'] = 'liked';
+                    } else {
+                        $userData['likeStatus'] = 'none';
+                    }
+                }
+
+                return $userData;
+            });
+        else {
+            $users = collect($users)->map(function ($user) {
+                return [
+                    'userName' => $user->username,
+                    'knownAs' => $user->known_as,
+                    'age' => $user->age(),
+                    'photoUrl' => $user->Photos->first(function ($photo) {
+                        return $photo->is_main;
+                    })?->url,
+                    'city' => $user->city,
+                    'country' => $user->country,
+                    'id' => $user->id,
+                    'created' => $user->created_at,
+                    'photos' => $user->photos,
+                ];
+            });
+        }
 
         $response = response()->json(
             $users,

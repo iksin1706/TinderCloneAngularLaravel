@@ -52,7 +52,12 @@ $transition-time: 350ms;
     border-radius: 50%;
 }
 
-
+.buttons-wrapper{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: .5rem;
+}
 
 .member-icons{
     position: absolute;

@@ -7,12 +7,12 @@
         <div class="d-flex mx-1">
             <label class="col-form-label">Age from: </label>
             <input [(ngModel)]="userParams.minAge" type="number" name="minAge" class="form-control ms-1"
-                style="width: 90px">
+                style="width: 90px" [max]="userParams.maxAge">
         </div>
         <div class="d-flex mx-1">
             <label class="col-form-label">Age to: </label>
             <input [(ngModel)]="userParams.maxAge" type="number" name="maxAge" class="form-control ms-1"
-                style="width: 90px">
+                style="width: 90px" [min]="userParams.minAge">
         </div>
 
         <div class="d-flex mx-1">
@@ -24,9 +24,9 @@
 
         <div class="sort-by mx-1">
             <div class="btn-group float-end">
-                <button [(ngModel)]="userParams.orderBy" btnRadio="lastActive" [class.unactive]="userParams.orderBy!=='newest'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Last Active</button>
-                <button [(ngModel)]="userParams.orderBy" btnRadio="created" [class.unactive]="userParams.orderBy!=='created_at'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Newest members</button>
-                <button [(ngModel)]="userParams.orderBy" btnRadio="lastActive" [class.unactive]="userParams.orderBy!=='best'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Active</button>
+                <button [(ngModel)]="userParams.orderBy" btnRadio="created_at" [class.unactive]="userParams.orderBy!=='created_at'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Newest</button>
+                <button [(ngModel)]="userParams.orderBy" btnRadio="points" [class.unactive]="userParams.orderBy!=='points'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Best</button>
+                <button [(ngModel)]="userParams.orderBy" btnRadio="last_active" [class.unactive]="userParams.orderBy!=='last_active'" class="btn btn-primary" name="orderBy" (click)="loadMembers()">Last active</button>
             </div>
         </div>
 

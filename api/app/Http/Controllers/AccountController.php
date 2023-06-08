@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
 use App\Models\Blockade;
 use App\Services\TokenService;
 use Illuminate\Auth\Events\Registered;
@@ -27,30 +28,17 @@ class AccountController extends Controller
 
     public function register(RegisterRequest $request)
     {
-
         $request->validated();
 
-        $user = User::create([
-            'username' => $request->username,
-            'email' => "test@test.pl",
-            'known_as' => $request->knownAs,
-            'gender' => $request->gender,
-            'date_of_birth' => $request->dateOfBirth,
-            'city' => $request->city,
-            'country' => $request->country,
-            'password' => Hash::make($request->password),
-            'role_id' => 1
-        ]);
+        $user = User::create(new UserResource($request));
 
         $token = Auth::login($user);
-
-
 
         return response()->json([
             'username' => $user->username,
             'token' => $token,
             'knownAs' => $user->know_as,
-            'gender' => $user->gender,
+            'gender' => $user->gender
         ], 201);
     }
 
@@ -66,30 +54,11 @@ class AccountController extends Controller
                 'message' => 'Unauthorized',
             ], 401);
         }
+        $user = Auth::user();
 
-        $user = User::find(Auth::user()->id);
+        $mainPhoto = $user->photos->where('is_main', true)->first();
 
-        $mainPhoto = $user->photos()->where('is_main', true)->first();
-
-        if ($mainPhoto) {
-            $photoUrl = $mainPhoto->url;
-        } else {
-            $photoUrl = null;
-        }
-
-        if (Auth::check()) {
-            $ban = Blockade::where('user_id', Auth::user()->id)->orderBy('until', 'desc')->first();
-            if ($ban) {
-                $banned_days = Carbon::now()->diffInDays($ban->until, false);
-                if ($banned_days > 0) {
-                    Auth::logout();
-                    return response(
-                        'Jestes zablokowany na ' . $banned_days . ' dni. Skontaktuj się z administratorem.',
-                        Response::HTTP_FORBIDDEN
-                    );
-                }
-            }
-        }
+        $photoUrl = $mainPhoto ? $mainPhoto->url : null;
 
         return response()->json([
             'username' => $user->username,
@@ -97,8 +66,7 @@ class AccountController extends Controller
             'type' => 'bearer',
             'knownAs' => $user->known_as,
             'gender' => $user->gender,
-            'photoUrl' => $photoUrl,
-            'role' => $user->role->name
+            'photoUrl' => $photoUrl
         ], 201);
     }
     public function logout()
@@ -121,7 +89,6 @@ class AccountController extends Controller
             'knownAs' => $user->know_as,
             'gender' => $user->gender,
             'photoUrl' => $mainPhoto,
-            'roleId' => $user->role_id
         ]);
     }
 }

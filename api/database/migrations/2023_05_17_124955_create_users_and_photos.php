@@ -53,6 +53,12 @@ return new class extends Migration
                 $table->boolean('is_mutual');
                 $table->timestamps();
             });
+            Schema::create('dislikes', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('source_user_id')->constrained('users');
+                $table->foreignId('target_user_id')->constrained('users');
+                $table->timestamps();
+            });
 
 
             Schema::create('messages', function (Blueprint $table) {

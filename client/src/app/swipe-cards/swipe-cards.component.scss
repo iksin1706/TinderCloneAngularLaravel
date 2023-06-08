@@ -1,7 +1,11 @@
+@import '../../vars.scss';
+
+
 .cards-container{
     position: relative;
     display: flex;
     justify-content: center;
+    min-height: 50vh;
 }
 .card-wrapper{
     position: absolute;
@@ -13,6 +17,14 @@
     width: 5rem;
     height: 5rem;
 }
+.link{
+    transition: 0.2s;
+    :hover{
+        transform: scale(1.2);
+        border-bottom: $color-secondary 5px solid;
+    }
+}
+
 
 .buttons-wrapper {
     margin-top: 36rem;
@@ -24,6 +36,26 @@
 .card-wrapper *{
     user-select: none;
 }
+
+.heart{
+    font-size: 8rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color: $color-secondary;
+    transform-origin: center;
+}
+.dislike{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 8rem;
+    color: red;
+    transform-origin: center;
+}
+
 
 .swipe-left{
     animation: fadeLeft .5s forwards;

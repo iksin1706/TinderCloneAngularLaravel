@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BanRequest;
 use App\Models\Blockade;
 use App\Models\Blockage;
 use App\Models\Report;
@@ -13,15 +14,13 @@ use Illuminate\Support\Facades\Auth;
 class BanController extends Controller
 {
     public function index(){
-        if (!Auth::payload()->get('role') == 'admin') return response('Only admin has access',403);
+        if (Auth::payload()->get('role') !== 'admin') return response('Only admin has access',403);
         $reponse = Blockade::all();
         return response()->json($reponse);
     }
     
-
-    public function ban(Request $request,$username){
-        if (!Auth::payload()->get('role') == 'admin') return response('Only admin has access',403);
-        $user = User::where('username',$username)->first();
+    public function ban(BanRequest $request,$username){
+        $user = User::where('username', $username)->firstOrFail();
         $ban = new Blockade();
         $ban->user_id=$user->id;
         $ban->admin_id=Auth::user()->id;
@@ -33,15 +32,11 @@ class BanController extends Controller
 
     public function unban($username){
    
-        if (!Auth::payload()->get('role') == 'admin') return response('Only admin has access',403);
-        $user = User::where('username', $username)->first();
+        if (Auth::payload()->get('role') !== 'admin') return response('Only admin has access',403);
+        $user = User::where('username', $username)->firstOrFail();
         $currentDate = Carbon::now();
-        if (!$user) {
-            return response('User not found.', 404);
-        }
-    
         Blockade::where('user_id', $user->id)
-            ->where('until', '>', $currentDate)
+            ->where('until', '>=', $currentDate)
             ->delete();
     
         return response()->json(['User unblocked successfuly'],200);

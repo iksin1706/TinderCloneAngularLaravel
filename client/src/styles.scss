@@ -66,3 +66,15 @@ body{
     50% { background-position: 100% 200%; }
     100% {background-position: 0% 100%; }
   }
+
+  .bs-datepicker-head{  
+    background: linear-gradient(124deg,$color-primary,$color-secondary);
+  }
+
+  .bs-datepicker {
+    background: #303030;
+  }
+
+  .modal-content{
+    background: rgb(67 67 67 / 79%);
+  }

@@ -4,9 +4,11 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Helpers\UserPointsHelper;
 
 class DatabaseSeeder extends Seeder
 {
@@ -68,5 +70,41 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        DB::table('default_points')->insert([
+            'what_for' => 'introduction',
+            'points' => 10,
+        ]);
+        DB::table('default_points')->insert([
+            'what_for' => 'looking_for',
+            'points' => 10,
+        ]);
+        DB::table('default_points')->insert([
+            'what_for' => 'interests',
+            'points' => 10,
+        ]);
+        DB::table('default_points')->insert([
+            'what_for' => 'first_photo',
+            'points' => 10,
+        ]);
+        DB::table('default_points')->insert([
+            'what_for' => 'next_photo',
+            'points' => 5,
+        ]);
+        DB::table('default_points')->insert([
+            'what_for' => 'likes',
+            'points' => 2,
+        ]);
+        DB::table('default_points')->insert([
+            'what_for' => 'bans',
+            'points' => -20,
+        ]);
+
+        $users = User::all();
+
+        foreach ($users as $user) {
+            UserPointsHelper::CalculateAndUpdateUserPoints($user);
+        }
     }
+
 }

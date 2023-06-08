@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\UserPointsHelper;
+use App\Http\Requests\LikesIndexRequest;
+use App\Models\Dislike;
 use App\Models\Like;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,46 +21,38 @@ class LikeController extends Controller
         $this->middleware('auth:api');
     }
 
-    public function index(Request $request)
+    public function index(LikesIndexRequest $request)
     {
-
         $userId = Auth::user()->id;
         $predicate = $request->input('predicate');
-        
+
         $users = User::orderBy('username');
-        
+
         if ($predicate == 'liked') {
-            $users->whereIn('id', function ($query) use ($userId) {
-                $query->select('target_user_id')
-                    ->from('likes')
-                    ->where('source_user_id', $userId);
-            });
-        }
-        
-        if ($predicate == 'likedBy') {
-            $users->whereIn('id', function ($query) use ($userId) {
-                $query->select('source_user_id')
-                    ->from('likes')
-                    ->where('target_user_id', $userId);
+            $users->whereHas('likedByUsers', function ($query) use ($userId) {
+                $query->where('source_user_id', $userId);
             });
         }
 
-        if($predicate == 'matches'){
-            $users->whereIn('id', function ($query) use ($userId) {
-                $query->select('source_user_id')
-                ->from('likes')
-                ->where('target_user_id', $userId)
-                ->where('is_mutual',true);
+        if ($predicate == 'likedBy') {
+            $users->whereHas('likes', function ($query) use ($userId) {
+                $query->where('target_user_id', $userId);
             });
-            
         }
-        
+
+        if ($predicate == 'matches') {
+            $users->whereHas('likes', function ($query) use ($userId) {
+                $query->where('target_user_id', $userId)
+                    ->where('is_mutual', true);
+            });
+        }
+
         $likedUsers = $users->get()->map(function ($user) {
             return [
-                'username' => $user->username,
+                'userName' => $user->username,
                 'knownAs' => $user->known_as,
                 'age' => now()->diffInYears($user->date_of_birth),
-                'photoUrl' => $user->Photos->first(function ($photo) {
+                'photoUrl' => $user->photos->first(function ($photo) {
                     return $photo->is_main;
                 })?->url,
                 'city' => $user->city,
@@ -66,48 +61,74 @@ class LikeController extends Controller
         });
 
         return response()->json($likedUsers);
-        
     }
 
     public function store($username)
     {
         $sourceUser = Auth::user();
-        $likedUser = User::where('username', $username)->first();
-       
-        $sourceUser = User::find($sourceUser->id);
-        if (!$likedUser) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
-        
+        $likedUser = User::findOrFail($username);
+
         if (strtolower($username) === strtolower($sourceUser->username)) {
             return response()->json(['error' => 'You cannot like yourself'], 400);
         }
-        
+
+        $userLike = Like::firstOrCreate([
+            'source_user_id' => $sourceUser->id,
+            'target_user_id' => $likedUser->id
+        ]);
+
+        $mutualLike = Like::where('target_user_id', $sourceUser->id)
+            ->where('source_user_id', $likedUser->id)
+            ->first();
+
+        if ($mutualLike) {
+            $mutualLike->is_mutual = true;
+            $mutualLike->save();
+            $userLike->is_mutual = true;
+        } else {
+            $userLike->is_mutual = false;
+        }
+
+        if ($userLike->save()) {
+            UserPointsHelper::CalculateAndUpdateUserPoints($likedUser);
+            return response()->json(['message' => 'User liked successfully', 'isMatch' => $userLike->is_mutual], 200);
+        }
+
+        return response('Failed to like user', 400);
+    }
+
+
+    public function destroy($username)
+    {
+        $sourceUser = Auth::user();
+        $likedUser = User::where('username', $username)->firstOrFail();
+
+
         $userLike = Like::where('source_user_id', $sourceUser->id)
             ->where('target_user_id', $likedUser->id)
             ->first();
-        
-        if ($userLike) {
-            return response('You already like this user', 400);
-        }
-        
-        $userLike = new Like();
-        $userLike->source_user_id = $sourceUser->id;
-        $userLike->target_user_id = $likedUser->id;
-        
-        $mutualLike = Like::where('target_user_id',$sourceUser->id)->where('source_user_id',$likedUser->id)->first();
-        if($mutualLike) {
-            $mutualLike->is_mutual=true;
-            $userLike->is_mutual=true;
-            $mutualLike->save();
-        } else $userLike->is_mutual=false;
 
-        Like::create($userLike->toArray());
-        
-        if ($sourceUser->save()) {
-            return response()->json(['message' => 'User liked successfully'], 200);
+        if (!$userLike) {
+            return response()->json(['error' => 'User is not liked'], 400);
         }
-        
-        return response('Failed to like user', 400);
+
+        $isMutual = $userLike->is_mutual;
+
+        if ($isMutual) {
+            $mutualLike = Like::where('target_user_id', $sourceUser->id)
+                ->where('source_user_id', $likedUser->id)
+                ->first();
+
+            if ($mutualLike) {
+                $mutualLike->is_mutual = false;
+                $mutualLike->save();
+            }
+        }
+
+        if ($userLike->delete()) {
+            UserPointsHelper::CalculateAndUpdateUserPoints($likedUser);
+            return response()->json(['message' => 'User unliked successfully', 'wasMatch' => $isMutual], 200);
+        }
+        return response()->json(['error' => 'Failed to unlike user'], 400);
     }
 }

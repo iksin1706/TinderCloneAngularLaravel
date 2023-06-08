@@ -21,7 +21,7 @@ export class NavComponent implements OnInit {
   constructor(public accountService: AccountService,public messageService:MessageService , public router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
-    if(this.currentUser$.pipe(take(1))) this.messageService.getMessagesThreadsInfo();
+    if(this.accountService.currentUser$.pipe(take(1))) this.messageService.getMessagesThreadsInfo();
   }
 
 

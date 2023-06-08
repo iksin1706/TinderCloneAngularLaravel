@@ -23,6 +23,10 @@ export class MembersService {
 
 
   constructor(private http: HttpClient,private accountService: AccountService) {
+    this.createUserParams();
+   }
+
+   public createUserParams(){
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => {
         if (user) {
@@ -59,6 +63,7 @@ export class MembersService {
     if(userParams.gender && userParams.gender!=='')
     params = params.append('gender',userParams.gender);
     params = params.append('orderBy', userParams.orderBy);
+    params = params.append('withoutLikes', userParams.withoutLikes);
 
     return getPaginatedResult<Member[]>(this.baseUrl + 'users', params,this.http).pipe(
       map(resposne => {
@@ -67,6 +72,17 @@ export class MembersService {
       })
     );
   }
+  getBestMembers() {  
+    let params = getPaginationHeaders(1, 3);
+    params = params.append('orderBy', 'points');
+    params = params.append('withoutLikes', false);
+    return getPaginatedResult<Member[]>(this.baseUrl + 'users', params,this.http).pipe(
+      map(resposne => {
+        return resposne;
+      })
+    );
+  }
+
 
  
 
@@ -93,6 +109,9 @@ export class MembersService {
 
   addLike(username: string){
     return this.http.post(this.baseUrl + 'likes/' + username, {});
+  }
+  dislike(username: string){
+    return this.http.post(this.baseUrl + 'dislikes/' + username, {});
   }
 
   getLikes(predicate: string,pageNumber: number, pageSize: number){

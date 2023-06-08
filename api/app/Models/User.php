@@ -77,15 +77,28 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Photo::class);
     }
-    public function likedByUsers()
+
+    public function mainPhoto()
     {
-        return $this->hasMany(Like::class, 'source_user_id');
+        return $this->photos()->where('is_main',true)->first();
     }
 
-    public function likedUsers()
+    public function isAdmin()
+    {
+        return $this->role === 'admin'; // Assuming the role attribute stores the user's role
+    }
+
+
+    public function likedByUsers()
     {
         return $this->hasMany(Like::class, 'target_user_id');
     }
+
+    public function likes()
+    {
+        return $this->hasMany(Like::class, 'source_user_id');
+    }
+    
     public function sentMessages()
     {
         return $this->hasMany(Message::class, 'sender_id');

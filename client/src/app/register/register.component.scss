@@ -1,3 +1,9 @@
+.register-wrapper{
+    min-width: 100vw;
+    display: flex;
+    justify-content: center;
+}
 .register{
-    width: 25rem;
+    width: clamp(25rem,20%,40rem);
+    padding: 1rem;
 }

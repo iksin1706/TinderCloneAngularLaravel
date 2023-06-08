@@ -60,7 +60,8 @@ export class UserManagementComponent implements OnInit {
     const config = {
       class: 'modal-dialog-centered',
       initialState: {
-        username: user.username,
+        user: user,
+        username: user.username
       }
     }
     this.bsModalRefBans = this.modalService.show(BansModalComponent, config);

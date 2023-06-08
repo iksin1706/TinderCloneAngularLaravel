@@ -6,6 +6,8 @@
 
 img {
     max-height: 50px;
+    aspect-ratio: 1;
+    object-fit: contain;
     border: 2px solid white;
     display: inline;
     border-radius: 50%;

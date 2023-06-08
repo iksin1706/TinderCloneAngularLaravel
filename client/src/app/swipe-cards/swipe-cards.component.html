@@ -6,5 +6,10 @@
         <button  (click)="dislikeUser(members[members.length-1])" class="btn btn-primary"><i class="fa fa-close"></i></button>
         <button (click)="likeUser(members[members.length-1])" class="btn btn-primary"><i class="fa fa-heart"></i></button>
     </div>
-    <h2 class="text-muted p-5" *ngIf="members.length==0">There is no more members that we can show you :(</h2>
+    <div class="heart" ><i [@like]="animationState" class="fa fa-heart"></i></div>
+    <div class="dislike" ><i [@dislike]="animationState2" class="fa fa-close"></i></div>
+    <h2 class="text-muted p-5" *ngIf="members.length==0">There is no more members that we can show you :( <br><a *ngIf="members.length==0" routerLink="/members" class="text-gradient link" >Look at full list of our members</a> 
+        <br> or <br> 
+        <a *ngIf="members.length==0" routerLink="/members" class="text-gradient link" >Click here to reset dislikes</a></h2>
+    
 </div>

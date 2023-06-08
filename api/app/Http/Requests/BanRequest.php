@@ -3,15 +3,16 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class LoginRequest extends FormRequest
+class BanRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return Auth::payload()->get('role') == 'admin';
     }
 
     /**
@@ -19,11 +20,11 @@ class LoginRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            'username' => 'required|string',
-            'password' => 'required|string',         
+            'reason' => 'required|string',
+            'until' => 'required|date',
         ];
     }
 }

@@ -40,6 +40,7 @@ Route::controller(UsersController::class)->group(function () {
 Route::controller(LikeController::class)->group(function () {
     Route::get('likes', 'index');
     Route::post('likes/{username}', 'store');
+    Route::post('dislikes/{username}', 'dislike');
 });
 
 Route::controller(MessageController::class)->group(function () {

@@ -13,7 +13,7 @@ export class RegisterComponent implements OnInit {
   @Output() cancelRegister = new EventEmitter();
   registerForm: FormGroup = new FormGroup({});
   maxDate: Date = new Date();
-  validationErrors: string[] | undefined;
+  validationErrors: string | undefined;
 
 
   constructor(private accountService: AccountService, private toastr: ToastrService, private fb: FormBuilder, private router: Router) { }
@@ -26,12 +26,13 @@ export class RegisterComponent implements OnInit {
   initializeForm() {
     this.registerForm = this.fb.group({
       gender: ['male', Validators.required],
-      username: ['', Validators.required],
-      knownAs: ['', Validators.required],
+      username: ['', Validators.required, Validators.minLength(4), Validators.maxLength(32)],
+      email: ['',Validators.required],
+      knownAs: ['', Validators.required, Validators.minLength(2), Validators.maxLength(32)],
       dateOfBirth: ['', Validators.required],
-      city: ['', Validators.required],
-      country: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8)]],
+      city: ['', Validators.required, Validators.minLength(2), Validators.maxLength(32)],
+      country: ['', Validators.required, Validators.minLength(2), Validators.maxLength(32)],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(16)]],
       confirmPassword: ['', [Validators.required, this.matchValues('password')]]
     });
     this.registerForm.controls['password'].valueChanges.subscribe({
@@ -53,7 +54,7 @@ export class RegisterComponent implements OnInit {
       next: response => {
         this.router.navigateByUrl('/members');
       },
-      error: error => this.validationErrors = error
+      error: error => this.validationErrors = error.error.message
     })
   }
 
