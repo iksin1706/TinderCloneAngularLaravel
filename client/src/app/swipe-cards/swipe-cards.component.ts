@@ -15,9 +15,9 @@ import { MembersService } from '../_services/members.service';
     // the fade-in/fade-out animation.
     trigger('simpleFadeAnimation', [
 
-      state('in', style({opacity: 1})),
+      state('in', style({ opacity: 1 })),
       transition(':leave',
-        animate(400, style({opacity: 0,transform: 'translateY(-200px)'})))
+        animate(400, style({ opacity: 0, transform: 'translateY(-200px)' })))
     ]),
     trigger('like', [
       state('in', style({ opacity: 0, transform: 'scale(1)' })),
@@ -40,12 +40,12 @@ import { MembersService } from '../_services/members.service';
   ]
 })
 export class SwipeCardsComponent implements OnInit {
-   members : Member[] = [] ;
-   pagination: Pagination | undefined;
-   userParams: UserParams | undefined;
-   animationState:string='in';
-   animationState2:string='in';
-   constructor(private memberService: MembersService, private route: ActivatedRoute,private toastr:ToastrService) {
+  members: Member[] = [];
+  pagination: Pagination | undefined;
+  userParams: UserParams | undefined;
+  animationState: string = 'in';
+  animationState2: string = 'in';
+  constructor(private memberService: MembersService, private route: ActivatedRoute, private toastr: ToastrService) {
     this.userParams = this.memberService.getUserParams();
   }
 
@@ -59,40 +59,49 @@ export class SwipeCardsComponent implements OnInit {
 
 
   loadMembers() {
-    if (this.userParams){
-      this.userParams.withoutLikes=true;
-      this.userParams.orderBy='points';
-      this.userParams.pageSize=3;
+    if (this.userParams) {
+      this.userParams.withoutLikes = true;
+      this.userParams.orderBy = 'points';
+      this.userParams.pageSize = 3;
       this.memberService.getMembers(this.userParams).subscribe({
-        next: response => {     
-          if(response.result)    
+        next: response => {
+          if (response.result)
             this.members.unshift(...response.result.reverse());
-            console.log(this.members);
-            console.log("NOOOO WYSOW3333333");
-            this.pagination = response.pagination;          
+          console.log(this.members);
+          console.log("NOOOO WYSOW3333333");
+          this.pagination = response.pagination;
         }
       })
       console.log("NOOOO WYSOW222222222");
     }
   }
 
-  removeMember(member:Member){
+  removeMember(member: Member) {
     this.members = this.members.filter(object => {
       return object.userName !== member.userName;
     });
   }
 
-  addLike(member: Member){
+  addLike(member: Member) {
     this.memberService.addLike(member.userName).subscribe({
-      next: () => this.toastr.success('You have liked ' +  member.knownAs)
+      next: () => this.toastr.success('You have liked ' + member.knownAs)
+    })
+  }
+  resetDislikes() {
+    this.memberService.resetDislikes().subscribe({
+      next: () => { 
+        this.toastr.success('Dislikes reseted successfully');
+        this.loadMembers();
+    }
     })
   }
 
-  likeUser(member:Member){
+  likeUser(member: Member) {
     this.memberService.addLike(member.userName).subscribe({
-      next: () => {
+      next: response => {
         this.removeMember(member);
         this.animationState = 'like';
+        if(response.isMatch) this.toastr.success("IT'S MATCH !");
         setTimeout(() => {
           this.animationState = 'in';
         }, 550);
@@ -101,7 +110,7 @@ export class SwipeCardsComponent implements OnInit {
     })
   }
 
-  dislikeUser(member:Member){
+  dislikeUser(member: Member) {
     this.memberService.dislike(member.userName).subscribe({
       next: () => {
         this.removeMember(member);
@@ -115,8 +124,8 @@ export class SwipeCardsComponent implements OnInit {
 
   }
 
-  checkEmpty(){
-    if(this.members.length===1)this.loadMembers();
+  checkEmpty() {
+    if (this.members.length === 1) this.loadMembers();
   }
-  
+
 }

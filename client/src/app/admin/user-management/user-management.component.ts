@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { BansModalComponent } from 'src/app/modals/bans-modal/bans-modal.component';
 import { RolesModalComponent } from 'src/app/modals/roles-modal/roles-modal.component';
 import { User } from 'src/app/_models/user';
+import { AccountService } from 'src/app/_services/account.service';
 import { AdminService } from 'src/app/_services/admin.service';
 
 @Component({
@@ -21,7 +22,7 @@ export class UserManagementComponent implements OnInit {
     'User'
   ]
 
-  constructor(private adminService: AdminService, private modalService: BsModalService, private toaster: ToastrService) {
+  constructor(private adminService: AdminService, private modalService: BsModalService, private toaster: ToastrService,public accountService: AccountService) {
 
   }
 
@@ -32,6 +33,9 @@ export class UserManagementComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.adminService.getRoles().subscribe({
+      next : response => this.availableRoles=response
+    })
     this.getUsersWithRoles();
   }
 

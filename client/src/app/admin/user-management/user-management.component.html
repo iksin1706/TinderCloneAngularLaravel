@@ -2,19 +2,21 @@
     <table>
         <thead>
             <tr>
-                <th style="width: 25%;">Username</th>
-                <th style="width: 25%;">Roles</th>
-                <th style="width: 25%;">Edit Role</th>
-                <th style="width: 25%;">Ban User</th>
+                <th style="width: 20%;">Username</th>
+                <th style="width: 20%;">E-mail</th>
+                <th style="width: 20%;">Roles</th>
+                <th *appHasRole="['admin']" style="width: 20%;">Edit Role</th>
+                <th style="width: 20%;">Ban User</th>
             </tr>
         </thead>
         <tbody>
             <tr class="user-table-row" *ngFor="let user of users">
                 <td> <a routerLink="/members/{{user.username}}">{{user.username}}</a></td>
+                <td>{{user.email}}</td>
                 <td>{{user.role}}</td>
-                <td><button (click)="openRolesModal(user)" class="btn btn-primary">Edit role</button></td>
+                <td *appHasRole="['admin']"><button [disabled]="(accountService.currentUser$ | async)?.username===user.username" (click)="openRolesModal(user)" class="btn btn-primary">Edit role</button></td>
                 <td>
-                    <button (click)="openBanModal(user)" class="btn btn-danger" *ngIf="!user.isBlocked">Ban user</button>
+                    <button (click)="openBanModal(user)" [disabled]="user.role==='admin' || user.role==='moderator'" class="btn btn-danger" *ngIf="!user.isBlocked">Ban user</button>
                     <button (click)="unbanUser(user)" class="btn btn-info" *ngIf="user.isBlocked">Unban user</button>              
                 </td>
             </tr>

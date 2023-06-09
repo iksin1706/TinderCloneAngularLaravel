@@ -26,10 +26,10 @@ export class MemberCardComponent {
     })
   }
   unlike(member: Member) {
-    this.membersService.addLike(member.userName).subscribe({
+    this.membersService.unLike(member.userName).subscribe({
       next: () => {
-        this.toastr.success('You have liked ' + member.knownAs)
-        member.likeStatus = 'liked';
+        this.toastr.success('You have unliked ' + member.knownAs)
+        member.likeStatus = 'none';
       }
     })
   }

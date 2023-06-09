@@ -7,7 +7,7 @@
             </li>
             <li class="list-inline-item">
                 <button *ngIf="member.likeStatus!=='liked'" (click)="addLike(member)" class="btn btn-primary px-2"><i class="fa fa-heart"></i></button>
-                <button *ngIf="member.likeStatus==='liked'" (click)="addLike(member)" class="btn btn-primary px-2"><i style="color:rgb(255, 16, 255)" class="fa fa-heart"></i></button>
+                <button *ngIf="member.likeStatus==='liked'" (click)="unlike(member)" class="btn btn-primary px-2"><i style="color:rgb(255, 16, 255)" class="fa fa-heart"></i></button>
             </li>
             <li class="list-inline-item">
                 <button 

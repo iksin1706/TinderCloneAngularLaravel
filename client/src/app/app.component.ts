@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   title = 'client';
   users: any;
   currentUser$: Observable<User | null> = of(null);
-
+  isNavHidden = false;
 
   constructor(private http: HttpClient, public accountService: AccountService, public router: Router) { }
   ngOnInit(): void {
@@ -28,5 +28,8 @@ export class AppComponent implements OnInit {
     if (!userString) return;
     const user: User = JSON.parse(userString);
     this.accountService.setCurrentUser(user);
+  }
+  hideShow(reduce: boolean) {
+    this.isNavHidden=reduce;
   }
 }

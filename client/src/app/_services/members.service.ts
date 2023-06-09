@@ -100,19 +100,26 @@ export class MembersService {
   }
 
   setMainPhoto(photoId: number) {
-    return this.http.put(this.baseUrl + 'users/set-main-photo/' + photoId, {})
+    return this.http.patch(this.baseUrl + 'users/photos/' + photoId, {})
   }
 
   deletePhoto(photoId: number) {
-    return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId, {});
+    return this.http.delete(this.baseUrl + 'users/photos/' + photoId, {});
   }
 
   addLike(username: string){
-    return this.http.post(this.baseUrl + 'likes/' + username, {});
+    return this.http.post<any>(this.baseUrl + 'likes/' + username, {});
+  }
+  unLike(username: string){
+    return this.http.delete(this.baseUrl + 'likes/' + username, {});
   }
   dislike(username: string){
     return this.http.post(this.baseUrl + 'dislikes/' + username, {});
   }
+  resetDislikes(){
+    return this.http.delete(this.baseUrl + 'dislikes/reset', {});
+  }
+
 
   getLikes(predicate: string,pageNumber: number, pageSize: number){
 
@@ -124,6 +131,6 @@ export class MembersService {
   }
 
   reportUser(username: string,values : any){
-    return this.http.post<string>(this.baseUrl + 'user/'+ username + '/report',values);
+    return this.http.post<string>(this.baseUrl + 'users/'+ username + '/report',values);
   }
 }

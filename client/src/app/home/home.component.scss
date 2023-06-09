@@ -1,10 +1,10 @@
 @import '../../vars.scss';
 
 .home {
-    background-image:linear-gradient(#00000000,#000000ff), url("/assets/background.png") ;
+    background-image:linear-gradient(#00000000,#000000ff), url("/assets/background.jpg") ;
     background-attachment: fixed;
     background-repeat: no-repeat;
-    background-position: 0% 15%;
+    background-position: center;
     background-size: cover;
     min-width: 100vw;
     min-height: 100vh;
@@ -13,13 +13,11 @@
     left: 0;
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-wrap: wrap;
     filter: saturate(1);
 
     &-header{
         font-size: 3rem;
-        height: 5rem;
     }
     &-btn{
          
@@ -54,11 +52,13 @@
   padding-bottom: 10rem;
   &-header{
     text-align: center;
-    margin: 10rem;
+    margin-bottom: 5rem;
+    margin-top: 5rem;
+    padding: 1rem;
     font-size: 2.5rem;
   }
 
-  &-container{
+&-container{
     display: flex;
     width: 100%;
     justify-content: space-around;

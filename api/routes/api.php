@@ -9,6 +9,8 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\DislikeController;
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,15 +34,19 @@ Route::controller(AccountController::class)->group(function () {
 Route::controller(UsersController::class)->group(function () {
     Route::get('users', 'index');
     Route::get('users/{username}', 'show');
-    Route::post('users/add-photo', 'addPhoto');
+    Route::post('users/photos', 'addPhoto');
     Route::put('users', 'update');
-    Route::delete('users/delete-photo/{id}', 'deletePhoto');
-    Route::put('users/set-main-photo/{id}', 'setMainPhoto');
+    Route::delete('users/photos/{id}', 'deletePhoto');
+    Route::put('users/photos/{id}', 'setMainPhoto');
 });
 Route::controller(LikeController::class)->group(function () {
     Route::get('likes', 'index');
     Route::post('likes/{username}', 'store');
-    Route::post('dislikes/{username}', 'dislike');
+    Route::delete('likes/{username}', 'destroy');
+});
+Route::controller(DislikeController::class)->group(function () {
+    Route::post('dislikes/{username}', 'store');
+    Route::delete('dislikes/reset', 'resetDislikes');
 });
 
 Route::controller(MessageController::class)->group(function () {
@@ -50,18 +56,22 @@ Route::controller(MessageController::class)->group(function () {
 });
 
 Route::controller(AdminController::class)->group(function () {
-    Route::get('admin/users-with-roles', 'usersWithRoles');
-    Route::put('admin/edit-role/{username}', 'editRole');
+    Route::get('admin/users', 'index');
+    Route::patch('admin/users/{username}', 'update');
+});
+
+Route::controller(RoleController::class)->group(function () {
+    Route::get('admin/roles', 'index');
 });
 
 Route::controller(BanController::class)->group(function () {
     Route::get('admin/blockages', 'index');
-    Route::post('user/{username}/ban', 'ban');
-    Route::post('user/{username}/unban', 'unban');
+    Route::post('users/{username}/ban', 'ban');
+    Route::post('users/{username}/unban', 'unban');
 })
 ;Route::controller(ReportController::class)->group(function () {
     Route::get('admin/reports', 'index');
-    Route::post('user/{username}/report', 'report');
+    Route::post('users/{username}/report', 'report');
 });
 
 

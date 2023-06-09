@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreMessageRequest;
 use App\Models\User;
 use App\Models\Message;
 use Illuminate\Http\Request;
@@ -39,7 +40,7 @@ class MessageController extends Controller
             $username = strtolower($message->sender_username);
 
             if ($username === strtolower($user->username)) {
-                return null; // Wyklucz rekord, który ma zgodne username
+                return null;
             }
 
             return [
@@ -49,7 +50,7 @@ class MessageController extends Controller
                 'dateRead' => $message->date_read
             ];
         })
-            ->filter(); // Usuń wartości null
+            ->filter(); 
 
         $messages = $messages->values();
 
@@ -57,8 +58,9 @@ class MessageController extends Controller
         return response()->json($messages);
     }
 
-    public function store(Request $request)
+    public function store(StoreMessageRequest $request)
     {
+        $request->validated();
         $username = Auth::user()->username;
 
         if (strtolower($username) === strtolower($request->recipient_username)) {

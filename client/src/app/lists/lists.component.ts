@@ -11,7 +11,7 @@ import { MembersService } from '../_services/members.service';
 export class ListsComponent {
 
   members: Member[] | undefined;
-  predicate = 'liked';
+  predicate = 'matches';
   pageNumber = 1;
   pageSize = 3;
   pagination: Pagination | undefined;

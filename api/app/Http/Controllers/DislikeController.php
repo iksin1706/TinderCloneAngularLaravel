@@ -14,39 +14,44 @@ class DislikeController extends Controller
     public function store($username)
     {
         $sourceUser = Auth::user();
-        $likedUser = User::findOrFail($username);
-
+        $targetUser = User::where('username', $username)->first();
+       
+        $sourceUser = User::find($sourceUser->id);
+        if (!$targetUser) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+        
         if (strtolower($username) === strtolower($sourceUser->username)) {
-            return response()->json(['error' => 'You cannot dislike yourself'], 400);
+            return response()->json(['error' => 'You cannot like yourself'], 400);
         }
-
-        try {
-            $userDislike = Dislike::firstOrCreate([
-                'source_user_id' => $sourceUser->id,
-                'target_user_id' => $likedUser->id
-            ]);
-
-            if ($userDislike) {
-                return response('You already dislike this user', 400);
-            }
-
-            if ($userDislike->save()) {
-                UserPointsHelper::CalculateAndUpdateUserPoints($likedUser);
-                return response()->json(['message' => 'User disliked successfully'], 200);
-            }
-        } catch (\Exception $e) {
-            return response('Failed to dislike user', 400);
+   
+        $userLike = Dislike::where('source_user_id', $sourceUser->id)
+            ->where('target_user_id', $targetUser->id)
+            ->first();
+        
+        if ($userLike) {
+            return response('You already like this user', 400);
         }
+        
+        $userLike = new Dislike();
+        $userLike->source_user_id = $sourceUser->id;
+        $userLike->target_user_id = $targetUser->id;
 
-        return response('Failed to dislike user', 400);
+        Dislike::create($userLike->toArray());
+        
+        if ($sourceUser->save()) {   
+            return response()->json(['message' => 'User liked successfully'], 200);
+        }
+        
+        return response('Failed to like user', 400);
     }
 
     public function resetDislikes()
     {
         $sourceUser = Auth::user();
-        if(Like::where('source_user_id', $sourceUser->id)->delete())         
+        if(Dislike::where('source_user_id', $sourceUser->id)->delete())         
             return response()->json(['message' => 'Dislikes reset successfully'], 200);
 
-        return response()->json(['error' => 'Failed to reset dislikes'], 400);
+        return response()->json(['You have no dislikes to reset'], 400);
     }
 }

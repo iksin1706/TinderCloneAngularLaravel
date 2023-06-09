@@ -19,8 +19,8 @@ class AdminController extends Controller
     }
 
     public function index(){
-        
-        if (Auth::payload()->get('role') !== 'admin') return response('Only admin has access',403);
+
+        if (Auth::payload()->get('role') !== 'admin' && Auth::payload()->get('role')!=='moderator') return response('Only admins and moderators has access',403);
 
         $users = User::all()->map(function ($user) {
             $isBanned = BanHelper::isBanned($user);
@@ -40,7 +40,7 @@ class AdminController extends Controller
     {
         $role = $request->input('role');
         $user = User::where('username', $username)->firstOrFail();
-        $user->role_id = Role::where('name', $role)->id;
+        $user->role_id = Role::where('name', $role)->first()->id;
         $user->save();
     
         return response()->json($role);

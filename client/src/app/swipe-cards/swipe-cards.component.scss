@@ -19,9 +19,9 @@
 }
 .link{
     transition: 0.2s;
-    :hover{
-        transform: scale(1.2);
-        border-bottom: $color-secondary 5px solid;
+    &:hover{
+        transform: scale(1.5);
+        cursor: pointer;
     }
 }
 

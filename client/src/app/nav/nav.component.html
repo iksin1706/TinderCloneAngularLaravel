@@ -1,4 +1,9 @@
-<nav class="navigation">
+
+<button class="navigation-show btn" *ngIf="isHidden" (click)="show()"><i class="fa fa-bars"></i></button>
+<nav class="navigation" *ngIf="!isHidden">
+    <button class="navigation-close" (click)="hide()"><i class="fa fa-close"></i></button>
+
+
     <div class="navigation-row navigation-profile">
         <div class="dropdown me-3" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
             <img src="{{user.photoUrl || './assets/user.png'}}" alt="">
@@ -8,30 +13,45 @@
                 <a href="" class="dropdown-item " (click)="logout()">Logout</a>
             </div>
         </div>
-        <div class="navigation-likes" *ngIf="(accountService.currentUser$ | async) as user">
-            <a routerLink="/lists" routerLinkActive="active"><i class="nav-likes fa fa-heart"></i></a>
-        </div>
+
+
         <div *ngIf="!(accountService.currentUser$ | async) as user">
             <a routerLink="/login" routerLinkActive="active">Log in</a>
         </div>
 
     </div>
-    <div class="navigation-row navigation-members">
+    <div class="navigation-row" *ngIf="(accountService.currentUser$ | async) as user">
+        <a class="navigation-link" [class.text-gradient]="router.isActive('/lists',true)"  routerLink="/lists" routerLinkActive="active"><i class="fa fa-heart"></i> Likes</a>
+    </div>
+    <div class="navigation-row" *ngIf="(accountService.currentUser$ | async) as user">
+        <a class="navigation-link" [class.text-gradient]="router.isActive('/members',true)" routerLink="/members" routerLinkActive="active"><i class="fa fa-users"></i> Members list</a>
+    </div>
+    <div class="navigation-row" *ngIf="(accountService.currentUser$ | async) as user">
+        <a class="navigation-link" [class.text-gradient]="router.isActive('/cards',true)"  routerLink="/cards" routerLinkActive="active"><i class="fa fa-clipboard"></i> Swipe cards</a>
+    </div>
+    <div class="navigation-row" *appHasRole="['admin','moderator']">
+        <a class="navigation-link" [class.text-gradient]="router.isActive('/admin/users',true)"  routerLink="/admin/users" routerLinkActive="active"><i class="fa fa-user"></i> Users managment</a>
+    </div>
+    <div class="navigation-row" *appHasRole="['admin','moderator']">
+        <a class="navigation-link" [class.text-gradient]="router.isActive('/reports/reports',true)"  routerLink="/admin/reports" routerLinkActive="active"><i class="fa fa-list"></i> Reports</a>
+    </div>
+
+    <!-- <div class="navigation-row navigation-members">
         <a *ngIf="router.isActive('/cards',true)" routerLink="/members" class="navigation-link text-gradient">Can't find
             love in cards? Click here and look at all of our members</a>
         <a *ngIf="!router.isActive('/cards',true)" routerLink="/members" class="navigation-link text-gradient">All
             Members</a><br> <br> <a *ngIf="!router.isActive('/cards',true)" routerLink="/cards"
             class="navigation-link text-gradient">Cards</a>
-    </div>
-    <h2 class="navigation-header" *ngIf="(accountService.currentUser$ | async)?.role==='admin'">
+    </div> -->
+
+    <!-- <h2 class="navigation-header" *ngIf="(accountService.currentUser$ | async)?.role==='admin'">
         Admin options
     </h2>
-        <div class="navigation-row navigation-members"
-            *ngIf="(accountService.currentUser$ | async)?.role==='admin'">
+    <div class="navigation-row navigation-members" *ngIf="(accountService.currentUser$ | async)?.role==='admin'">
 
-            <a routerLink="/admin/users" class="navigation-link text-gradient">Users</a>
-            <a routerLink="/admin/reports" class="navigation-link text-gradient">Reports</a>
-        </div>
+        <a routerLink="/admin/users" class="navigation-link text-gradient">Users</a>
+        <a routerLink="/admin/reports" class="navigation-link text-gradient">Reports</a>
+    </div> -->
 
     <h2 class="navigation-header  ">
         Last messages

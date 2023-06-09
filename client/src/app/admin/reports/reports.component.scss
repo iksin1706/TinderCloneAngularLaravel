@@ -9,7 +9,7 @@ td {
 
 .user-table {
     overflow-y: scroll;
-    height: 40rem;
+    max-height: 40rem;
     margin-top: 2rem;
     &-row{
         border-top: 2px solid #aaaaaa5d;

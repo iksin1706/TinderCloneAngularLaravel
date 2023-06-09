@@ -50,6 +50,8 @@ export class MemberListComponent implements OnInit {
 
   resetFilters(){
       this.userParams = this.memberService.resetUserParams();
+      if(this.userParams)
+      this.memberService.setUserParams(this.userParams);
       this.loadMembers();
   }
 
