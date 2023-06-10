@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\UserPointsHelper;
+use App\Helpers\UserResponseHelper;
 use App\Http\Requests\LikesIndexRequest;
 use App\Models\Dislike;
 use App\Models\Like;
@@ -48,20 +49,7 @@ class LikeController extends Controller
             });
         }
 
-        $likedUsers = $users->get()->map(function ($user) {
-            return [
-                'userName' => $user->username,
-                'knownAs' => $user->known_as,
-                'age' => now()->diffInYears($user->date_of_birth),
-                'photoUrl' => $user->photos->first(function ($photo) {
-                    return $photo->is_main;
-                })?->url,
-                'city' => $user->city,
-                'id' => $user->id
-            ];
-        });
-
-        return response()->json($likedUsers);
+        return response()->json(UserResponseHelper::transformUsers($users->get()));
     }
 
     public function store($username)
@@ -78,7 +66,6 @@ class LikeController extends Controller
             return response()->json(['error' => 'You cannot like yourself'], 400);
         }
 
-        
         $userLike = Like::where('source_user_id', $sourceUser->id)
             ->where('target_user_id', $likedUser->id)
             ->first();
@@ -101,7 +88,7 @@ class LikeController extends Controller
         Like::create($userLike->toArray());
         
         if ($sourceUser->save()) {   
-            UserPointsHelper::CalculateAndUpdateUserPoints($likedUser);
+            UserPointsHelper::calculateAndUpdateUserPoints($likedUser);
             return response()->json(['message' => 'User liked successfully','isMatch'=>$userLike->is_mutual], 200);
         }
         
@@ -137,7 +124,7 @@ class LikeController extends Controller
         }
 
         if ($userLike->delete()) {
-            UserPointsHelper::CalculateAndUpdateUserPoints($likedUser);
+            UserPointsHelper::calculateAndUpdateUserPoints($likedUser);
             return response()->json(['message' => 'User unliked successfully', 'wasMatch' => $isMutual], 200);
         }
         return response()->json(['error' => 'Failed to unlike user'], 400);

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\BanHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Http\Resources\UserResource;
 use App\Models\Blockade;
 use App\Services\TokenService;
 use Illuminate\Auth\Events\Registered;
@@ -28,9 +28,20 @@ class AccountController extends Controller
 
     public function register(RegisterRequest $request)
     {
+
         $request->validated();
 
-        $user = User::create(new UserResource($request));
+        $user = User::create([
+            'username' => $request->username,
+            'email' => $request->email,
+            'known_as' => $request->knownAs,
+            'gender' => $request->gender,
+            'date_of_birth' => $request->dateOfBirth,
+            'city' => $request->city,
+            'country' => $request->country,
+            'password' => Hash::make($request->password),
+            'role_id' => 1
+        ]);
 
         $token = Auth::login($user);
 
@@ -38,7 +49,7 @@ class AccountController extends Controller
             'username' => $user->username,
             'token' => $token,
             'knownAs' => $user->know_as,
-            'gender' => $user->gender
+            'gender' => $user->gender,
         ], 201);
     }
 
@@ -50,15 +61,26 @@ class AccountController extends Controller
         $token = Auth::attempt($credentials);
         if (!$token) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized',
+                'error' => 'Unauthorized',
             ], 401);
         }
-        $user = Auth::user();
 
-        $mainPhoto = $user->photos->where('is_main', true)->first();
 
-        $photoUrl = $mainPhoto ? $mainPhoto->url : null;
+        $user = User::find(Auth::user()->id);
+        $banned_days = BanHelper::isBanned($user);
+        if ($banned_days>0)
+            return response(
+                'Jestes zablokowany na ' . $banned_days . ' dni. Skontaktuj się z administratorem.',
+                Response::HTTP_FORBIDDEN
+            );
+
+        $mainPhoto = $user->photos()->where('is_main', true)->first();
+
+        if ($mainPhoto) {
+            $photoUrl = $mainPhoto->url;
+        } else {
+            $photoUrl = null;
+        }
 
         return response()->json([
             'username' => $user->username,
@@ -66,7 +88,7 @@ class AccountController extends Controller
             'type' => 'bearer',
             'knownAs' => $user->known_as,
             'gender' => $user->gender,
-            'photoUrl' => $photoUrl
+            'photoUrl' => $photoUrl,
         ], 201);
     }
     public function logout()
@@ -89,6 +111,7 @@ class AccountController extends Controller
             'knownAs' => $user->know_as,
             'gender' => $user->gender,
             'photoUrl' => $mainPhoto,
+            'roleId' => $user->role_id
         ]);
     }
 }

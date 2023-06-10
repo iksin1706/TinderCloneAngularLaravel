@@ -13,3 +13,10 @@
     margin-left: 1rem;
 
 }
+
+@media (max-width: 500px) {
+    .filter {
+      width: 15rem;
+      justify-content: space-between;
+    }
+  }

@@ -32,13 +32,10 @@ export class LoginComponent implements OnInit{
     console.log(this.model);
     
     this.accountService.login(this.loginForm.value).subscribe({
-      next: _ => {
+      next: response => {
         this.messageService.getMessagesThreadsInfo();
-        this.router.navigateByUrl('/cards');
         this.memberService.createUserParams();
-      },
-      error: _ => {
-        this.toastr.warning('Wrong username or password')
+        this.router.navigateByUrl('/cards');
       }
     }
     )

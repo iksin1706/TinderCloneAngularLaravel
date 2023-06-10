@@ -11,6 +11,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DislikeController;
 use App\Http\Controllers\RoleController;
+use App\Http\Middleware\CheckBanned;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::controller(AccountController::class)->group(function () {
-    Route::post('account/login', 'login');
+    Route::post('account/login', 'login')->middleware(CheckBanned::class);
     Route::post('account/register', 'register');
 });
 Route::controller(UsersController::class)->group(function () {
@@ -37,7 +38,7 @@ Route::controller(UsersController::class)->group(function () {
     Route::post('users/photos', 'addPhoto');
     Route::put('users', 'update');
     Route::delete('users/photos/{id}', 'deletePhoto');
-    Route::put('users/photos/{id}', 'setMainPhoto');
+    Route::patch('users/photos/{id}', 'setMainPhoto');
 });
 Route::controller(LikeController::class)->group(function () {
     Route::get('likes', 'index');

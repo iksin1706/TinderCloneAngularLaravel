@@ -1,5 +1,12 @@
 .cards{
     flex-wrap: wrap;
     gap: 1rem;
-
+   
 }
+@media (max-width: 1000px) {
+    .cards {
+      justify-content: center;
+    }
+    
+  }
+  

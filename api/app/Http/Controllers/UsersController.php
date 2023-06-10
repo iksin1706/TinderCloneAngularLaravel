@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\UserPointsHelper;
+use App\Helpers\UserResponseHelper;
 use App\Http\Requests\AddPhotoRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Dislike;
@@ -41,19 +43,14 @@ class UsersController extends Controller
         $query = User::with('photos');
         if (Auth::user()) {
             $userId = Auth::user()->id;
-
-
             $dislikedUserIds = Dislike::where('source_user_id', $userId)->pluck('target_user_id');
             $likedUserIds = Like::where('source_user_id', $userId)->pluck('target_user_id');
-
 
             if ($withoutLikes == 'true') {
                 $query = $query->whereNotIn('id', $likedUserIds);
                 $query = $query->whereNotIn('id', $dislikedUserIds);
             }
         }
-
-
 
         if ($minAge) {
             $minBirthDate = date('Y-m-d', strtotime("-$minAge years"));
@@ -72,9 +69,6 @@ class UsersController extends Controller
         if ($orderBy == 'created_at' || $orderBy == 'points' || $orderBy == 'last_active')
             $query->orderBy($orderBy, 'desc');
 
-
-
-
         $totalItems = $query->count();
         $totalPages = ceil($totalItems / $pageSize);
 
@@ -82,49 +76,18 @@ class UsersController extends Controller
             ->take($pageSize)
             ->get();
 
-        if (Auth::user())
+        $users = UserResponseHelper::transformUsers($users);
+
+        if (Auth::check()) {
             $users = $users->map(function ($user) use ($likedUserIds, $dislikedUserIds) {
-                $userData = [
-                    'userName' => $user->username,
-                    'knownAs' => $user->known_as,
-                    'age' => $user->age(),
-                    'photoUrl' => optional($user->Photos->first(function ($photo) {
-                        return $photo->is_main;
-                    }))->url,
-                    'city' => $user->city,
-                    'country' => $user->country,
-                    'id' => $user->id,
-                    'created' => $user->created_at,
-                    'photos' => $user->photos->sortByDesc('is_main')
-                ];
-
-                if (Auth::check()) {
-                    if ($dislikedUserIds->contains($user->id)) {
-                        $userData['likeStatus'] = 'disliked';
-                    } elseif ($likedUserIds->contains($user->id)) {
-                        $userData['likeStatus'] = 'liked';
-                    } else {
-                        $userData['likeStatus'] = 'none';
-                    }
+                if ($dislikedUserIds->contains($user['id'])) {
+                    $user['likeStatus'] = 'disliked';
+                } elseif ($likedUserIds->contains($user['id'])) {
+                    $user['likeStatus'] = 'liked';
+                } else {
+                    $user['likeStatus'] = 'none';
                 }
-
-                return $userData;
-            });
-        else {
-            $users = collect($users)->map(function ($user) {
-                return [
-                    'userName' => $user->username,
-                    'knownAs' => $user->known_as,
-                    'age' => $user->age(),
-                    'photoUrl' => $user->Photos->first(function ($photo) {
-                        return $photo->is_main;
-                    })?->url,
-                    'city' => $user->city,
-                    'country' => $user->country,
-                    'id' => $user->id,
-                    'created' => $user->created_at,
-                    'photos' => $user->photos,
-                ];
+                return $user;
             });
         }
 
@@ -145,15 +108,9 @@ class UsersController extends Controller
     public function show($username)
     {
         $user = User::with('photos')->where('username', $username)->first();
-        $user['photoUrl'] = $user->Photos->first(function ($photo) {
-            return $photo->is_main;
-        })?->url;
-        $user['lookingFor'] = $user['looking_for'];
-        $user['age'] = $user->age();
-        $user['knownAs'] = $user['known_as'];
-        $user['userName'] = $user['username'];
-        if ($user)
-            return $user;
+        $user = UserResponseHelper::transformDetailedUser($user);
+        if($user)
+            return response()->json($user, 200);
         else return response("Not found", 404);
     }
 
@@ -177,6 +134,7 @@ class UsersController extends Controller
         }
 
         if ($user->save()) {
+            UserPointsHelper::calculateAndUpdateUserPoints($user);
             return response()->json(['message' => 'User updated successfully'], 200);
         }
 
@@ -211,6 +169,7 @@ class UsersController extends Controller
         }
 
         $photo->save();
+        UserPointsHelper::calculateAndUpdateUserPoints($user);
 
         return response()->json($photo);
     }
@@ -230,6 +189,7 @@ class UsersController extends Controller
         }
 
         $photo->delete();
+        UserPointsHelper::calculateAndUpdateUserPoints(User::find(Auth::user()));
 
         return response()->json(['message' => 'Photo deleted successfully']);
     }

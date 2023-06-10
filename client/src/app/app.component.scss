@@ -2,6 +2,13 @@
     padding-left: 30rem !important;
 }
 
+@media (max-width: 1000px) {
+    .main-nav-margin {
+        padding-left: 0rem !important;
+    }
+  }
+  
+
 .rainbow-progress-bar{
     // display: none;
 }    

@@ -11,9 +11,9 @@ class BanHelper
 {
     public static function isBanned(User $user){
         $ban = Blockade::where('user_id',$user->id)->orderBy('until','desc')->first();
-        if(!$ban) return false;
+        if(!$ban) return 0;
         $banned_days = Carbon::now()->diffInDays($ban->until, false)+1;
-        if ($banned_days>0) return true;
+        if ($banned_days>0) return $banned_days;
     }
 }
 ?>

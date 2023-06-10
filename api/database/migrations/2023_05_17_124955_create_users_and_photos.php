@@ -97,6 +97,7 @@ return new class extends Migration
             Schema::create('default_points', function (Blueprint $table) {
                 $table->increments('id');
                 $table->string('what_for');
+                $table->string('description');
                 $table->integer('points');
             });
     }

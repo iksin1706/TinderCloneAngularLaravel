@@ -44,7 +44,7 @@ export class BansModalComponent implements OnInit {
     if (this.username)
       this.adminService.banUser(this.username, values).subscribe({
         next: response => {
-          this.toaster.success(response);
+          this.toaster.success("User banned successfully");
           if (this.user)
             this.user.isBlocked = true;
         }

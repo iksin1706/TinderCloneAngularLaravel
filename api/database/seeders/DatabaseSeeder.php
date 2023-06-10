@@ -73,37 +73,44 @@ class DatabaseSeeder extends Seeder
 
         DB::table('default_points')->insert([
             'what_for' => 'introduction',
+            'description' => 'For having filled introduction on profile',
             'points' => 10,
         ]);
         DB::table('default_points')->insert([
             'what_for' => 'looking_for',
+            'description' => 'For having filled looking for on profile',
             'points' => 10,
         ]);
         DB::table('default_points')->insert([
             'what_for' => 'interests',
+            'description' => 'For having filled interets on profile',
             'points' => 10,
         ]);
         DB::table('default_points')->insert([
             'what_for' => 'first_photo',
+            'description' => 'For having main photo',
             'points' => 10,
         ]);
         DB::table('default_points')->insert([
             'what_for' => 'next_photo',
+            'description' => 'Additional points for each next photo',
             'points' => 5,
         ]);
         DB::table('default_points')->insert([
             'what_for' => 'likes',
+            'description' => 'Additional points for each like',
             'points' => 2,
         ]);
         DB::table('default_points')->insert([
             'what_for' => 'bans',
+            'description' => 'Penalty points for each ban',
             'points' => -20,
         ]);
 
         $users = User::all();
 
         foreach ($users as $user) {
-            UserPointsHelper::CalculateAndUpdateUserPoints($user);
+            UserPointsHelper::calculateAndUpdateUserPoints($user);
         }
     }
 

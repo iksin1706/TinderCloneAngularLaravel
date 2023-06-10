@@ -32,8 +32,6 @@ class CheckBanned
                 , Response::HTTP_FORBIDDEN);
             }
         }
-
-
         return $next($request);
     }
 }

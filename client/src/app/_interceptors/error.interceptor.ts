@@ -14,7 +14,7 @@ import { AccountService } from '../_services/account.service';
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
 
-  constructor(private router: Router, private toastr: ToastrService,private accountService:AccountService) { }
+  constructor(private router: Router, private toastr: ToastrService, private accountService: AccountService) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
@@ -38,13 +38,16 @@ export class ErrorInterceptor implements HttpInterceptor {
               this.accountService.logout();
               this.router.navigateByUrl('/login');
               break;
-              case 403:
-                this.toastr.error(error.error);
-                this.accountService.logout();
-                this.router.navigateByUrl('/login');
-                break;
+            case 403:
+              this.toastr.error(error.error);
+              this.accountService.logout();
+              this.router.navigateByUrl('/login');
+              break;
             case 404:
               this.router.navigateByUrl('/not-found');
+              break;
+            case 422:
+              this.toastr.error('Unprocesable content');
               break;
             case 500:
               const navigationExtras: NavigationExtras = { state: { error: error.error } }

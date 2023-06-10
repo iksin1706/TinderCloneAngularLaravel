@@ -112,3 +112,10 @@ img {
 .thread {
     flex: 1;
 }
+@media (max-width: 1000px) {
+    .navigation {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+  

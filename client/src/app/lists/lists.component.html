@@ -1,10 +1,10 @@
-<div class="text-cente mt-3">
+<div class="text-center m-3">
     <h2>{{predicate === 'liked' ? 'Members I like' : predicate === 'likedBy' ? 'Members who like me' : 'My matches'}}</h2>
 </div>
 
-<div class="mt-3">
-    <div class="d-flex">
-        <form #form="ngForm" class="d-flex mb-3" (ngSubmit)="loadLikes()" autocomplete="off">
+<div class="m-3">
+    <div class="d-flex cards">
+        <form #form="ngForm" class="d-flex mb-3" autocomplete="off">
         <div class="btn-group">
             <button name="predicate" (click)="loadLikes()" class="btn btn-primary" [class.unactive]="predicate!=='matches'"   btnRadio="matches" [(ngModel)]="predicate">Matches</button>
             <button name="predicate" (click)="loadLikes()" class="btn btn-primary" [class.unactive]="predicate!=='liked'"   btnRadio="liked" [(ngModel)]="predicate">I like</button>

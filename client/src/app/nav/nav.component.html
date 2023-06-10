@@ -21,19 +21,19 @@
 
     </div>
     <div class="navigation-row" *ngIf="(accountService.currentUser$ | async) as user">
-        <a class="navigation-link" [class.text-gradient]="router.isActive('/lists',true)"  routerLink="/lists" routerLinkActive="active"><i class="fa fa-heart"></i> Likes</a>
+        <a class="navigation-link" (click)="isMobile && hide()" [class.text-gradient]="router.isActive('/lists',true)"  routerLink="/lists" routerLinkActive="active"><i class="fa fa-heart"></i> Likes</a>
     </div>
     <div class="navigation-row" *ngIf="(accountService.currentUser$ | async) as user">
-        <a class="navigation-link" [class.text-gradient]="router.isActive('/members',true)" routerLink="/members" routerLinkActive="active"><i class="fa fa-users"></i> Members list</a>
+        <a class="navigation-link" (click)="isMobile && hide()" [class.text-gradient]="router.isActive('/members',true)" routerLink="/members" routerLinkActive="active"><i class="fa fa-users"></i> Members list</a>
     </div>
     <div class="navigation-row" *ngIf="(accountService.currentUser$ | async) as user">
-        <a class="navigation-link" [class.text-gradient]="router.isActive('/cards',true)"  routerLink="/cards" routerLinkActive="active"><i class="fa fa-clipboard"></i> Swipe cards</a>
+        <a class="navigation-link" (click)="isMobile && hide()" [class.text-gradient]="router.isActive('/cards',true)"  routerLink="/cards" routerLinkActive="active"><i class="fa fa-clipboard"></i> Swipe cards</a>
     </div>
     <div class="navigation-row" *appHasRole="['admin','moderator']">
-        <a class="navigation-link" [class.text-gradient]="router.isActive('/admin/users',true)"  routerLink="/admin/users" routerLinkActive="active"><i class="fa fa-user"></i> Users managment</a>
+        <a class="navigation-link" (click)="isMobile && hide()" [class.text-gradient]="router.isActive('/admin/users',true)"  routerLink="/admin/users" routerLinkActive="active"><i class="fa fa-user"></i> Users managment</a>
     </div>
     <div class="navigation-row" *appHasRole="['admin','moderator']">
-        <a class="navigation-link" [class.text-gradient]="router.isActive('/reports/reports',true)"  routerLink="/admin/reports" routerLinkActive="active"><i class="fa fa-list"></i> Reports</a>
+        <a class="navigation-link" (click)="isMobile && hide()" [class.text-gradient]="router.isActive('/admin/reports',true)"  routerLink="/admin/reports" routerLinkActive="active"><i class="fa fa-list"></i> Reports</a>
     </div>
 
     <!-- <div class="navigation-row navigation-members">

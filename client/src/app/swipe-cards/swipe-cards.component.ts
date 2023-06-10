@@ -45,6 +45,8 @@ export class SwipeCardsComponent implements OnInit {
   userParams: UserParams | undefined;
   animationState: string = 'in';
   animationState2: string = 'in';
+
+  preventLike = false;
   constructor(private memberService: MembersService, private route: ActivatedRoute, private toastr: ToastrService) {
     this.userParams = this.memberService.getUserParams();
   }
@@ -83,34 +85,46 @@ export class SwipeCardsComponent implements OnInit {
   }
 
   addLike(member: Member) {
+    this.preventLike = true;
     this.memberService.addLike(member.userName).subscribe({
-      next: () => this.toastr.success('You have liked ' + member.knownAs)
+      next: () => this.toastr.success('You have liked ' + member.knownAs),
+      complete: () => {
+        this.preventLike = false;
+      }
     })
   }
   resetDislikes() {
+    this.preventLike = true;
     this.memberService.resetDislikes().subscribe({
-      next: () => { 
+      next: () => {
         this.toastr.success('Dislikes reseted successfully');
         this.loadMembers();
-    }
+      }, complete: () => {
+        this.preventLike = false;
+      }
+
     })
   }
 
   likeUser(member: Member) {
+    this.preventLike = true;
     this.memberService.addLike(member.userName).subscribe({
       next: response => {
         this.removeMember(member);
         this.animationState = 'like';
-        if(response.isMatch) this.toastr.success("IT'S MATCH !");
+        if (response.isMatch) this.toastr.success("IT'S MATCH !");
         setTimeout(() => {
           this.animationState = 'in';
         }, 550);
         this.checkEmpty();
+      }, complete: () => {
+        this.preventLike = false;
       }
     })
   }
 
   dislikeUser(member: Member) {
+    this.preventLike = true;
     this.memberService.dislike(member.userName).subscribe({
       next: () => {
         this.removeMember(member);
@@ -119,6 +133,9 @@ export class SwipeCardsComponent implements OnInit {
           this.animationState2 = 'in';
         }, 550);
         this.checkEmpty();
+      },
+      complete: () => {
+        this.preventLike = false;
       }
     })
 

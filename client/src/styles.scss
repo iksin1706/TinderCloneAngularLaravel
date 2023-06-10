@@ -73,9 +73,23 @@ body{
 
   .bs-datepicker {
     background: #303030;
+    box-shadow: none;
+  }
+
+  .bs-datepicker-body span[bsdatepickerdaydecorator] {
+    color: #f2f2f2 !important;
+  }
+  .bs-datepicker-body span.is-other-month[bsdatepickerdaydecorator]{
+    color: #707070 !important;
+  }
+  .bs-datepicker-body span.disabled[bsdatepickerdaydecorator] {
+    color: #202020 !important;
   }
 
   .modal-content{
     background: rgb(67 67 67 / 79%);
   }
 
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
