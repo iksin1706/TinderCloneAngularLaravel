@@ -47,8 +47,9 @@
         <app-member-card [member]="member"></app-member-card>
     </div>
 </div>
+<h2 class="mt-5 text-center" *ngIf="members.length<=0">No one match your preferences :(</h2>
 
-<div class="d-flex justify-content-center" *ngIf="pagination">
+<div class="d-flex justify-content-center" *ngIf="pagination && members.length>0">
     <pagination [(ngModel)]="pagination.currentPage" [boundaryLinks]="true" [maxSize]="10"
         [totalItems]="pagination.totalItems" previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;"
         lastText="&raquo;" (pageChanged)="pageChanged($event)" [itemsPerPage]="pagination.itemsPerPage">

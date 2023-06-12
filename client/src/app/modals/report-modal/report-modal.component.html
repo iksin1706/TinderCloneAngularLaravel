@@ -7,6 +7,6 @@
   <div class="modal-body">
     <form [formGroup]="reportForm" class="register" (ngSubmit)="reportForm.valid && report()" id="rolesForm" action="">
         <app-text-input [formControl]="$any(reportForm.controls['reason'])" [label]="'Reason'" [type]="'text'"></app-text-input>
-        <button type="submit" class="btn btn-primary" (click)="reportForm.valid && bsModalRef.hide()">Report</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!reportForm.invalid" (click)="reportForm.valid && bsModalRef.hide()">Report</button>
     </form>
   </div>

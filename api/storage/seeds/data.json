@@ -2,7 +2,7 @@
     {
         "username": "Lisa",
         "gender": "female",
-        "date_of_birth": "1956-07-22",
+        "date_of_birth": "1996-07-22",
         "known_as": "Lisa",
         "created": "2020-06-24",
         "last_active": "2020-06-21",
@@ -13,7 +13,7 @@
         "country": "Martinique",
         "photos": [
             {
-                "url": "https:\/\/randomuser.me\/api\/portraits\/women\/54.jpg",
+                "url": "http://127.0.0.1:8000/storage/photos/w1.jpg",
                 "is_main": true
             }
         ]
@@ -32,7 +32,7 @@
         "country": "Grenada",
         "photos": [
             {
-                "url": "https:\/\/randomuser.me\/api\/portraits\/women\/50.jpg",
+                "url": "http://127.0.0.1:8000/storage/photos/w2.jpg",
                 "is_main": true
             }
         ]
@@ -40,7 +40,7 @@
     {
         "username": "Margo",
         "gender": "female",
-        "date_of_birth": "1959-01-24",
+        "date_of_birth": "1998-01-24",
         "known_as": "Margo",
         "created": "2019-08-10",
         "last_active": "2020-05-12",
@@ -51,7 +51,7 @@
         "country": "Svalbard and Jan Mayen Islands",
         "photos": [
             {
-                "url": "https:\/\/randomuser.me\/api\/portraits\/women\/14.jpg",
+                "url": "http://127.0.0.1:8000/storage/photos/w3.jpg",
                 "is_main": true
             }
         ]
@@ -59,7 +59,7 @@
     {
         "username": "Lois",
         "gender": "female",
-        "date_of_birth": "1988-06-22",
+        "date_of_birth": "1972-06-22",
         "known_as": "Lois",
         "created": "2019-04-24",
         "last_active": "2020-06-17",
@@ -70,7 +70,7 @@
         "country": "Zimbabwe",
         "photos": [
             {
-                "url": "https:\/\/randomuser.me\/api\/portraits\/women\/11.jpg",
+                "url": "http://127.0.0.1:8000/storage/photos/w4.jpg",
                 "is_main": true
             }
         ]
@@ -78,7 +78,7 @@
     {
         "username": "Ruthie",
         "gender": "female",
-        "date_of_birth": "1956-01-12",
+        "date_of_birth": "1990-01-12",
         "known_as": "Ruthie",
         "created": "2019-04-30",
         "last_active": "2020-06-21",
@@ -89,7 +89,7 @@
         "country": "Antigua and Barbuda",
         "photos": [
             {
-                "url": "https:\/\/randomuser.me\/api\/portraits\/women\/84.jpg",
+                "url": "http://127.0.0.1:8000/storage/photos/w5.jpg",
                 "is_main": true
             }
         ]
@@ -97,7 +97,7 @@
     {
         "username": "Todd",
         "gender": "male",
-        "date_of_birth": "1950-02-07",
+        "date_of_birth": "1983-02-07",
         "known_as": "Todd",
         "created": "2019-04-29",
         "last_active": "2020-05-16",
@@ -105,10 +105,10 @@
         "looking_for": "Magna ex non ullamco ipsum commodo minim cupidatat sit. Sint dolor enim amet cupidatat. Anim et ea officia ea officia veniam adipisicing tempor. Labore consequat in duis deserunt tempor aliqua. Eu incididunt id deserunt proident ullamco aliqua culpa officia anim deserunt fugiat amet voluptate qui. In id non sint sint aliqua commodo reprehenderit excepteur cillum Lorem minim.\r\n",
         "interests": "Esse cillum deserunt fugiat deserunt irure ea esse deserunt quis exercitation velit do nisi reprehenderit.",
         "city": "Cliff",
-        "country": "British Indian Ocean Territory",
+        "country": "England",
         "photos": [
             {
-                "url": "https:\/\/randomuser.me\/api\/portraits\/men\/90.jpg",
+                "url": "http://127.0.0.1:8000/storage/photos/m1.jpg",
                 "is_main": true
             }
         ]
@@ -116,7 +116,7 @@
     {
         "username": "Porter",
         "gender": "male",
-        "date_of_birth": "1967-04-09",
+        "date_of_birth": "1985-04-09",
         "known_as": "Porter",
         "created": "2020-04-05",
         "last_active": "2020-06-23",
@@ -127,7 +127,7 @@
         "country": "Christmas Island",
         "photos": [
             {
-                "url": "https:\/\/randomuser.me\/api\/portraits\/men\/87.jpg",
+                "url": "http://127.0.0.1:8000/storage/photos/m2.jpg",
                 "is_main": true
             }
         ]
@@ -135,7 +135,7 @@
     {
         "username": "Mayo",
         "gender": "male",
-        "date_of_birth": "1990-03-23",
+        "date_of_birth": "1995-03-23",
         "known_as": "Mayo",
         "created": "2020-03-14",
         "last_active": "2020-05-17",
@@ -146,7 +146,7 @@
         "country": "Burkina Faso",
         "photos": [
             {
-                "url": "https:\/\/randomuser.me\/api\/portraits\/men\/57.jpg",
+                "url": "http://127.0.0.1:8000/storage/photos/m3.jpg",
                 "is_main": true
             }
         ]
@@ -154,7 +154,7 @@
     {
         "username": "Skinner",
         "gender": "male",
-        "date_of_birth": "1952-12-01",
+        "date_of_birth": "1990-12-01",
         "known_as": "Skinner",
         "created": "2019-01-28",
         "last_active": "2020-06-07",
@@ -165,7 +165,7 @@
         "country": "Poland",
         "photos": [
             {
-                "url": "https:\/\/randomuser.me\/api\/portraits\/men\/11.jpg",
+                "url": "http://127.0.0.1:8000/storage/photos/m4.jpg",
                 "is_main": true
             }
         ]
@@ -173,7 +173,7 @@
     {
         "username": "Davis",
         "gender": "male",
-        "date_of_birth": "1978-03-20",
+        "date_of_birth": "1999-03-20",
         "known_as": "Davis",
         "created": "2020-02-25",
         "last_active": "2020-06-11",
@@ -184,7 +184,7 @@
         "country": "Luxembourg",
         "photos": [
             {
-                "url": "https:\/\/randomuser.me\/api\/portraits\/men\/93.jpg",
+                "url": "http://127.0.0.1:8000/storage/photos/m5.jpg",
                 "is_main": true
             }
         ]

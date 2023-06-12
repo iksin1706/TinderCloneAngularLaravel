@@ -30,7 +30,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 }
                 throw modelStateErrors.flat();
               } else {
-                this.toastr.error(error.error, error.status.toString());
+                this.toastr.error(error.error);
               }
               break;
             case 401:
@@ -47,7 +47,7 @@ export class ErrorInterceptor implements HttpInterceptor {
               this.router.navigateByUrl('/not-found');
               break;
             case 422:
-              this.toastr.error('Unprocesable content');
+              this.toastr.error(error.error.message);
               break;
             case 500:
               const navigationExtras: NavigationExtras = { state: { error: error.error } }

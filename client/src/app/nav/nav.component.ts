@@ -22,7 +22,7 @@ export class NavComponent implements OnInit {
   @Output() hideShowEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
   isMobile=false;
 
-  title = 'Dating app';
+  title = 'Matcher';
   constructor(public accountService: AccountService, public messageService: MessageService, public router: Router, private toastr: ToastrService, public breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {

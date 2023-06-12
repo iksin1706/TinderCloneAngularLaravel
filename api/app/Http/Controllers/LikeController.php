@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\UserLikeStatusHelper;
 use App\Helpers\UserPointsHelper;
 use App\Helpers\UserResponseHelper;
 use App\Http\Requests\LikesIndexRequest;
+use App\Http\Resources\UserResource;
 use App\Models\Dislike;
 use App\Models\Like;
 use App\Models\User;
@@ -49,7 +51,12 @@ class LikeController extends Controller
             });
         }
 
-        return response()->json(UserResponseHelper::transformUsers($users->get()));
+        $users = $users->get();
+        if (Auth::check()) {
+            $users = UserLikeStatusHelper::getLikeStatuses($users,$userId);
+        }
+
+        return response()->json(UserResource::collection($users));
     }
 
     public function store($username)

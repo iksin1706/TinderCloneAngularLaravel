@@ -1,3 +1,16 @@
 .buttons-wrapper{
     margin-top: .5rem;
 }
+.d-flex {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.row{
+    width: 100%;
+}
+h1{
+    width: 25rem;
+}
+.edit {
+    width: clamp(20rem,50%,60rem);
+}

@@ -13,12 +13,26 @@ class UserResource extends JsonResource
         return [
             'username' => $this->username,
             'email' => $this->email,
-            'date_of_birth' => $this->dateOfBirth,
-            'known_as' => $this->knownAs,
+            'introduction' => $this->introduction,
+            'knownAs' => $this->known_as,
             'gender' => $this->gender,
             'city' => $this->city,
+            'lookingFor' => $this->looking_for,
+            'interests' => $this->interests,
+            'age' => now()->diffInYears($this->date_of_birth),
             'country' => $this->country,
-            'password' => Hash::make($request->password)
+            'photos' =>  PhotoResource::collection($this->photos->sortByDesc('is_main')),
+            'photoUrl' => $this->photos->first(function ($photo) {
+                return $photo->is_main;
+            })?->url,
+            'likeStatus' => $this->like_status
+            
+        ];
+    }
+    public function addLikeStatus($request)
+    {
+        return [
+            'additional_field' => 'Additional value',
         ];
     }
 }

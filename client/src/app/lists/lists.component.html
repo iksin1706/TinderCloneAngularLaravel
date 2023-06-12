@@ -12,10 +12,12 @@
         </div>
     </form>
     </div>
+    <h2 *ngIf="members && members.length===0">{{predicate === 'liked' ? 'You havent liked anyone yet :(' : predicate === 'likedBy' ? 'No one liked you yet :(' : 'You have no matches yet :('}}</h2>
     <div class="d-flex cards">
         <div *ngFor="let member of members">
             <app-member-card [member]="member"></app-member-card>
         </div>
+
     </div>
 </div>
 

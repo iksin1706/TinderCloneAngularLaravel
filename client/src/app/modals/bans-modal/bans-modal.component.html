@@ -8,6 +8,6 @@
     <form [formGroup]="banForm" class="register" (ngSubmit)="banForm.valid && ban()" id="rolesForm" action="">
         <app-text-input [formControl]="$any(banForm.controls['reason'])" [label]="'Reason'" [type]="'text'"></app-text-input>
         <app-date-picker [formControl]="$any(banForm.controls['until'])" [label]="'Until'" [minDate]="now"></app-date-picker>
-        <button type="submit" class="btn btn-primary" (click)="banForm.valid && bsModalRef.hide()">Ban</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!banForm.valid " (click)="banForm.valid && bsModalRef.hide()">Ban</button>
     </form>
   </div>

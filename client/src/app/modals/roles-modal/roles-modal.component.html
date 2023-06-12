@@ -6,7 +6,7 @@
   </div>
   <div class="modal-body">
     <form #rolesForm="ngForm" id="rolesForm" action="">
-      <select [value]="selectedRole" name="" id="" (change)="update($event)">
+      <select [(ngModel)]="selectedRole"  name="selectedRole" id="selectedRole" (change)="update($event)" required>
         <option class="form-check"  [value]="role" *ngFor="let role of availableRoles">
             <label >{{role}}</label>
         </option>
@@ -14,5 +14,5 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Submit</button>
+    <button type="button" class="btn btn-default"  (click)="bsModalRef.hide()">Submit</button>
   </div>

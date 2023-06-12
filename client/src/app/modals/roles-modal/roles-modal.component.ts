@@ -1,5 +1,5 @@
 import { AnimateTimings } from '@angular/animations';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -7,12 +7,17 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
   templateUrl: './roles-modal.component.html',
   styleUrls: ['./roles-modal.component.scss']
 })
-export class RolesModalComponent {
+export class RolesModalComponent  implements OnInit{
   username = '';
   availableRoles: any[] = [];
-  @Input() selectedRole: string='';
+  selectedRole: string='user';
 
   constructor(public bsModalRef: BsModalRef){ }
+
+  ngOnInit(): void {
+    //this.selectedRole='user';
+  }
+
 
   update(event: Event) {
     const value = (event.target as HTMLSelectElement).value;

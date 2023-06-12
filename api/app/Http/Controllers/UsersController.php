@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\UserLikeStatusHelper;
 use App\Helpers\UserPointsHelper;
 use App\Helpers\UserResponseHelper;
 use App\Http\Requests\AddPhotoRequest;
@@ -11,6 +12,7 @@ use App\Models\Like;
 use App\Models\User;
 use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
+use App\Models\DefaultPoint;
 use App\Models\Photo;
 use App\Repositories\UserRepository;
 use App\Services\TokenService;
@@ -76,20 +78,15 @@ class UsersController extends Controller
             ->take($pageSize)
             ->get();
 
-        $users = UserResponseHelper::transformUsers($users);
-
         if (Auth::check()) {
-            $users = $users->map(function ($user) use ($likedUserIds, $dislikedUserIds) {
-                if ($dislikedUserIds->contains($user['id'])) {
-                    $user['likeStatus'] = 'disliked';
-                } elseif ($likedUserIds->contains($user['id'])) {
-                    $user['likeStatus'] = 'liked';
-                } else {
-                    $user['likeStatus'] = 'none';
-                }
-                return $user;
-            });
+            $users = $users->where('id', '!=', $userId);
+            $users = UserLikeStatusHelper::getLikeStatuses($users, $userId);
         }
+
+
+        $users = UserResource::collection($users);
+
+
 
         $response = response()->json(
             $users,
@@ -108,8 +105,8 @@ class UsersController extends Controller
     public function show($username)
     {
         $user = User::with('photos')->where('username', $username)->first();
-        $user = UserResponseHelper::transformDetailedUser($user);
-        if($user)
+        $user = new UserResource($user);
+        if ($user)
             return response()->json($user, 200);
         else return response("Not found", 404);
     }
@@ -142,9 +139,13 @@ class UsersController extends Controller
     }
 
 
-    public function addPhoto(Request $request)
+    public function addPhoto(AddPhotoRequest $request)
     {
-        $user = Auth::user();
+        $request->validated();
+
+
+        $user = User::Find(Auth::user()->id);
+        
 
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
@@ -154,12 +155,14 @@ class UsersController extends Controller
             return response()->json(['error' => 'Invalid file'], 400);
         }
 
+        if($user->photos->count()>=5)
+            return response()->json(['error' => 'You cant upload more than 5 photos'], 400);
+
         $file = $request->file('file');
         $path = $file->store('public/photos');
 
         $photo = new Photo();
         $photo->url = asset(Str::replaceFirst('public', 'storage', $path));
-        $photo->public_id = '';
         $photo->user_id = $user->id;
 
         if ($user->photos->isEmpty()) {
@@ -168,10 +171,17 @@ class UsersController extends Controller
             $photo->is_main = false;
         }
 
-        $photo->save();
-        UserPointsHelper::calculateAndUpdateUserPoints($user);
+        if ($photo->save()) {
+            $user = User::find(Auth::user()->id);
+            $nextPhotoPoints = DefaultPoint::where('what_for', 'next_photo')->first()->points;
+            $user->points += $nextPhotoPoints;
+            $user->save();
+            $photo['isMain']=$photo->is_main;
+            return response()->json($photo);
+        }
+        return response()->json(["error"=>"Failed to save photo"]);
 
-        return response()->json($photo);
+
     }
 
     public function deletePhoto($id)
@@ -182,17 +192,26 @@ class UsersController extends Controller
             return response()->json(['error' => 'Photo not found'], 404);
         }
 
+        if ($photo->user_id !== Auth::user()->id) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         $photoPath = public_path($photo->url);
 
         if (file_exists($photoPath)) {
             unlink($photoPath);
         }
 
-        $photo->delete();
-        UserPointsHelper::calculateAndUpdateUserPoints(User::find(Auth::user()));
-
-        return response()->json(['message' => 'Photo deleted successfully']);
+        if ($photo->delete()) {
+            $user = User::find(Auth::user()->id);
+            $nextPhotoPoints = DefaultPoint::where('what_for', 'next_photo')->first()->points;
+            $user->points -= $nextPhotoPoints;
+            $user->save();
+            return response()->json(['message' => 'Photo deleted successfully']);
+        }
+        return response()->json(["error"=>"Failed to delete photo"]);
     }
+
 
     public function setMainPhoto($photoId)
     {

@@ -41,6 +41,7 @@ export class MemberProfileCardComponent implements OnInit{
       return value.isMain ? -1 : 1 
     })
    console.log("TEST");
+   if(this.member.photos.length>=1)
     for (const photo of this.member.photos) {
       imageUrls.push({
         small: photo.url,
@@ -48,6 +49,11 @@ export class MemberProfileCardComponent implements OnInit{
         big: photo.url
       })
     }
+    else imageUrls.push({
+      small: 'assets/user.png',
+      medium: 'assets/user.png',
+      big: 'assets/user.png'
+    })
     
     return imageUrls;
   }

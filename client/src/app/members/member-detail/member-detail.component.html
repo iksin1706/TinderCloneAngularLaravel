@@ -2,11 +2,11 @@
     <div class=" me-4">
         <app-member-profile-card [member]="member"></app-member-profile-card>
         <div class="buttons-wrapper">
-            <button class="btn btn-primary">Like <i class="fa fa-heart"></i></button>
-            <button (click)="openReportModal(member.userName)" class="btn">Report User <i class="fa fa-flag"></i></button>
+            <!-- <button class="btn btn-primary" [class.liked]="member.likeStatus" (click)="like()">Like <i class="fa fa-heart"></i></button> -->
+            <button (click)="openReportModal(member.username)" class="btn">Report User <i class="fa fa-flag"></i></button>
         </div>
     </div>
-    <div class="col-7">
+    <div class="column">
         <tabset class="member-tabs" #memberTabs>
             <tab heading="About {{member.knownAs}}" class="pt-3" (selectTab)="onTabActivated($event)">
                 <h4>Description</h4>
@@ -19,7 +19,7 @@
                 <p>{{member.interests}}</p>
             </tab>
             <tab heading="Messages" class="pt-3" (selectTab)="onTabActivated($event)">
-                <app-member-messages [messages]="this.messages" [username]="member.userName"></app-member-messages>
+                <app-member-messages [messages]="this.messages" [username]="member.username"></app-member-messages>
             </tab>
 
         </tabset>

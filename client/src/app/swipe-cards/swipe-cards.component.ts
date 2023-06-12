@@ -69,24 +69,22 @@ export class SwipeCardsComponent implements OnInit {
         next: response => {
           if (response.result)
             this.members.unshift(...response.result.reverse());
-          console.log(this.members);
-          console.log("NOOOO WYSOW3333333");
           this.pagination = response.pagination;
+          this.preventLike=false;
         }
       })
-      console.log("NOOOO WYSOW222222222");
     }
   }
 
   removeMember(member: Member) {
     this.members = this.members.filter(object => {
-      return object.userName !== member.userName;
+      return object.username !== member.username;
     });
   }
 
   addLike(member: Member) {
     this.preventLike = true;
-    this.memberService.addLike(member.userName).subscribe({
+    this.memberService.addLike(member.username).subscribe({
       next: () => this.toastr.success('You have liked ' + member.knownAs),
       complete: () => {
         this.preventLike = false;
@@ -108,7 +106,7 @@ export class SwipeCardsComponent implements OnInit {
 
   likeUser(member: Member) {
     this.preventLike = true;
-    this.memberService.addLike(member.userName).subscribe({
+    this.memberService.addLike(member.username).subscribe({
       next: response => {
         this.removeMember(member);
         this.animationState = 'like';
@@ -125,7 +123,7 @@ export class SwipeCardsComponent implements OnInit {
 
   dislikeUser(member: Member) {
     this.preventLike = true;
-    this.memberService.dislike(member.userName).subscribe({
+    this.memberService.dislike(member.username).subscribe({
       next: () => {
         this.removeMember(member);
         this.animationState2 = 'dislike';

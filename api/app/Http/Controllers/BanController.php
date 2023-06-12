@@ -16,7 +16,7 @@ class BanController extends Controller
 {
     public function index()
     {
-        if (Auth::payload()->get('role') !== 'admin') return response('Only admin has access', 403);
+        if (Auth::payload()->get('role') !== 'admin' && Auth::payload()->get('role') !== 'moderator') return response('Only admin has access', 403);
         $reponse = Blockade::all();
         return response()->json($reponse);
     }
@@ -44,7 +44,7 @@ class BanController extends Controller
     public function unban($username)
     {
         $role = Auth::payload()->get('role');
-        if ($role !== 'admin' && $role !== 'moderator') return response('Only admin has access', 403);
+        if ($role !== 'admin' && $role !== 'moderator') return response('Only admins and moderators has access', 403);
         $user = User::where('username', $username)->firstOrFail();
         $currentDate = Carbon::now();
         Blockade::where('user_id', $user->id)

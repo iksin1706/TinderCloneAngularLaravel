@@ -14,3 +14,9 @@
 input[tyoe=file]{
     color: transparent;
 }
+
+.img-thumbnail{
+    width: 5rem;
+    aspect-ratio: 1;
+    object-fit: cover;
+}

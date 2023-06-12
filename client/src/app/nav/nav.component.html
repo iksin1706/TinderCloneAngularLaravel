@@ -57,8 +57,8 @@
         Last messages
         <button class="btn"><i class="fa fa-refresh" (click)="messageService.getMessagesThreadsInfo()"></i></button>
     </h2>
-    <div *ngFor="let thread of messageService.messageThreadsInfo$ | async">
-        <app-messages-thread-info [info]="thread"></app-messages-thread-info>
+    <div class="thread" *ngFor="let thread of messageService.messageThreadsInfo$ | async">
+        <app-messages-thread-info  [info]="thread"></app-messages-thread-info>
     </div>
     <!-- <div class="container-fluid">
         <a class="navbar-brand" routerLink="/" routerLinkActive="active">{{title}}</a>

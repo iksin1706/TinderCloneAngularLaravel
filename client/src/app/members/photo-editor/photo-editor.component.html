@@ -2,12 +2,11 @@
     <div class="col-2" *ngFor="let photo of member.photos">
         <img [class.main-photo]="photo.isMain" src="{{photo.url}}" alt="photo of user" class="img-thumbnail mb-1">
         <div class="text-center">
-            <button class="btn btn-primary p-1" 
+            <button class="btn btn-primary p-1 " 
             [disabled]="photo.isMain"
-            (click)="setMainPhoto(photo)"
-            
+            (click)="setMainPhoto(photo)"            
             >Set main</button>
-            <button class="btn btn-sm" (click)="deletePhoto(photo)"><i class="fa fa-trash"></i></button>
+            <button class="btn btn-sm"  (click)="deletePhoto(photo)"><i class="fa fa-trash"></i></button>
         </div>
     </div>
 </div>

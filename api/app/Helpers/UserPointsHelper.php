@@ -12,14 +12,12 @@ class UserPointsHelper
     {
         $points = 0;
         if ($user->introduction && Str::length($user->introduction)>20) $points += DefaultPoint::where('what_for', 'introduction')->first()->points;
-        if ($user->looking_for && Str::length($user->introduction)>20) $points += DefaultPoint::where('what_for', 'looking_for')->first()->points;
-        if ($user->interests && Str::length($user->introduction)>20) $points += DefaultPoint::where('what_for', 'interests')->first()->points;
+        if ($user->looking_for && Str::length($user->looking_for)>20) $points += DefaultPoint::where('what_for', 'looking_for')->first()->points;
+        if ($user->interests && Str::length($user->interests)>20) $points += DefaultPoint::where('what_for', 'interests')->first()->points;
 
-        if ($user->photos->count() === 1) {
-            $points += $user->photos->count() * DefaultPoint::where('what_for', 'first_photo')->first()->points;
-        } else if($user->photos->count()>1){
-            $points += ($user->photos->count() - 1) * DefaultPoint::where('what_for', 'next_photo')->first()->points;
-        }
+
+        $points += (($user->photos->count()) * (DefaultPoint::where('what_for', 'next_photo')->first()->points));
+        
         $points += $user->likedByUsers->count() * DefaultPoint::where('what_for', 'likes')->first()->points;
 
 

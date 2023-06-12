@@ -50,7 +50,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     this.route.data.subscribe({
       next: data => {
         this.member = data['member'];
-        this.memberService.getMember(this.member.userName).subscribe({
+        this.memberService.getMember(this.member.username).subscribe({
           next: response => {
             if (response) this.member=response;
             console.log(this.member);
@@ -104,7 +104,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
 
   loadMessages(){
     if(this.member){
-      this.messageService.getMessageThread(this.member.userName).subscribe({
+      this.messageService.getMessageThread(this.member.username).subscribe({
         next: messages => this.messages = messages
       })
     }

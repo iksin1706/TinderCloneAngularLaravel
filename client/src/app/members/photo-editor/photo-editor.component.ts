@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { withHashLocation } from '@angular/router';
 import { FileUploader } from 'ng2-file-upload';
+import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { Member } from 'src/app/_models/member';
 import { Photo } from 'src/app/_models/photo';
@@ -21,7 +22,7 @@ export class PhotoEditorComponent implements OnInit {
   baseUrl = environment.apiUrl;
   user: User | undefined;
 
-  constructor(private accountService: AccountService,private memberService: MembersService){
+  constructor(private accountService: AccountService,private memberService: MembersService,private toastr: ToastrService){
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user =>{
         if(user) this.user = user;
@@ -58,7 +59,13 @@ export class PhotoEditorComponent implements OnInit {
         if(photo.isMain && this.user && this.member){
           this.user.photoUrl = photo.url;
           this.member.photoUrl = photo.url;
+          this.accountService.setCurrentUser(this.user);
         }
+      }
+    }
+    this.uploader.onErrorItem = (item, respone, status, headers)=> {
+      if(respone){
+        this.toastr.error("Can't upload this image");
       }
     }
   }

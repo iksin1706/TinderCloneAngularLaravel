@@ -34,7 +34,7 @@ export class UserManagementComponent implements OnInit {
 
   ngOnInit(): void {
     this.adminService.getRoles().subscribe({
-      next : response => this.availableRoles=response
+      next : response => this.availableRoles=response.reverse()
     })
     this.getUsersWithRoles();
   }
@@ -43,7 +43,7 @@ export class UserManagementComponent implements OnInit {
     const config = {
       class: 'modal-dialog-centered',
       initialState: {
-        username: user.username,
+        user: user,
         availableRoles: this.availableRoles,
         selectedRole: user.role
       }

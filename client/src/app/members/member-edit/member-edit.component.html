@@ -1,36 +1,60 @@
-<div class="row" *ngIf="member">
-    <div class="col-4">
-        <h1>Your Profile</h1>
-    </div>
-    <div class="col-8">
-        <div class="alert alert-info p-2 pb-0" *ngIf="editForm.dirty">
-            <p><strong>Information: </strong>You made changes. Save changes to don't lose them</p>
+<div class="d-flex" *ngIf="member">
+    <div class="mx-2">
+        <div class="col-4">
+            <h1>Your Profile</h1>
+        </div>
+        <div class="col-8">
+            <div class="alert alert-info p-2 pb-0" *ngIf="editForm.dirty">
+                <p><strong>Information: </strong>You made changes. Save changes to don't lose them</p>
+            </div>
+        </div>
+        <div class="col-4">
+            <app-member-profile-card [member]="member"></app-member-profile-card>
+            <div class="buttons-wrapper">
+                <button class="btn btn-primary" [disabled]="!editForm.dirty || editForm.invalid" type="submit"
+                    form="editForm">Save changes</button>
+            </div>
         </div>
     </div>
-    <div class="col-4">
-        <app-member-profile-card [member]="member"></app-member-profile-card>
-        <div class="buttons-wrapper">
-            <button class="btn btn-primary"  [disabled]="!editForm.dirty" type="submit" form="editForm">Save changes</button>
-        </div>
-    </div>
-    <div class="col-7">
+    <div class="edit mx-2 mt-4">
         <tabset class="member-tabs">
             <tab heading="About {{member.knownAs}}" class="pt-1">
                 <form id="editForm" #editForm="ngForm" (ngSubmit)="updateMember()">
                     <h4 class="mt-2">Description</h4>
-                    <textarea class="form-control" [(ngModel)]="member.introduction" name="introduction" rows="3"></textarea>
+                    <textarea class="form-control" [(ngModel)]="member.introduction" name="introduction"
+                        rows="3"></textarea>
                     <h4 class="mt-2">Looking for</h4>
-                    <textarea class="form-control" [(ngModel)]="member.lookingFor" name="lookingFor" rows="3"></textarea>
+                    <textarea class="form-control" [(ngModel)]="member.lookingFor" name="lookingFor"
+                        rows="3"></textarea>
                     <h4 class="mt-2">Interests</h4>
                     <textarea class="form-control" [(ngModel)]="member.interests" name="interests" rows="3"></textarea>
                     <h4 class="mt-2">Location</h4>
-                    <div class="d-flex flex-row align-items-center">
-                        <label for="city">City:</label>
-                        <input type="text" [(ngModel)]="member.city" name="city" class="form-control mx-2">
-                        <label for="country">Country:</label>
-                        <input type="text" [(ngModel)]="member.country" name="country" class="form-control mx-2">
+                    <div class="d-flex">
+                        <div class="form-group  me-5">
+                            <label for="city">City*:</label>
+                            <input type="text" [(ngModel)]="member.city" name="city" minlength="2" maxlength="32"
+                                required class="form-control">
+                            <ng-container *ngIf="editForm.controls['city']?.errors">
+                                <div *ngIf="editForm.controls['city'].errors?.['required'] && editForm.controls['city'].touched"
+                                    class="text-danger">
+                                    City is required.
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="form-group me-5">
+                            <label for="country">Country*:
+                                <input type="text" [(ngModel)]="member.country" name="country" minlength="2"
+                                    maxlength="32" required class="form-control ">
+                            </label>
+                            <ng-container *ngIf="editForm.controls['city']?.errors">
+                                <div *ngIf="editForm.controls['country'].errors?.['required'] && editForm.controls['country'].touched"
+                                    class="text-danger">
+                                    Country is required.
+                                </div>
+                            </ng-container>
+                        </div>
                     </div>
-                    
+
                 </form>
 
             </tab>

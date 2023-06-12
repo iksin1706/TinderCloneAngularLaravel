@@ -1,7 +1,7 @@
 <div class="card" *ngIf="member">
     <ngx-gallery [options]="galleryOptions" [images]="galleryImages" class="ngx-gallery img-thumbnail"></ngx-gallery>        
     <div class="card-body">
-        <h1 *ngIf="profileLink"><a routerLink="/members/{{member.userName}}"> {{member.knownAs}}, {{member.age}}</a></h1>
+        <h1 *ngIf="profileLink"><a routerLink="/members/{{member.username}}"> {{member.knownAs}}, {{member.age}}</a></h1>
         <h1 *ngIf="!profileLink">{{member.knownAs}}, {{member.age}}</h1>
         <div>
             <p>Location: {{member.city}}, {{member.country}}</p>

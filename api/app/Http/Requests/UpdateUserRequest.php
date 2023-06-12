@@ -25,8 +25,8 @@ class UpdateUserRequest extends FormRequest
                 'Introduction' => 'sometimes|max:255',
                 'LookingFor' => 'sometimes|max:255',
                 'Interests' => 'sometimes|max:255',
-                'City' => 'sometimes|max:255',
-                'Country' => 'sometimes|max:255',
+                'City' => 'required|string|min:2|max:32',
+                'Country' => 'required|string|min:2|max:32',
         ];
     }
 }

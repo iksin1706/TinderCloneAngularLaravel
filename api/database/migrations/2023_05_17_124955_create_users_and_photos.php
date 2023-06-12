@@ -41,7 +41,6 @@ return new class extends Migration
                 $table->id();
                 $table->string('url');
                 $table->boolean('is_main');
-                $table->string('public_id');
                 $table->foreignId('user_id')->constrained('users');
                 $table->timestamps();
             });
