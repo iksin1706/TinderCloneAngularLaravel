@@ -9,8 +9,8 @@
         </app-text-input>
 
         <div class="text-center">
-            <button class="btn btn-primary me-2" type="submit">Login</button>
-            <button class="btn btn-default" type="submit" routerLink="/register">Sign Up</button>
+            <button class="btn btn-primary me-2" [disabled]="!loginForm.valid" type="submit">Login</button>
+            <a class="btn btn-default" routerLink="/register">Sign Up</a>
         </div>
     </div>
 </form>

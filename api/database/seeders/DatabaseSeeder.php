@@ -62,7 +62,6 @@ class DatabaseSeeder extends Seeder
             foreach ($photos as $photo) {
                 DB::table('photos')->insert([
                     'user_id' => $userId,
-                    'public_id' => "temp",
                     'url' => $photo['url'],
                     'is_main' => $photo['is_main'],
                     'created_at' => now(),
@@ -87,7 +86,7 @@ class DatabaseSeeder extends Seeder
             'points' => 10,
         ]);
         DB::table('default_points')->insert([
-            'what_for' => 'photo',
+            'what_for' => 'photos',
             'description' => 'For each photo',
             'points' => 10,
         ]);

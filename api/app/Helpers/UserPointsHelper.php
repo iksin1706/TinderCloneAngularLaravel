@@ -16,7 +16,7 @@ class UserPointsHelper
         if ($user->interests && Str::length($user->interests)>20) $points += DefaultPoint::where('what_for', 'interests')->first()->points;
 
 
-        $points += (($user->photos->count()) * (DefaultPoint::where('what_for', 'next_photo')->first()->points));
+        $points += (($user->photos->count()) * (DefaultPoint::where('what_for', 'photos')->first()->points));
         
         $points += $user->likedByUsers->count() * DefaultPoint::where('what_for', 'likes')->first()->points;
 

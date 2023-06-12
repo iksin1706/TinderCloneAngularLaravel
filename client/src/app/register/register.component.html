@@ -37,7 +37,7 @@
     </div>
 
     <div class="text-center">
-        <button class="btn btn-primary me-2" type="submit">Register</button>
+        <button class="btn btn-primary me-2" type="submit" [disabled]="!registerForm.valid" >Register</button>
         <button class="btn btn-default" type="submit" routerLink="/">Go back</button>
     </div>
 </form>
