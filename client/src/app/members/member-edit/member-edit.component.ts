@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
@@ -23,9 +23,19 @@ export class MemberEditComponent implements OnInit {
   member: Member | undefined;
   user: User | null = null;
   galleryOptions: NgxGalleryOptions[] = [];
-  galleryImages: NgxGalleryImage[] = []
+  galleryImages: NgxGalleryImage[] = [];
 
-  constructor(private accountService: AccountService, private memberService: MembersService, private toaster: ToastrService) {
+  // editForm: FormGroup = new FormGroup({});
+  // maxDate: Date = new Date();
+  // validationErrors: string | undefined;
+
+
+
+
+
+
+
+  constructor(private accountService: AccountService, private memberService: MembersService, private toaster: ToastrService,private fb: FormBuilder) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => this.user = user
     })
@@ -44,6 +54,8 @@ export class MemberEditComponent implements OnInit {
     ]
 
   }
+
+
   getImages() {
     if (!this.member) return [];
     const imageUrls = [];
@@ -66,6 +78,7 @@ export class MemberEditComponent implements OnInit {
     this.memberService.getMember(this.user.username).subscribe({
       next: member => {
         this.member = member;
+        this.member
         this.galleryImages = this.getImages();
       }
     })
