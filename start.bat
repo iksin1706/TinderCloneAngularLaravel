@@ -5,7 +5,7 @@ REM Set up Laravel API
 cd api
 
 REM 
-%systemDrive%\xampp\mysql\bin\mysql -uroot -e "CREATE DATABASE IF NOT EXISTS ai1_lab11;"
+%systemDrive%\xampp\mysql\bin\mysql -uroot -e "CREATE DATABASE IF NOT EXISTS dating;"
 
 REM 
 php -r "copy('.env.example', '.env');"
