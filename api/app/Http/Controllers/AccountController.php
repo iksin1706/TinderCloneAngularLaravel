@@ -67,7 +67,7 @@ class AccountController extends Controller
 
 
         $user = User::find(Auth::user()->id);
-        $banned_days = BanHelper::isBanned($user);
+        $banned_days = BanHelper::getBannedDays($user);
         if ($banned_days>0)
             return response(
                 'Jestes zablokowany na ' . $banned_days . ' dni. Skontaktuj się z administratorem.',

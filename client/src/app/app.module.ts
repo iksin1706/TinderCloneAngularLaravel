@@ -33,7 +33,6 @@ import { PhotoManagmentComponent } from './admin/photo-managment/photo-managment
 import { RolesModalComponent } from './modals/roles-modal/roles-modal.component';
 import { LoginComponent } from './login/login.component';
 import { MessagesListComponent } from './messages-list/messages-list.component';
-import { MessagesThreadsComponent } from './messages-threads/messages-threads.component';
 import { MessagesThreadInfoComponent } from './messages-thread-info/messages-thread-info.component';
 import { TruncateWordsPipe } from './truncate-words.pipe';
 import { MemberProfileCardComponent } from './member/member-profile-card/member-profile-card.component';
@@ -68,7 +67,6 @@ import { ReportsComponent } from './admin/reports/reports.component';
     RolesModalComponent,
     LoginComponent,
     MessagesListComponent,
-    MessagesThreadsComponent,
     MessagesThreadInfoComponent,
     TruncateWordsPipe,
     MemberProfileCardComponent,

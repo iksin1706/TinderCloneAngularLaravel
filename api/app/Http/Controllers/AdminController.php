@@ -23,7 +23,7 @@ class AdminController extends Controller
         if (Auth::payload()->get('role') !== 'admin' && Auth::payload()->get('role')!=='moderator') return response('Only admins and moderators has access',403);
 
         $users = User::all()->map(function ($user) {
-            $isBanned = BanHelper::isBanned($user);
+            $isBanned = BanHelper::getBannedDays($user);
     
             return [
                 'username' => $user->username,

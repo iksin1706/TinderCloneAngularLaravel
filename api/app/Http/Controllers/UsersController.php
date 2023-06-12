@@ -143,65 +143,66 @@ class UsersController extends Controller
     {
         $request->validated();
 
-
-        $user = User::Find(Auth::user()->id);
+        $user = User::find(Auth::user()->id);
         
-
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
-
+        
         if (!$request->hasFile('file') || !$request->file('file')->isValid()) {
             return response()->json(['error' => 'Invalid file'], 400);
         }
-
-        if($user->photos->count()>=5)
-            return response()->json(['error' => 'You cant upload more than 5 photos'], 400);
-
+        
+        if ($user->photos->count() >= 5) {
+            return response()->json(['error' => 'You cannot upload more than 5 photos'], 400);
+        }
+        
         $file = $request->file('file');
         $path = $file->store('public/photos');
-
+        
         $photo = new Photo();
-        $photo->url = asset(Str::replaceFirst('public', 'storage', $path));
+        $photo->url = asset(Storage::url($path)); // Use Storage::url() to generate the URL
         $photo->user_id = $user->id;
-
+        
         if ($user->photos->isEmpty()) {
             $photo->is_main = true;
         } else {
             $photo->is_main = false;
         }
-
+        
         if ($photo->save()) {
             $user = User::find(Auth::user()->id);
             $nextPhotoPoints = DefaultPoint::where('what_for', 'next_photo')->first()->points;
             $user->points += $nextPhotoPoints;
             $user->save();
-            $photo['isMain']=$photo->is_main;
+            $photo['isMain'] = $photo->is_main;
             return response()->json($photo);
         }
-        return response()->json(["error"=>"Failed to save photo"]);
-
+        
+        return response()->json(["error" => "Failed to save photo"]);
+        
 
     }
 
     public function deletePhoto($id)
     {
         $photo = Photo::find($id);
-
+    
         if (!$photo) {
             return response()->json(['error' => 'Photo not found'], 404);
         }
-
+    
         if ($photo->user_id !== Auth::user()->id) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-
-        $photoPath = public_path($photo->url);
-
-        if (file_exists($photoPath)) {
-            unlink($photoPath);
+    
+        $photoUrl = $photo->url;
+        $path = str_replace(asset(Storage::url('')), 'public', $photoUrl);
+    
+        if (Storage::exists($path)) {
+            Storage::delete($path);
         }
-
+    
         if ($photo->delete()) {
             $user = User::find(Auth::user()->id);
             $nextPhotoPoints = DefaultPoint::where('what_for', 'next_photo')->first()->points;
@@ -209,8 +210,11 @@ class UsersController extends Controller
             $user->save();
             return response()->json(['message' => 'Photo deleted successfully']);
         }
-        return response()->json(["error"=>"Failed to delete photo"]);
+    
+        return response()->json(["error" => "Failed to delete photo"]);
     }
+    
+    
 
 
     public function setMainPhoto($photoId)

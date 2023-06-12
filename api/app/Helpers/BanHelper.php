@@ -9,7 +9,7 @@ use Carbon\Carbon;
 
 class BanHelper 
 {
-    public static function isBanned(User $user){
+    public static function getBannedDays(User $user){
         $ban = Blockade::where('user_id',$user->id)->orderBy('until','desc')->first();
         if(!$ban) return 0;
         $banned_days = Carbon::now()->diffInDays($ban->until, false)+1;

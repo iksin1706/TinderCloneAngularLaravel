@@ -11,6 +11,7 @@
         "interests": "Sit sit incididunt proident velit.",
         "city": "Greenbush",
         "country": "Martinique",
+        "role_id":"3",
         "photos": [
             {
                 "url": "http://127.0.0.1:8000/storage/photos/w1.jpg",
@@ -30,6 +31,7 @@
         "interests": "Dolor aliquip velit amet aliqua minim labore sit laboris non aliquip cillum.",
         "city": "Celeryville",
         "country": "Grenada",
+        "role_id":"2",
         "photos": [
             {
                 "url": "http://127.0.0.1:8000/storage/photos/w2.jpg",
@@ -49,6 +51,7 @@
         "interests": "Commodo do eiusmod quis labore est non.",
         "city": "Rosewood",
         "country": "Svalbard and Jan Mayen Islands",
+        "role_id":"1",
         "photos": [
             {
                 "url": "http://127.0.0.1:8000/storage/photos/w3.jpg",
@@ -68,6 +71,7 @@
         "interests": "Duis in est laboris anim pariatur incididunt mollit laboris ea velit aliquip cillum.",
         "city": "Orviston",
         "country": "Zimbabwe",
+        "role_id":"1",
         "photos": [
             {
                 "url": "http://127.0.0.1:8000/storage/photos/w4.jpg",
@@ -87,6 +91,7 @@
         "interests": "Elit Lorem aliquip deserunt cupidatat ex aliquip ullamco.",
         "city": "Germanton",
         "country": "Antigua and Barbuda",
+        "role_id":"1",
         "photos": [
             {
                 "url": "http://127.0.0.1:8000/storage/photos/w5.jpg",
@@ -106,6 +111,7 @@
         "interests": "Esse cillum deserunt fugiat deserunt irure ea esse deserunt quis exercitation velit do nisi reprehenderit.",
         "city": "Cliff",
         "country": "England",
+        "role_id":"1",
         "photos": [
             {
                 "url": "http://127.0.0.1:8000/storage/photos/m1.jpg",
@@ -125,6 +131,7 @@
         "interests": "Aliquip proident pariatur excepteur incididunt irure et.",
         "city": "Welda",
         "country": "Christmas Island",
+        "role_id":"1",
         "photos": [
             {
                 "url": "http://127.0.0.1:8000/storage/photos/m2.jpg",
@@ -144,6 +151,7 @@
         "interests": "Duis consectetur proident labore velit minim irure proident incididunt officia duis.",
         "city": "Clarence",
         "country": "Burkina Faso",
+        "role_id":"1",
         "photos": [
             {
                 "url": "http://127.0.0.1:8000/storage/photos/m3.jpg",
@@ -163,6 +171,7 @@
         "interests": "Pariatur qui ut commodo laboris officia.",
         "city": "Herald",
         "country": "Poland",
+        "role_id":"1",
         "photos": [
             {
                 "url": "http://127.0.0.1:8000/storage/photos/m4.jpg",
@@ -182,6 +191,7 @@
         "interests": "Labore consectetur labore ut nulla voluptate nulla quis labore tempor dolor laborum.",
         "city": "Lupton",
         "country": "Luxembourg",
+        "role_id":"1",
         "photos": [
             {
                 "url": "http://127.0.0.1:8000/storage/photos/m5.jpg",

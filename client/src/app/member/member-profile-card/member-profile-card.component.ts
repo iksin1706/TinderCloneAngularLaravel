@@ -34,13 +34,9 @@ export class MemberProfileCardComponent implements OnInit{
   getImages() {
     if (!this.member) return [];
     const imageUrls = [];
-    console.log(this.member.photos);
-    console.log(this.member.photos);
-    console.log(this.member.photos);
     this.member.photos.sort(value => {
       return value.isMain ? -1 : 1 
     })
-   console.log("TEST");
    if(this.member.photos.length>=1)
     for (const photo of this.member.photos) {
       imageUrls.push({

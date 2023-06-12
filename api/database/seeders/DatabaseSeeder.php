@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
                 'password' => Hash::make("Passw0rd"),
-                'role_id' => 1
+                'role_id' => $item['role_id']
             ]);
 
             // Insert photos
@@ -87,14 +87,9 @@ class DatabaseSeeder extends Seeder
             'points' => 10,
         ]);
         DB::table('default_points')->insert([
-            'what_for' => 'first_photo',
-            'description' => 'For having main photo',
+            'what_for' => 'photo',
+            'description' => 'For each photo',
             'points' => 10,
-        ]);
-        DB::table('default_points')->insert([
-            'what_for' => 'next_photo',
-            'description' => 'Additional points for each next photo',
-            'points' => 5,
         ]);
         DB::table('default_points')->insert([
             'what_for' => 'likes',
