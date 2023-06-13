@@ -1,36 +1,31 @@
 @echo off
 
-REM Set up Laravel API
-
 cd api
 
-REM 
 %systemDrive%\xampp\mysql\bin\mysql -uroot -e "CREATE DATABASE IF NOT EXISTS dating;"
 
-REM 
 php -r "copy('.env.example', '.env');"
 
-REM 
 call composer install
 
-REM
 call php artisan migrate:fresh --seed
 
-REM 
 call php artisan key:generate
 
-cd ..
+call php artisan serve
 
-REM 
+cd ..
 
 cd client
 
-REM 
 call npm install
 
-REM 
 call ng build
 
-cd ..
+call ng serve
+
+
+
+
 
 echo "Setup completed successfully."
