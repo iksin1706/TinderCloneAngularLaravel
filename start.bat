@@ -12,6 +12,8 @@ call php artisan migrate:fresh --seed
 
 call php artisan key:generate
 
+call php artisan jwt:secret
+
 start php artisan serve
 
 cd ..
@@ -24,4 +26,7 @@ call ng build
 
 start ng serve
 
+start http://localhost:4200
+
 echo "Setup completed successfully."
+
