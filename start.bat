@@ -12,7 +12,7 @@ call php artisan migrate:fresh --seed
 
 call php artisan key:generate
 
-call php artisan serve
+start php artisan serve
 
 cd ..
 
@@ -22,10 +22,6 @@ call npm install
 
 call ng build
 
-call ng serve
-
-
-
-
+start ng serve
 
 echo "Setup completed successfully."
