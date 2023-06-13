@@ -26,7 +26,7 @@ call ng build
 
 start ng serve
 
-start http://localhost:4200
+start https://localhost:4200
 
 echo "Setup completed successfully."
 
